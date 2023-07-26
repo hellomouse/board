@@ -4,5 +4,19 @@ https://github.com/BayBreezy/nuxt3-vuetify3-starter/blob/main/plugins/vuetify.ts
 error page - add github url
 - different errors as well
 
-fonts + iconset
+fonts + icon set
+
+github linting workflow
+
+-----
+
+navbar:
+- Logo 
+    - change dynamically based on route
+    + light/dark logo
+
+- Login or user dropdown
+- Apps list
+- Search bar
+
 

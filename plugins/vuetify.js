@@ -10,7 +10,6 @@ export default defineNuxtPlugin(nuxtApp => {
         components,
         directives,
 
-        customVariables: ["~/assets/variables.scss"],
         theme: {
             defaultTheme: "dark",
             themes: {

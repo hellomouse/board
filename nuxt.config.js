@@ -21,7 +21,11 @@ export default {
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
-        '@/assets/css/main.scss'
+        '@/assets/css/main.scss',
+    ],
+
+    components: [
+        '~/components',
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -35,7 +39,7 @@ export default {
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
-        async (options, nuxt) => {
+        async (_options, nuxt) => {
             nuxt.hooks.hook("vite:extendConfig", (config) =>
                 // @ts-ignore
                 config.plugins.push(vuetify())
