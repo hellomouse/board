@@ -14,7 +14,7 @@ definePageMeta({
                     creator="helloasdad1231521613123131312313131231313212312313131312"
                     created="1:00 AM 12/12/12"
                     edited="1:00 AM 12/12/12"
-                    flags="LOCKED | ARCHIVED | PINNED"
+                    flags="LOCKED"
                     class="mb-1"
                 />
             </div>

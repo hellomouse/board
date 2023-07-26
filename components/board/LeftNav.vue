@@ -50,7 +50,7 @@ export default {
     width: $left-nav-width-pc;
 
     .list-item {
-        height: 2.4rem;
+        height: $menu-item-height;
     }
 }
 </style>

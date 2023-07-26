@@ -21,10 +21,9 @@ button:not(:disabled) {
     cursor: pointer;
 }
 
-// Make buttons less round
-body .v-btn {
-    border-radius: 2px;
-}
+// Remove border-radius: buttons, tooltips
+body .v-btn,
+.v-tooltip>.v-overlay__content { border-radius: 0; }
 
 // Cards not round
 body .v-sheet.v-card {
@@ -60,13 +59,4 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
 
 .hoverable:hover {
     background-color: #333; // TODO
-}
-
-
-// --- Start vuetify bug fixes ---- \\
-
-// Remove extra left space in tabs (for button, which doesn't exist
-// when it's disabled)
-.v-slide-group__prev.v-slide-group__prev--disabled {
-    display: none !important;
 }
