@@ -40,8 +40,8 @@
                             <small>@Username</small>
                         </div>
                         <!-- TODO icons -->
-                        <button class="py-3 px-4">Settings</button><br>
-                        <button class="py-3 px-4">Logout</button><br>
+                        <button class="py-3 px-4 hoverable">Settings</button><br>
+                        <button class="py-3 px-4 hoverable">Logout</button><br>
                         <div class="py-2 px-4">
                             <small>FAQ / Info</small>
                         </div>

@@ -2,6 +2,7 @@ body {
     margin: 0;
 }
 
+// Buttons should have a clickable cursor
 button:not(:disabled) {
     cursor: pointer;
 }
@@ -20,6 +21,16 @@ body .v-sheet.v-card {
 body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     border-radius: 0 !important;
 }
+
+// Hoverable
+.hoverable {
+    transition: background-color 0.2s;
+}
+
+.hoverable:hover {
+    background-color: #333; // TODO
+}
+
 
 // --- Start vuetify bug fixes ---- \\
 

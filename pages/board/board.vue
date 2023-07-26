@@ -7,6 +7,7 @@
 
 <script>
 export default {
-    name: 'BoardPage'
+    name: 'BoardPage',
+    layout: 'board'
 }
 </script>

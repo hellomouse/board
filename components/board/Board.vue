@@ -1,7 +1,7 @@
 <template>
     <v-sheet
         elevation="0"
-        class="board-tile mr-3 mb-3"
+        class="board-tile hoverable mr-3 mb-3"
         :style="{ borderColor: color }"
     >
         <div class="px-4 pt-4">
