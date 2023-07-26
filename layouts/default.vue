@@ -1,5 +1,5 @@
 <template>
-    <v-app id="main" dark>
+    <v-app id="main" ref="app" dark>
         <AppNavbar />
 
         <v-main class="mx-16 mt-2">

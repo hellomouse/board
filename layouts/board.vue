@@ -1,5 +1,5 @@
 <template>
-    <v-app id="main" dark>
+    <v-app id="main" ref="app" dark>
         <UiAppNavbar />
 
         <v-main class="mx-8 mt-4">

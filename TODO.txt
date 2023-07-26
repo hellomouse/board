@@ -32,4 +32,5 @@ navbar:
 - Logo
     + light/dark logo
 
-adjust colors (darker like yt) / font sizes / icons
+icons
+
