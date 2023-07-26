@@ -6,7 +6,7 @@
             <div class="d-flex flex-row">
                 <BoardLeftNav />
 
-                <v-container>
+                <v-container class="container">
                     <slot />
                 </v-container>
             </div>
@@ -15,3 +15,11 @@
         <UiAppFooter />
     </v-app>
 </template>
+
+<style lang="scss" scoped>
+@import "~/assets/variables.scss";
+
+.container {
+    max-width: calc(100% - $left-nav-width-pc) !important;
+}
+</style>

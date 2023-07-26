@@ -1,6 +1,7 @@
 <template>
     <v-sheet
         elevation="0"
+        width="250"
         class="board-tile hoverable mr-3 mb-3"
         :style="{ borderColor: color }"
     >
@@ -52,7 +53,6 @@ export default {
 
 .board-tile {
     max-width: 100%;
-    width: 320px;
     border-right: 3px solid;
     display: inline-block;
 

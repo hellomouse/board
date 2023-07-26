@@ -39,7 +39,7 @@
                             <b>Username</b><br>
                             <small>@Username</small>
                         </div>
-                        <!-- TODO icons -->
+
                         <button class="py-3 px-4 hoverable hover-list-item">
                             <v-icon icon="mdi-cog" /> Settings
                         </button>

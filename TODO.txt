@@ -4,8 +4,6 @@ https://github.com/BayBreezy/nuxt3-vuetify3-starter/blob/main/plugins/vuetify.ts
 error page - add github url
 - different errors as well
 
-fonts + icon set
-
 github linting workflow
 
 -----
@@ -19,7 +17,6 @@ github linting workflow
 
 proper 404 page - current one doesnt owkr
 
-adjust colors to be less bad
 
 profile pic plugin
 - handle a global login state - plugin
