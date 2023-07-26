@@ -40,8 +40,12 @@
                             <small>@Username</small>
                         </div>
                         <!-- TODO icons -->
-                        <button class="py-3 px-4 hoverable">Settings</button><br>
-                        <button class="py-3 px-4 hoverable">Logout</button><br>
+                        <button class="py-3 px-4 hoverable hover-list-item">
+                            <v-icon icon="mdi-cog" /> Settings
+                        </button>
+                        <button class="py-3 px-4 hoverable hover-list-item">
+                            <v-icon icon="mdi-logout" /> Logout
+                        </button>
                         <div class="py-2 px-4">
                             <small>FAQ / Info</small>
                         </div>

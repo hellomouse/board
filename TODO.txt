@@ -32,5 +32,3 @@ navbar:
 - Logo
     + light/dark logo
 
-icons
-

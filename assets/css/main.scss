@@ -36,6 +36,23 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     border-radius: 0 !important;
 }
 
+// Hover list
+.hover-list-item {
+    width: 100%;
+    text-align: left;
+    display: block;
+
+    .v-icon {
+        margin-right: 12px;
+    }
+}
+
+// Move icons up a bit
+.v-icon {
+    position: relative;
+    top: -1px;
+}
+
 // Hoverable
 .hoverable {
     transition: background-color 0.2s;

@@ -1,23 +1,33 @@
 <template>
     <v-sheet
         elevation="0"
-        class="mr-3 mb-3"
-        width="270"
+        class="mr-3 mb-3 left-nav"
+        width="240"
         color="transparent"
     >
         <v-btn
             color="red"
         >
-            + {{ buttonLabel }}
+            <v-icon icon="mdi-plus" /> {{ buttonLabel }}
         </v-btn>
 
-        <v-list>
-            <v-list-item title="My boards"></v-list-item>
-            <v-list-item title="Shared with me"></v-list-item>
-            <v-list-item title="Favorites"></v-list-item>
-            <v-list-item title="Trash"></v-list-item>
-            <v-list-item title="Storage"></v-list-item>
-        </v-list>
+        <div class="mt-3">
+            <button class="py-2 px-4 hoverable hover-list-item">
+                <v-icon icon="mdi-view-dashboard" /> My Boards
+            </button>
+            <button class="py-2 px-4 hoverable hover-list-item">
+                <v-icon icon="mdi-folder-account" /> Shared With Me
+            </button>
+            <button class="py-2 px-4 hoverable hover-list-item">
+                <v-icon icon="mdi-star" /> Favorites
+            </button>
+            <button class="py-2 px-4 hoverable hover-list-item">
+                <v-icon icon="mdi-trash-can" /> Trash
+            </button>
+            <button class="py-2 px-4 hoverable hover-list-item">
+                <v-icon icon="mdi-cloud" /> Storage
+            </button>
+        </div>
     </v-sheet>
 </template>
 
@@ -36,5 +46,7 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
 
-
+.left-nav {
+    border-right: 1px solid $border-color;
+}
 </style>

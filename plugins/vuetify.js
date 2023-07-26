@@ -4,14 +4,20 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import colors from 'vuetify/lib/util/colors';
 
+import { aliases, mdi } from 'vuetify/iconsets/mdi';
+import '@mdi/font/css/materialdesignicons.css';
+
 // eslint-disable-next-line no-undef
 export default defineNuxtPlugin(nuxtApp => {
     const vuetify = createVuetify({
         ssr: true,
         components,
         directives,
+        aliases,
         treeShake: true,
+        defaultSet: 'mdi',
 
+        sets: { mdi },
         theme: {
             defaultTheme: "dark",
             themes: {
