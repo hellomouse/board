@@ -10,13 +10,21 @@ github linting workflow
 
 -----
 
-navbar:
-- Logo 
-    - change dynamically based on route
-    + light/dark logo
+- have different layouts depending on app - ie board default
 
 - Login or user dropdown
 - Apps list
 - Search bar
 
+
+profile pic plugin
+- handle a global login state - plugin
+- also store stuff like current username
+
+
+future todo:
+
+navbar:
+- Logo
+    + light/dark logo
 
