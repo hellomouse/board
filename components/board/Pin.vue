@@ -218,7 +218,7 @@ export default {
 }
 
 .edit-list-item {
-    &:not(:hover) { background-color: rgb(var(--v-theme-surface)); }
+    &:not(:hover) { background-color: rgb(var(--v-theme-background-light)); }
     height: $menu-item-height;
 
     &.line {

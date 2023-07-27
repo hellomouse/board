@@ -11,7 +11,7 @@
         <div class="navbar__links">
             <v-menu>
                 <template #activator="{ props }">
-                    <button class="image-button mx-2" v-bind="props"></button>
+                    <v-btn class="navbar-btn mx-2" icon="mdi-apps" color="rgba(0, 0, 0, 0)" flat v-bind="props"></v-btn>
                 </template>
                 <div>
                     <v-sheet
@@ -26,7 +26,7 @@
 
             <v-menu>
                 <template #activator="{ props }">
-                    <button class="image-button mx-2" v-bind="props"></button>
+                    <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props"></button>
                 </template>
                 <div>
                     <v-sheet
@@ -59,11 +59,15 @@
 <style lang="scss">
 $height: 64px;
 
+.navbar-btn {
+    height: 60% !important;
+    aspect-ratio: 1 / 1;
+    font-size: 1.3rem;
+}
+
 .image-button {
     border-radius: 50%;
     background: red;
-    height: 70%;
-    aspect-ratio: 1 / 1; 
 }
 
 $popout-arrow-size: 10px;
@@ -72,6 +76,7 @@ $popout-arrow-gap: 5px;
 .popout-sheet {
     border-radius: 0 !important;
     margin-top: $popout-arrow-size + $popout-arrow-gap;
+    background-color: rgb(var(--v-theme-background-light));
 
     &:after {
         position: absolute;

@@ -8,7 +8,6 @@ github linting workflow
 
 -----
 
-- have different layouts depending on app - ie board default
 
 - Login or user dropdown
 - Apps list
@@ -16,7 +15,6 @@ github linting workflow
 
 
 proper 404 page - current one doesnt owkr
-
 
 profile pic plugin
 - handle a global login state - plugin
