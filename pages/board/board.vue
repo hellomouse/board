@@ -29,12 +29,20 @@ definePageMeta({
                     <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
                 </v-btn>
 
-                <v-btn
-                    icon variant="text"
-                    height="40"
-                >
-                    <v-icon>mdi-cog</v-icon>
-                </v-btn>
+                <v-menu :close-on-content-click="false">
+                    <template #activator="{ props }">
+                        <v-btn
+                            icon variant="text"
+                            height="40"
+                            v-bind="props"
+                        >
+                            <v-icon>mdi-cog</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
+                        <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show card details"></v-switch>
+                    </v-sheet>
+                </v-menu>
             </div>
 
             <div class="grid">
@@ -60,7 +68,8 @@ export default {
     data() {
         return {
             selected: 'Created',
-            sortDown: true
+            sortDown: true,
+            alwaysShowCardDetails: false
         };
     },
     computed: {

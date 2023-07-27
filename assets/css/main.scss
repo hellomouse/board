@@ -61,6 +61,16 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     background-color: #444; // TODO
 }
 
+// Hide extra padding below from empty details
+.v-input__details {
+    box-sizing: border-box !important;
+    min-height: 0 !important;
+    padding-top: 0 !important;
+
+    & .v-messages:empty { display: none; }
+    & .v-messages:not(:empty) { margin-top: 6px; }
+}
+
 // Fix for vuetify select
 .v-select {
     // Make not round
@@ -69,8 +79,6 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     .v-field__overlay {
         border-radius: 0 !important;
     }
-    // Hide extra padding below from empty details
-    .v-input__details { display: none; }
     // Font size not too large
     .v-select__selection { font-size: 14px; }
 }
