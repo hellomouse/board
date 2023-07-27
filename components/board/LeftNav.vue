@@ -21,9 +21,6 @@
                 <v-icon icon="mdi-star" /> Favorites
             </button>
             <button class="px-4 hoverable hover-list-item list-item">
-                <v-icon icon="mdi-trash-can" /> Trash
-            </button>
-            <button class="px-4 hoverable hover-list-item list-item">
                 <v-icon icon="mdi-cloud" /> Storage
             </button>
         </div>

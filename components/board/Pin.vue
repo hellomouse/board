@@ -7,9 +7,9 @@
         :class="pinTileClasses"
     >
         <div class="pin-tile__header pt-4 px-4">
-            <div class="pin-tile__header__creator text-truncate">
+            <div class="pin-tile__header__creator-wrapper text-truncate">
                 <div class="pfp mr-1"></div>
-                @{{ creator }}
+                <span class="pin-tile__header__creator">@{{ creator }}</span>
             </div>
 
             <div class="pin-tile__header__icon-row">
@@ -31,7 +31,7 @@
             </div>
         </div>
             
-        <div class="pa-4 pin-tile__content">
+        <div class="px-4 py-1 pin-tile__content">
             This is a pin
 
             type: string,
@@ -47,12 +47,13 @@
         </div>
 
         <div class="pl-4 pin-tile__bottom">
-
-            <div v-if="created" class="pin-tile__timestamp">
-                <v-icon icon="mdi-clock"/> {{ created }}
-            </div>
-            <div v-if="edited" class="pin-tile__timestamp">
-                &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
+            <div class="pin-tile__timestamp-wrapper">
+                <div v-if="created" class="pin-tile__timestamp">
+                    <v-icon icon="mdi-clock"/> {{ created }}
+                </div>
+                <div v-if="edited" class="pin-tile__timestamp">
+                    &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
+                </div>
             </div>
 
             <v-menu>
@@ -175,11 +176,26 @@ export default {
         border: 1px solid rgb(var(--v-theme-primary));
     }
 
+
+    // Hide details until hover
+    .pin-tile__header__icon-row,
+    .pin-tile__timestamp-wrapper {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    &:hover {
+        .pin-tile__header__icon-row,
+        .pin-tile__timestamp-wrapper {
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+    }
+
     .pin-tile__header {
-        .pin-tile__header__creator {
+        .pin-tile__header__creator-wrapper {
             max-width: 70%;
             display: inline-block;
-            font-weight: bold;
 
             .pfp {
                 width: 12pt;
@@ -189,6 +205,10 @@ export default {
                 background: white;
                 display: inline-block;
             }
+        }
+
+        .pin-tile__header__creator {
+            opacity: $secondary-text-opacity
         }
         
         .pin-tile__header__icon-row {
@@ -206,6 +226,7 @@ export default {
         align-items: center;
 
         .pin-tile__timestamp {
+            display: inline-block;
             font-size: 0.75rem;
             opacity: $secondary-text-opacity;
         }

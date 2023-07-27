@@ -9,8 +9,19 @@ definePageMeta({
     <!-- A page to show pins within a single board -->
     <div>
         <NuxtLayout name="board">
+            <!-- Sort options -->
+            <div class="mb-2">
+                Sort by: 
+                <v-select
+                    v-model="selected" density="compact" solo-filled max-width="200"
+                    flat class="select mr-2"
+                    :items="['Created', 'Modified']"
+                ></v-select>
+            </div>
+
             <div class="grid">
-                <BoardPin v-for="index in 10" :key="index" 
+                <BoardPin
+                    v-for="index in 10" :key="index" 
                     creator="helloasdad1231521613123131312313131231313212312313131312"
                     created="1:00 AM 12/12/12"
                     edited="1:00 AM 12/12/12"
@@ -27,12 +38,23 @@ import BoardPin from '~/components/board/Pin.vue';
 
 export default {
     name: 'BoardPage',
-    components: { BoardPin }
+    components: { BoardPin },
+    data() {
+        return {
+            selected: ''
+        };
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
+
+.select {
+    width: 200px;
+    max-width: 200px;
+    display: inline-block;
+}
 
 .grid {
     column-count: 3;

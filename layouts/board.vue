@@ -6,7 +6,7 @@
             <div class="d-flex flex-row">
                 <BoardLeftNav />
 
-                <v-container class="container">
+                <v-container class="container pt-0">
                     <slot />
                 </v-container>
             </div>

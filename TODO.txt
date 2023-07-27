@@ -1,9 +1,6 @@
 https://github.com/nuxt-community/vuetify-module/issues/213
 https://github.com/BayBreezy/nuxt3-vuetify3-starter/blob/main/plugins/vuetify.ts
 
-error page - add github url
-- different errors as well
-
 github linting workflow
 
 -----
@@ -18,6 +15,31 @@ github linting workflow
 profile pic plugin
 - handle a global login state - plugin
 - also store stuff like current username
+
+
+toast for errors / success
+- modal to confirm deletion
+- modal to create board 
+- modal to create pin
+
+
+responsive mobile
+
+responsive columns for pins
+
+sort options
+
+
+
+custom backgrounds on pins?
+
+
+pin types:
+markdown rendering
+
+
+organize css more
+
 
 
 sign in button when not logged in
