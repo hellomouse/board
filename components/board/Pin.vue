@@ -67,26 +67,26 @@
                 
                 <v-sheet elevation="8" rounded="0">
                     <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-link" /> Permalink
+                        <v-icon icon="mdi-link" />Permalink
                     </button>
                     <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-pencil" /> Edit
+                        <v-icon icon="mdi-pencil" />Edit
                     </button>
                     <button class="px-4 hoverable hover-list-item edit-list-item line">
-                        <v-icon icon="mdi-star" /> Favorite
+                        <v-icon icon="mdi-star" />Favorite
                     </button>
 
                     <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-pin" /> Pin
+                        <v-icon icon="mdi-pin" />Pin
                     </button>
                     <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-lock" /> Lock
+                        <v-icon icon="mdi-lock" />Lock
                     </button>
                     <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-folder-zip" /> Archive
+                        <v-icon icon="mdi-folder-zip" />Archive
                     </button>
                     <button class="px-4 text-red [ hoverable hover-list-item ] edit-list-item">
-                        <v-icon icon="mdi-trash-can" color="red" /> Delete
+                        <v-icon icon="mdi-trash-can" color="red" />Delete
                     </button>
                 </v-sheet>
             </v-menu>

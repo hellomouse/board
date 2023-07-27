@@ -14,11 +14,14 @@ github linting workflow
 - Search bar
 
 
-proper 404 page - current one doesnt owkr
 
 profile pic plugin
 - handle a global login state - plugin
 - also store stuff like current username
+
+
+sign in button when not logged in
+
 
 
 future todo:

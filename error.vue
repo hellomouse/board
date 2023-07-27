@@ -1,5 +1,5 @@
 <template>
-    <v-app dark>
+    <NuxtLayout>
         <div class="error-container">
             <h1 v-if="error.statusCode === 404">
                 {{ pageNotFound }}
@@ -10,22 +10,20 @@
 
             <p class="text--secondary mt-3">
                 If you think you found a bug, please add it to our
-                <a href="TODO: url">issue tracker</a> on github.
+                <a href="https://github.com/hellomouse/board/issues">issue tracker</a> on github.
             </p>
 
-            <v-btn to="/" class="mt-5">Back to Home Page</v-btn>
+            <v-btn to="/" class="mt-5" tile>Back to Home Page</v-btn>
         </div>
-    </v-app>
+    </NuxtLayout>
 </template>
 
 <script>
 export default {
-    name: 'EmptyLayout',
-    layout: 'empty',
     props: {
         error: {
             type: Object,
-            default: null,
+            default: () => {},
         },
     },
     data() {
