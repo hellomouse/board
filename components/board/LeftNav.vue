@@ -4,11 +4,7 @@
         class="mr-3 mb-3 left-nav"
         color="transparent"
     >
-        <v-btn
-            color="red"
-        >
-            <v-icon icon="mdi-plus" /> {{ buttonLabel }}
-        </v-btn>
+        <BoardNewBoardBtn />
 
         <div class="mt-3 mr-2">
             <button class="px-4 hoverable hover-list-item list-item">

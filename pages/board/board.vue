@@ -40,7 +40,7 @@ definePageMeta({
                         </v-btn>
                     </template>
                     <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
-                        <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show card details"></v-switch>
+                        <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
                     </v-sheet>
                 </v-menu>
             </div>
