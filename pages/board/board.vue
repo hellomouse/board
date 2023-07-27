@@ -9,14 +9,32 @@ definePageMeta({
     <!-- A page to show pins within a single board -->
     <div>
         <NuxtLayout name="board">
+            <!-- TODO: full board name  + desc -->
+            <h1>Board Name</h1>
+            <p>Board description</p>
+
             <!-- Sort options -->
-            <div class="mb-2">
-                Sort by: 
+            <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
                 <v-select
                     v-model="selected" density="compact" solo-filled max-width="200"
                     flat class="select mr-2"
                     :items="['Created', 'Modified']"
                 ></v-select>
+
+                <v-btn
+                    icon variant="text"
+                    height="40"
+                    @click="toggleSortDirection"
+                >
+                    <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                </v-btn>
+
+                <v-btn
+                    icon variant="text"
+                    height="40"
+                >
+                    <v-icon>mdi-cog</v-icon>
+                </v-btn>
             </div>
 
             <div class="grid">
@@ -41,8 +59,19 @@ export default {
     components: { BoardPin },
     data() {
         return {
-            selected: ''
+            selected: 'Created',
+            sortDown: true
         };
+    },
+    computed: {
+        downArrowClass() {
+            return this.sortDown ? 'down' : '';
+        }
+    },
+    methods: {
+        toggleSortDirection() {
+            this.sortDown = !this.sortDown;
+        }
     }
 }
 </script>
@@ -54,6 +83,22 @@ export default {
     width: 200px;
     max-width: 200px;
     display: inline-block;
+}
+
+// Make sort options smaller
+.small-container {
+    transform: scale(0.8);
+    transform-origin: right;
+}
+
+// Sort arrow
+.sort-arrow-down {
+    transform: rotateZ(0deg);
+    transition: transform 0.2s;
+
+    &.down {
+        transform: rotateZ(180deg);
+    }
 }
 
 .grid {

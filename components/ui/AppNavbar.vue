@@ -112,6 +112,7 @@ $popout-arrow-gap: 5px;
     box-sizing: border-box;
     justify-content: space-between;
     padding: 0 20px;
+    background-color: rgb(var(--v-theme-background));
 
     // Stick to top
     position: sticky;

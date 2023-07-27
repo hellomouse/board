@@ -27,8 +27,9 @@ responsive mobile
 
 responsive columns for pins
 
-sort options
+checkbox to show card details by default
 
+board header 
 
 
 custom backgrounds on pins?

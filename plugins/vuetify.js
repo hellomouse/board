@@ -33,7 +33,7 @@ export default defineNuxtPlugin(nuxtApp => {
                         success: colors.green.accent3,
                         background: '#0D0D0D',
                         surface: '#1A1A1A',
-                        'background-light': '#333'
+                        'background-light': '#222'
                     }
                 },
             },

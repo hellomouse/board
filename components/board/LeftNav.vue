@@ -45,6 +45,7 @@ export default {
 .left-nav {
     border-right: 1px solid $border-color;
     width: $left-nav-width-pc;
+    position: fixed;
 
     .list-item {
         height: $menu-item-height;
