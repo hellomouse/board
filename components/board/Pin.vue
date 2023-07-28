@@ -152,6 +152,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
+@import "~/assets/css/dropdown-menu.scss";
 
 .pin-tile {
     display: inline-block;
@@ -235,15 +236,6 @@ export default {
             position: relative;
             margin-left: auto;
         }
-    }
-}
-
-.edit-list-item {
-    &:not(:hover) { background-color: rgb(var(--v-theme-background-light)); }
-    height: $menu-item-height;
-
-    &.line {
-        border-bottom: 1px solid $border-color;
     }
 }
 </style>

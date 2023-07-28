@@ -10,13 +10,13 @@ html {
     }
 }
 
-
 body { margin: 0; }
 
 // Buttons should have a clickable cursor
-button:not(:disabled) {
-    cursor: pointer;
-}
+button:not(:disabled) { cursor: pointer; }
+
+// Disabled buttons should be darker, not lighter
+.v-theme--dark .v-btn__overlay { background-color: black !important; }
 
 // Remove border-radius: buttons, tooltips
 body .v-btn,
@@ -57,6 +57,7 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
 .hoverable:hover {
     background-color: #444; // TODO
 }
+
 
 // Hide extra padding below from empty details
 .v-input__details {

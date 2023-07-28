@@ -1,0 +1,10 @@
+@import "~/assets/variables.scss";
+
+.edit-list-item {
+    &:not(:hover) { background-color: rgb(var(--v-theme-background-light)); }
+    height: $menu-item-height;
+
+    &.line {
+        border-bottom: 1px solid $border-color;
+    }
+}

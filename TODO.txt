@@ -5,8 +5,6 @@ github linting workflow
 
 -----
 
-
-- Login or user dropdown
 - Apps list
 - Search bar
 
@@ -15,6 +13,18 @@ left nav user select none
 profile pic plugin
 - handle a global login state - plugin
 - also store stuff like current username
+
+
+board page:
+
+- delete board:
+    pass errors on (ie if error toast or something)
+    only show delete, edit, etc.. if has perms
+
+- create board swatches
+- on create -> event -> update boards
+- click on board to go
+- get search params in route
 
 
 toast for errors / success
@@ -53,11 +63,6 @@ markdown rendering
 
 
 organize css more
-
-
-
-sign in button when not logged in
-
 
 
 future todo:

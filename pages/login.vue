@@ -67,22 +67,11 @@ export default {
 
             // Send login request
             let authStore = useAuthStore(this.$pinia);
-            let requestOptions = {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify({
+            try {
+                await this.$fetchApi('/api/login', 'POST', {
                     username: this.username,
                     password: this.password
-                }),
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            
-            try {
-                // eslint-disable-next-line no-undef
-                await $fetch('/api/login', requestOptions);
+                });
             } catch(e) {
                 this.error_msg = (e + '').includes('401') ?
                     'Incorrect username or password' :
@@ -93,16 +82,8 @@ export default {
 
             try {
                 // Get user info
-                requestOptions = {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'same-origin'
-                };
-                // eslint-disable-next-line no-undef
-                let auth = await $fetch('/api/users?' + new URLSearchParams({
-                    id: this.username
-                }), requestOptions);
-                authStore.login(auth);
+                let user = await this.$fetchApi('/api/users', 'GET', { id: this.username  });
+                authStore.login(user);
             } catch (e) {
                 this.error_msg = 'Failed to retrieve user information';
                 this.loading = false;

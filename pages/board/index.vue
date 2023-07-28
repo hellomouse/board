@@ -9,11 +9,18 @@ definePageMeta({
     <!-- A page to show all the boards the user has -->
     <div>
         <NuxtLayout name="board">
-            <BoardBoard title="Hello" creatorId="bowserinator" color="#FF0000"></BoardBoard>
-            <BoardBoard title="Minecraft Build Inspirtation" desc="Cool builds in Minecraft" creatorId="bowserinator" color="#FFFF00"></BoardBoard>
-            <BoardBoard title="Cool websites" creatorId="bowserinator" color="#FFFFFF"></BoardBoard>
-            <BoardBoard title="Random Code Snippets" creatorId="bowserinator" color="#AA0011"></BoardBoard>
-            <BoardBoard title="Hello 131312312323132131o" desc="this is a super long description 1231312241231231" creatorId="bowserinator1231313131313131" color="#FF00FF"></BoardBoard>
+            <BoardBoard
+                v-for="board in boards"
+                :key="board.id"
+
+                :board-id="board.id"
+                :title="board.name"
+                :desc="board.desc"
+                :creator-id="board.creator"
+                :color="board.color"
+
+                @update="onBoardUpdate"
+            ></BoardBoard>
         </NuxtLayout>
     </div>
 </template>
@@ -23,6 +30,29 @@ import BoardBoard from '~/components/board/Board.vue';
 
 export default {
     name: 'BoardIndexPage',
-    components: { BoardBoard }
+    components: { BoardBoard },
+    data: () => ({
+        boards: []
+    }),
+    async created() {
+        this.getBoards();
+    },
+    methods: {
+        async getBoards() {
+            try {
+                // eslint-disable-next-line no-undef
+                let boards = await this.$fetchApi('/api/board/boards', 'GET', {});
+                this.boards = boards.boards;
+                console.log(boards.boards)
+            } catch (e) {
+                console.log(e);
+                return;
+            }
+        },
+        async onBoardUpdate(msg) {
+            if (msg === 'board_delete') // Board was deleted
+                await this.getBoards();
+        }
+    }
 }
 </script>
