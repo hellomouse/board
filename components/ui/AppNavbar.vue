@@ -11,13 +11,15 @@
         <div class="navbar__links">
             <v-menu>
                 <template #activator="{ props }">
-                    <v-btn class="navbar-btn mx-2" icon="mdi-apps" color="rgba(0, 0, 0, 0)" flat v-bind="props"></v-btn>
+                    <v-btn
+                        class="navbar-btn mx-2" icon="mdi-apps" color="rgba(0, 0, 0, 0)" flat
+                        v-bind="props"></v-btn>
                 </template>
                 <div>
                     <v-sheet
                         elevation="6"
                         width="200"
-                        class="popout-sheet"
+                        class="popout-sheet pa-2"
                     >
                         TODO
                     </v-sheet>
@@ -26,7 +28,9 @@
 
             <v-menu>
                 <template #activator="{ props }">
-                    <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props"></button>
+                    <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props">
+                        <img :src="user.pfp_url" />
+                    </button>
                 </template>
                 <div>
                     <v-sheet
@@ -34,17 +38,16 @@
                         width="200"
                         class="popout-sheet"
                     >
-                        <div class="py-2 px-4">
-                            <!-- TODO pfp pic -->
-                            <b>Username</b><br>
-                            <small>@Username</small>
+                        <div class="py-3 px-4">
+                            <p class="text-truncate user-name">{{ user.name }}</p>
+                            <p class="text-truncate user-id">@{{ user.id }}</p>
                         </div>
 
                         <button class="py-3 px-4 hoverable hover-list-item">
                             <v-icon icon="mdi-cog" /> Settings
                         </button>
-                        <button class="py-3 px-4 hoverable hover-list-item">
-                            <v-icon icon="mdi-logout" /> Logout
+                        <button class="py-3 px-4 hoverable hover-list-item" @click="logout">
+                            <v-icon icon="mdi-logout" /> Sign Out
                         </button>
                         <div class="py-2 px-4">
                             <small>FAQ / Info</small>
@@ -56,7 +59,39 @@
     </div>
 </template>
 
+<script>
+import { useAuthStore } from '~/store/auth.js';
+
+export default {
+    computed: {
+        user() { return useAuthStore(this.$pinia).user; }
+    },
+    methods: {
+        async logout() {
+            let authStore = useAuthStore(this.$pinia);
+            let requestOptions = {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include'
+            };
+
+            try {
+                // eslint-disable-next-line no-undef
+                await $fetch('/api/logout', requestOptions);
+                authStore.logout();
+            } catch (e) {
+                console.log(e);
+                return;
+            }
+            this.$router.push('/login');
+        }
+    }
+};
+</script>
+
 <style lang="scss">
+@import "~/assets/variables.scss";
+
 $height: 64px;
 
 .navbar-btn {
@@ -68,30 +103,31 @@ $height: 64px;
 .image-button {
     border-radius: 50%;
     background: red;
+    overflow: hidden;
+
+    & > img {
+        object-fit: cover;
+        max-height: 100%;
+    }
 }
 
-$popout-arrow-size: 10px;
-$popout-arrow-gap: 5px;
+$popout-gap: 5px;
 
 .popout-sheet {
     border-radius: 0 !important;
-    margin-top: $popout-arrow-size + $popout-arrow-gap;
+    margin-top: $popout-gap;
     background-color: rgb(var(--v-theme-background-light));
 
-    &:after {
-        position: absolute;
-        top: -$popout-arrow-size + $popout-arrow-gap;
-        height: 0;
-        width: 0;
-        left: calc(100% - 35px); // TODO: calculate bsaed on image size
-        border: $popout-arrow-size solid transparent;
-        border-bottom-color: #333;
-        content: '';
+    .user-name {
+        font-size: 1.2rem;
+    }
+    .user-id {
+        opacity: $secondary-text-opacity;
+        margin-top: -2px;
     }
 
-    // TODO: abstract highlight to global highlightable or something
     & > button:first-of-type {
-        border-top: 1px solid #333; // TODO
+        border-top: 1px solid $border-color;
     }
 
     & > button {
@@ -101,7 +137,7 @@ $popout-arrow-gap: 5px;
         outline: none;
 
         text-align: left;
-        border-bottom: 1px solid #333; // TODO
+        border-bottom: 1px solid $border-color;
     }
 }
 

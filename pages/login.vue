@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../store/auth.js';
+import { useAuthStore } from '~/store/auth.js';
 
 export default {
     name: 'LoginPage',
@@ -82,7 +82,7 @@ export default {
             
             try {
                 // eslint-disable-next-line no-undef
-                await $fetch("/api/login", requestOptions);
+                await $fetch('/api/login', requestOptions);
             } catch(e) {
                 this.error_msg = (e + '').includes('401') ?
                     'Incorrect username or password' :
@@ -99,7 +99,7 @@ export default {
                     credentials: 'same-origin'
                 };
                 // eslint-disable-next-line no-undef
-                let auth = await $fetch("/api/users?" + new URLSearchParams({
+                let auth = await $fetch('/api/users?' + new URLSearchParams({
                     id: this.username
                 }), requestOptions);
                 authStore.login(auth);
