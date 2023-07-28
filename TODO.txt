@@ -10,7 +10,7 @@ github linting workflow
 - Apps list
 - Search bar
 
-
+left nav user select none
 
 profile pic plugin
 - handle a global login state - plugin
@@ -27,6 +27,22 @@ responsive mobile
 
 responsive columns for pins
 
+https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
+
+https://www.npmjs.com/package/vue-markdown-render
+https://markdown-it.github.io/markdown-it/
+
+global state:
+- favicon
+- icon
+
+
+
+
+board options
+- share
+- edit
+- delete
 
 
 board header 

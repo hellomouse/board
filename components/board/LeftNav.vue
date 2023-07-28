@@ -45,6 +45,7 @@ export default {
 
     .list-item {
         height: $menu-item-height;
+        user-select: none;
     }
 }
 </style>

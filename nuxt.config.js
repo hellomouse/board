@@ -1,6 +1,9 @@
 import vuetify from "vite-plugin-vuetify";
 
 export default {
+    ssr: true,
+    target: 'server',
+
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
         title: "Hellomouse Board",
@@ -44,7 +47,22 @@ export default {
                 config.plugins.push(vuetify())
             );
         },
+        '@pinia/nuxt',
+        '@pinia-plugin-persistedstate/nuxt',
+        'nuxt-proxy'
     ],
+
+    proxy: {
+        options: {
+            target: 'http://localhost:8080',
+            changeOrigin: true,
+            pathRewrite: { '^/api': '/v1' },
+            pathFilter: [ '/api' ],
+            secure: false,
+            cookieDomainRewrite: "localhost",
+            debug: true
+        },
+    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {

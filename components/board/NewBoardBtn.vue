@@ -15,8 +15,8 @@
 
         <v-card rounded="0" title="New Board">
             <v-card-text>
-                <v-text-field class="mb-2" label="Name" rounded="0" variant="solo-filled"></v-text-field>
-                <v-textarea class="mb-2" label="Description" rounded="0" variant="solo-filled"></v-textarea>
+                <v-text-field density="compact" class="mb-2" label="Name" rounded="0" variant="solo-filled"></v-text-field>
+                <v-textarea density="compact" class="mb-2" label="Description" rounded="0" variant="solo-filled"></v-textarea>
 
                 TODO: pick from swatches
                 <v-color-picker rounded="0" mode="hex"></v-color-picker>

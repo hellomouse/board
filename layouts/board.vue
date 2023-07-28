@@ -9,8 +9,6 @@
                 <slot />
             </v-container>
         </v-main>
-
-        <UiAppFooter />
     </v-app>
 </template>
 
