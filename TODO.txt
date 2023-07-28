@@ -37,8 +37,6 @@ global state:
 - icon
 
 
-
-
 board options
 - share
 - edit

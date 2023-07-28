@@ -2,11 +2,7 @@
     <div class="navbar" fixed>
         <UiAppLogo /> <!-- TODO: pass icon path from layout -->
 
-        <v-text-field
-            label="" rounded="0"
-            placeholder="Search"
-            flat variant="solo-filled"
-        ></v-text-field>  <!-- TODO prepend icon -->
+        <slot></slot>
 
         <div class="navbar__links">
             <v-menu>
@@ -26,7 +22,11 @@
                 </div>
             </v-menu>
 
-            <v-menu>
+            <NuxtLink v-if="!isLoggedIn" class="login-link" :to="'/login?r=' + $route.path">
+                Sign In
+            </NuxtLink>
+
+            <v-menu v-if="isLoggedIn">
                 <template #activator="{ props }">
                     <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props">
                         <img :src="user.pfp_url" />
@@ -64,7 +64,8 @@ import { useAuthStore } from '~/store/auth.js';
 
 export default {
     computed: {
-        user() { return useAuthStore(this.$pinia).user; }
+        user() { return useAuthStore(this.$pinia).user; },
+        isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; }
     },
     methods: {
         async logout() {
@@ -93,6 +94,11 @@ export default {
 @import "~/assets/variables.scss";
 
 $height: 64px;
+
+.login-link {
+    color: white;
+    text-decoration: none;
+}
 
 .navbar-btn {
     height: 60% !important;

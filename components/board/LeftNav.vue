@@ -1,12 +1,12 @@
 <template>
     <v-sheet
         elevation="0"
-        class="mr-3 mb-3 left-nav"
+        class="pr-3 mb-3 left-nav"
         color="transparent"
     >
         <BoardNewBoardBtn />
 
-        <div class="mt-3 mr-2">
+        <div class="mt-3">
             <button class="px-4 hoverable hover-list-item list-item">
                 <v-icon icon="mdi-view-dashboard" /> My Boards
             </button>

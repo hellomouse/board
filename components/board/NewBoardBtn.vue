@@ -7,10 +7,10 @@
             <v-btn
                 color="red"
                 v-bind="props"
+                block
             >
                 <v-icon icon="mdi-plus" /> New Board
             </v-btn>
-
         </template>
 
         <v-card rounded="0" title="New Board">
