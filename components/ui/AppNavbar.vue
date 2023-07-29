@@ -79,11 +79,13 @@ export default {
             try {
                 // eslint-disable-next-line no-undef
                 await $fetch('/api/logout', requestOptions);
-                authStore.logout();
             } catch (e) {
+                // Ignore error on logout: cookie may be invalid
+                // if server restarted, invalidate session on client side
+                // if server errors anyways
                 console.log(e);
-                return;
             }
+            authStore.logout();
             this.$router.push('/login');
         }
     }
