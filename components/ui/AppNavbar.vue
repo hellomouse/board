@@ -29,7 +29,7 @@
             <v-menu v-if="isLoggedIn">
                 <template #activator="{ props }">
                     <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props">
-                        <img :src="user.pfp_url" />
+                        <profile-picture :src="user.pfp_url" />
                     </button>
                 </template>
                 <div>
@@ -106,17 +106,6 @@ $height: 64px;
     height: 60% !important;
     aspect-ratio: 1 / 1;
     font-size: 1.3rem;
-}
-
-.image-button {
-    border-radius: 50%;
-    background: red;
-    overflow: hidden;
-
-    & > img {
-        object-fit: cover;
-        max-height: 100%;
-    }
 }
 
 $popout-gap: 5px;

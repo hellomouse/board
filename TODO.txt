@@ -12,7 +12,6 @@ github linting workflow
 board page:
 loading + empty state
 - delete board:
-    pass errors on (ie if error toast or something)
     only show delete, edit, etc.. if has perms
 - click on board to go
 - get search params in route
@@ -21,8 +20,12 @@ make share modal
 - endpoint
 - perms
 
+modal max width as percentage!
+
+
 toast for errors / success
 - modal to create pin
+
 
 
 responsive mobile

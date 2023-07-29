@@ -8,7 +8,7 @@
     >
         <div class="pin-tile__header pt-4 px-4">
             <div class="pin-tile__header__creator-wrapper text-truncate">
-                <div class="pfp mr-1"></div>
+                <profile-picture class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt" src="" />
                 <span class="pin-tile__header__creator">@{{ creator }}</span>
             </div>
 
@@ -197,15 +197,6 @@ export default {
         .pin-tile__header__creator-wrapper {
             max-width: 70%;
             display: inline-block;
-
-            .pfp {
-                width: 12pt;
-                height: 12pt;
-                vertical-align: middle;
-                border-radius: 50%;
-                background: white;
-                display: inline-block;
-            }
         }
 
         .pin-tile__header__creator {

@@ -1,12 +1,25 @@
+<!--
+The create + edit board modal
 
+Example usage:
+
+<BoardModal
+:edit-mode="editBoard"    true for edit, false for create
+:show="createBoardModal"  show modal or not?
+:board="currentBoard"     Board data to fill in edit, or {} for create
+
+@update="onBoardCreate"
+@error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+/>
+-->
 
 <template>
     <v-dialog
         v-model="showModal"
         width="auto"
     >
-        <v-card rounded="0" width="500" max-width="500" class="py-4">
-            <v-card-text>
+        <v-card rounded="0" width="500" max-width="500" class="py-2">
+            <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Board</h1>
 
                 <v-text-field
@@ -27,7 +40,7 @@
                     <v-icon v-if="selectedSwatchIndex === index" icon="mdi-check" />
                 </v-btn>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions class="mr-3">
                 <v-spacer />
                 <v-btn color="primary" @click="$emit('update', false)">Cancel</v-btn>
                 <v-btn color="primary" :loading="loading" @click="createBoard">{{ editMode ? 'Apply' : 'Create' }}</v-btn>

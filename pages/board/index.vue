@@ -41,6 +41,12 @@ definePageMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
 
+            <ShareModal
+                :show="true"
+
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            />
+
             <v-snackbar
                 v-model="showErrorToast" color="error" rounded="0" theme="dark"
                 transition="scroll-y-reverse-transition"

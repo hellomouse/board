@@ -12,7 +12,8 @@
         <div class="px-4 pb-3">
             <div class="board-tile__desc text-truncate">{{ desc }}</div>
             <div class="board-tile__owner-row pt-1 mt-1">
-                <div class="board-tile__pfp mr-1"></div>
+                <profile-picture class="mr-1" size="12pt" src="" />
+
                 <div class="d-inline-block text-truncate">
                     <small>@{{ creatorId }}</small>
                 </div>
@@ -150,15 +151,6 @@ export default {
 
     .board-tile__desc {
         opacity: $secondary-text-opacity;
-    }
-
-    .board-tile__pfp {
-        width: 12pt;
-        height: 12pt;
-        vertical-align: middle;
-        border-radius: 50%;
-        background: white;
-        display: inline-block;
     }
 }
 </style>
