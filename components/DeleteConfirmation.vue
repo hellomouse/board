@@ -32,6 +32,7 @@ Example usage:
                     density="compact"
                     class="mt-2 mb-10"
                     variant="solo-filled"
+                    @keyup.enter="() => { if (inputString === confirmationString) $emit('update', true) }"
                 />
 
                 <div style="float: right">

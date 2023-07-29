@@ -16,7 +16,6 @@ loading + empty state
     only show delete, edit, etc.. if has perms
 - click on board to go
 - get search params in route
-- delete confirmation - if press enter in textbox should accept as ok
 
 make share modal
 - endpoint
