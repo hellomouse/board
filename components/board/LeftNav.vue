@@ -4,7 +4,7 @@
         class="pr-3 mb-3 left-nav"
         color="transparent"
     >
-        <BoardNewBoardBtn />
+        <slot></slot>
 
         <div class="mt-3">
             <button class="px-4 hoverable hover-list-item list-item">
@@ -25,13 +25,7 @@
 
 <script>
 export default {
-    name: 'BoardBoard',
-    props: {
-        buttonLabel: {
-            type: String,
-            default: 'New Board'
-        }
-    },
+    name: 'BoardLeftNav'
 }
 </script>
 

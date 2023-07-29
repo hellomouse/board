@@ -35,7 +35,18 @@
                         <button class="px-4 hoverable hover-list-item edit-list-item">
                             <v-icon icon="mdi-account-plus" />Share
                         </button>
-                        <button class="px-4 hoverable hover-list-item edit-list-item line">
+                        <button
+                            class="px-4 hoverable hover-list-item edit-list-item line"
+                            @click="$emit('update', {
+                                type: 'edit',
+                                board: {
+                                    id: boardId,
+                                    name: title,
+                                    desc,
+                                    creator: creatorId,
+                                    color
+                                }
+                            })">
                             <v-icon icon="mdi-pencil" />Edit
                         </button>
                         <button class="px-4 text-red [ hoverable hover-list-item ] edit-list-item" @click="deleteModal = true">
@@ -100,10 +111,16 @@ export default {
             }
 
             this.deleteModalLoading = true;
-            await this.$fetchApi('/api/board/boards', 'DELETE', { id: this.boardId });
+            try {
+                await this.$fetchApi('/api/board/boards', 'DELETE', { id: this.boardId });
+                this.$emit('update', { type: 'board_delete' });
+            } catch(e) {
+                // TODO emit error
+                // TODO: get error code and general error message handler
+            }
+
             this.deleteModal = false;
             this.deleteModalLoading = false;
-            this.$emit('update', 'board_delete');
         }
     }
 }

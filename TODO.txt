@@ -8,27 +8,32 @@ github linting workflow
 - Apps list
 - Search bar
 
-left nav user select none
-
-profile pic plugin
-- handle a global login state - plugin
-- also store stuff like current username
-
 
 board page:
+
+loading + empty state
 
 - delete board:
     pass errors on (ie if error toast or something)
     only show delete, edit, etc.. if has perms
 
-- create board swatches
-- on create -> event -> update boards
+
+logout:
+- always redirect and clear cookies
+- at least clear store
+
+
 - click on board to go
 - get search params in route
 
 
+
+make share modal
+- endpoint
+- perms
+
+
 toast for errors / success
-- modal to confirm deletion
 - modal to create board 
 - modal to create pin
 
@@ -45,12 +50,6 @@ https://markdown-it.github.io/markdown-it/
 global state:
 - favicon
 - icon
-
-
-board options
-- share
-- edit
-- delete
 
 
 board header 

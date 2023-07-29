@@ -69,7 +69,7 @@ export default {
         },
         show: {
             type: Boolean,
-            required: true
+            default: false
         },
         loading: {
             type: Boolean,
@@ -77,7 +77,6 @@ export default {
         }
     },
     data: () => ({
-        deleteModal: false,
         inputString: ''
     }),
     computed: {

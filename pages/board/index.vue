@@ -7,8 +7,17 @@ definePageMeta({
 
 <template>
     <!-- A page to show all the boards the user has -->
-    <div>
-        <NuxtLayout name="board">
+    <NuxtLayout name="board">
+        <BoardLeftNav>
+            <v-btn
+                color="red" block
+                @click="openCreateBoard"
+            >
+                <v-icon icon="mdi-plus" /> New Board
+            </v-btn>
+        </BoardLeftNav>
+
+        <v-container class="container pt-0">
             <BoardBoard
                 v-for="board in boards"
                 :key="board.id"
@@ -21,38 +30,78 @@ definePageMeta({
 
                 @update="onBoardUpdate"
             ></BoardBoard>
-        </NuxtLayout>
-    </div>
+
+            <BoardModal
+                :edit-mode="editBoard"
+                :show="createBoardModal"
+                :board="currentBoard"
+
+                @update="onBoardCreate"
+                @error="e => console.error(e) /* TODO toast */"
+            />
+        </v-container>
+    </NuxtLayout>
 </template>
 
 <script>
 import BoardBoard from '~/components/board/Board.vue';
+import BoardModal from '~/components/board/Modal.vue';
 
 export default {
     name: 'BoardIndexPage',
-    components: { BoardBoard },
+    components: { BoardBoard, BoardModal },
     data: () => ({
-        boards: []
+        boards: [],
+        editBoard: false,
+        createBoardModal: false,
+        currentBoard: {}
     }),
+    // Get boards on page first load
     async created() {
         this.getBoards();
     },
     methods: {
         async getBoards() {
             try {
-                // eslint-disable-next-line no-undef
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {});
                 this.boards = boards.boards;
                 console.log(boards.boards)
             } catch (e) {
-                console.log(e);
+                console.log(e); // TODO: toast
                 return;
             }
         },
+        // Handle menu selection for each board
         async onBoardUpdate(msg) {
-            if (msg === 'board_delete') // Board was deleted
+            if (msg.type === 'board_delete') // Board was deleted
                 await this.getBoards();
+            else if (msg.type === 'edit') {  // Open edit modal
+                this.editBoard = true;
+                this.createBoardModal = true;
+                this.currentBoard = msg.board;
+            }
+        },
+        // Open the create board button
+        async openCreateBoard() {
+            this.editBoard = false;
+            this.createBoardModal = true;
+            this.currentBoard = {};
+        },
+        // Called when a board is newly created or cancelled
+        async onBoardCreate(created) {
+            this.createBoardModal = false;
+            if (created)
+                this.getBoards();
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "~/assets/variables.scss";
+
+.container {
+    max-width: calc(100% - $left-nav-width-pc) !important;
+    margin-left: $left-nav-width-pc;
+}
+</style>
