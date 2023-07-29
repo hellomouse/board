@@ -29,6 +29,7 @@ definePageMeta({
                 :color="board.color"
 
                 @update="onBoardUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             ></BoardBoard>
 
             <BoardModal
@@ -37,8 +38,22 @@ definePageMeta({
                 :board="currentBoard"
 
                 @update="onBoardCreate"
-                @error="e => console.error(e) /* TODO toast */"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
+
+            <v-snackbar
+                v-model="showErrorToast" color="error" rounded="0" theme="dark"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastErrorMsg }}
+            </v-snackbar>
+            <v-snackbar
+                v-model="showSuccessToast" color="success"
+                rounded="0" theme="dark" timeout="2000"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastSuccessMsg }}
+            </v-snackbar>
         </v-container>
     </NuxtLayout>
 </template>
@@ -54,7 +69,12 @@ export default {
         boards: [],
         editBoard: false,
         createBoardModal: false,
-        currentBoard: {}
+        currentBoard: {},
+
+        showErrorToast: false,
+        showSuccessToast: false,
+        toastErrorMsg: '',
+        toastSuccessMsg: ''
     }),
     // Get boards on page first load
     async created() {
@@ -73,8 +93,10 @@ export default {
         },
         // Handle menu selection for each board
         async onBoardUpdate(msg) {
-            if (msg.type === 'board_delete') // Board was deleted
+            if (msg.type === 'board_delete') { // Board was deleted
                 await this.getBoards();
+                [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
+            }
             else if (msg.type === 'edit') {  // Open edit modal
                 this.editBoard = true;
                 this.createBoardModal = true;
@@ -90,8 +112,11 @@ export default {
         // Called when a board is newly created or cancelled
         async onBoardCreate(created) {
             this.createBoardModal = false;
-            if (created)
+            if (created) {
+                [this.showSuccessToast, this.toastSuccessMsg] = [true,
+                    this.editBoard ? 'Board edited!' : 'Board created!'];
                 this.getBoards();
+            }
         }
     }
 }

@@ -115,8 +115,8 @@ export default {
                 await this.$fetchApi('/api/board/boards', 'DELETE', { id: this.boardId });
                 this.$emit('update', { type: 'board_delete' });
             } catch(e) {
-                // TODO emit error
-                // TODO: get error code and general error message handler
+                let errorMsg = `Failed to delete board: ${this.$apiErrorToString(e)}`;
+                this.$emit('error', errorMsg);
             }
 
             this.deleteModal = false;

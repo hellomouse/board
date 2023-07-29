@@ -83,8 +83,14 @@ export default {
     },
     methods: {
         async createBoard() {
-            if (!this.name)
+            if (!this.name) {
                 this.$emit('error', 'Name cannot be empty');
+                return;
+            }
+            if (!this.description) {
+                this.$emit('error', 'Description cannot be empty');
+                return;
+            }
 
             let params = {
                 name: this.name,
@@ -100,11 +106,7 @@ export default {
             try {
                 await this.$fetchApi('/api/board/boards', this.editMode ? 'PUT' : 'POST', params);
             } catch (e) {
-                let errorMsg = (e + '').includes('40') ?
-                    'Failed to create board' :
-                    'Error creating board';
-                // TODO: general error
-
+                let errorMsg = `Failed to modify board: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
                 this.loading = false;
                 return;

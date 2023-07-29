@@ -10,27 +10,19 @@ github linting workflow
 
 
 board page:
-
 loading + empty state
-
 - delete board:
     pass errors on (ie if error toast or something)
     only show delete, edit, etc.. if has perms
-
-
-
 - click on board to go
 - get search params in route
-
-
+- delete confirmation - if press enter in textbox should accept as ok
 
 make share modal
 - endpoint
 - perms
 
-
 toast for errors / success
-- modal to create board 
 - modal to create pin
 
 
