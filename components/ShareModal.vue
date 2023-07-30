@@ -1,4 +1,24 @@
+<!--
+A generic share resource modal
+It's recommend to wrap this for each resource
 
+Example usage:
+
+<ShareModal
+    :show="shareBoardModal"
+    :perma-share-link="shareBoardLink"
+    :creator="shareBoardCreator"
+    :resource-name="shareBoardName"
+    :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
+    :initial-users="shareUsers"
+    :initial-public-perm="sharePublicPerm"
+    :share-board-modal-loading="shareBoardModalLoading"
+
+    @update="newPerms => {} or { user: { perm_level: ... }}"
+    @error="e => ..."
+    @success="e => ..."
+/>
+-->
 
 <template>
     <v-dialog
@@ -181,7 +201,10 @@ export default {
         initialUsers: {
             type: Array,
             required: true,
-            // TODO: validation
+            validator(val) {
+                return val.every(x => ['id', 'name', 'pfp_url', 'level']
+                    .every(prop => Object.keys(x).includes(prop)));
+            }
         },
         // Initial public permission, must be in perm levels
         initialPublicPerm: {
@@ -265,7 +288,6 @@ export default {
                 this.select = this.select.filter(u => !existingIds.includes(u.id));
             }
             this.users = this.users.concat(this.select || []);
-
             this.select = null;
             this.search = '';
             this.items = [];

@@ -2,7 +2,10 @@
 
 <template>
     <div class="user__pfp" :style="{ width: size, height: size }">
-        <img :src="src">
+        <img
+            :src="src"
+            @error="$event.target.src = '/default-pfp.png'"
+        >
     </div>
 </template>
 

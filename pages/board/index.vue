@@ -43,8 +43,7 @@ definePageMeta({
 
             <ShareModal
                 :show="shareBoardModal"
-
-                perma-share-link="test"
+                :perma-share-link="shareBoardLink"
                 :creator="shareBoardCreator"
                 :resource-name="shareBoardName"
                 :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
@@ -95,6 +94,7 @@ export default {
         shareBoardId: '',
         shareBoardCreator: '',
         shareBoardName: '',
+        shareBoardLink: '',
 
         showErrorToast: false,
         showSuccessToast: false,
