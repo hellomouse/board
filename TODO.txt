@@ -17,8 +17,20 @@ loading + empty state
 - get search params in route
 
 make share modal
-- endpoint
-- perms
+
+
+done:
+    - perma share link
+    - perms per user - done
+    - title - done
+
+refactors:
+move share modal own component that uses the global share modal
+proper console.error
+
+- batch user search
+
+pfp default image
 
 modal max width as percentage!
 

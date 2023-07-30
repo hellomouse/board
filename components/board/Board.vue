@@ -33,7 +33,13 @@
                         <button class="px-4 hoverable hover-list-item edit-list-item">
                             <v-icon icon="mdi-link" />Permalink
                         </button>
-                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                        <button
+                            class="px-4 hoverable hover-list-item edit-list-item"
+                            @click="$emit('update', {
+                                type: 'share',
+                                id: boardId
+                            })"
+                        >
                             <v-icon icon="mdi-account-plus" />Share
                         </button>
                         <button
