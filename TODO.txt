@@ -10,7 +10,6 @@ github linting workflow
 
 
 board page:
-- only show delete, edit, etc.. if has perms
 - click on board to go
 - get search params in route
 - sort bar
@@ -20,8 +19,9 @@ board page:
 - require login for board
 
 
-api:
-- returning list of boards should return perms as well
+make it so editors can also update board and share
+- make it so editors cant promote others to owner
+
 - batch user search
 
 

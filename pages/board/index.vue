@@ -28,6 +28,7 @@ definePageMeta({
                 :desc="board.desc"
                 :creator-id="board.creator"
                 :color="board.color"
+                :current-user-perm="board.perms[user.id]?.perm_level"
 
                 @update="onBoardUpdate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -78,6 +79,7 @@ definePageMeta({
 </template>
 
 <script>
+import { useAuthStore } from '~/store/auth.js';
 import BoardBoard from '~/components/board/Board.vue';
 import BoardModal from '~/components/board/Modal.vue';
 
@@ -98,6 +100,9 @@ export default {
         toastErrorMsg: '',
         toastSuccessMsg: ''
     }),
+    computed: {
+        user() { return useAuthStore(this.$pinia).user; },
+    },
     // Get boards on page first load
     async created() {
         this.getBoards();

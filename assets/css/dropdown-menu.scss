@@ -4,7 +4,7 @@
     &:not(:hover) { background-color: rgb(var(--v-theme-background-light)); }
     height: $menu-item-height;
 
-    &.line {
-        border-bottom: 1px solid $border-color;
+    &--line {
+        border-top: 1px solid $border-color;
     }
 }

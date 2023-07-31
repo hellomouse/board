@@ -34,6 +34,7 @@
                             <v-icon icon="mdi-link" />Permalink
                         </button>
                         <button
+                            v-if="['Owner', 'Edit'].includes(currentUserPerm)"
                             class="px-4 hoverable hover-list-item edit-list-item"
                             @click="$emit('update', {
                                 type: 'share',
@@ -43,7 +44,8 @@
                             <v-icon icon="mdi-account-plus" />Share
                         </button>
                         <button
-                            class="px-4 hoverable hover-list-item edit-list-item line"
+                            v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                            class="px-4 hoverable hover-list-item edit-list-item"
                             @click="$emit('update', {
                                 type: 'edit',
                                 board: {
@@ -57,7 +59,8 @@
                             <v-icon icon="mdi-pencil" />Edit
                         </button>
                         <button
-                            class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
+                            v-if="['Owner'].includes(currentUserPerm)"
+                            class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
                             @click="$emit('update', {
                                 type: 'open_board_delete',
                                 id: boardId,
@@ -97,6 +100,10 @@ export default {
             type: String,
             default: "#FFFFFF",
             validator(value) { return /^#[0-9a-fA-F]{6}$/i.test(value); }
+        },
+        currentUserPerm: {
+            type: String,
+            default: ''
         }
     }
 }
