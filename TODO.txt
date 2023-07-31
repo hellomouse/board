@@ -10,23 +10,31 @@ github linting workflow
 
 
 board page:
-- click on board to go
 - get search params in route
 - refresh boards periodically?
 - default description in create
 - expand list of boards - show boards like channels on left
 - require login for board
-- save sort preference
+- save sort preference - localstorage
+- instead of board fixed size adaptive columns
+
 
 make it so editors can also update board and share
 - make it so editors cant promote others to owner
 
 
-
+pins:
+- dropdown
+    - edit
+    - share
+    - delete
+    - properties
 
 wip:
 - api documentation page
 - table of contents for docs on right somehow
+- api page for mobile users
+    - json block scroll no overflow
 
 
 

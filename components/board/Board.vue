@@ -5,12 +5,18 @@
         class="board-tile hoverable [ mr-3 mb-3 ]"
         :style="{ borderColor: color }"
     >
-        <div class="px-4 pt-4">
+        <div
+            class="px-4 pt-4"
+            @dblclick="goToBoard"
+        >
             <div class="text-truncate text-h6">{{ title }}</div>
         </div>
         
         <div class="px-4 pb-3">
-            <div class="board-tile__desc text-truncate">{{ desc }}</div>
+            <div
+                class="board-tile__desc text-truncate"
+                @dblclick="goToBoard"
+            >{{ desc }}</div>
             <div class="board-tile__owner-row pt-1 mt-1">
                 <profile-picture class="mr-1" size="12pt" src="" />
 
@@ -111,6 +117,9 @@ export default {
             if (process.client)
                 navigator.clipboard.writeText(window.location.origin + '/board/board?id=' + this.boardId);
             this.$emit('success', 'Link copied!');
+        },
+        goToBoard() {
+            this.$router.push('/board/board?id=' + this.boardId);
         }
     }
 }
@@ -124,7 +133,7 @@ export default {
     max-width: 100%;
     border-right: 3px solid;
     display: inline-block;
-
+    
     &__menu {
         margin-left: auto;
         margin-bottom: -12px;
