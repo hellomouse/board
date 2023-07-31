@@ -17,7 +17,7 @@ Example usage:
         :show="show"
         title="Delete Board"
         :loading="deleteModalLoading"
-        :confirmation-string="board.title"
+        :confirmation-string="board.title || ''"
         @update="die => deleteBoard(die)"
     >
         <p>

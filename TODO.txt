@@ -22,10 +22,17 @@ board page:
 make it so editors can also update board and share
 - make it so editors cant promote others to owner
 
+
 - batch user search
 
-
+wip:
 - api documentation page
+- table of contents for docs on right somehow
+
+
+
+[Vue warn]: Do not use built-in or reserved HTML elements as component id: menu                                                10:42:02 AM
+[Vue warn]: Property "showModal" was accessed during render but is not defined on instance.
 
 
 make nicer:

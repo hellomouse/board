@@ -1,0 +1,26 @@
+@import "../variables.scss";
+
+.api-parameter-table {
+    border: 1px solid $border-color;
+    max-width: 470px;
+    margin: 12px 0;
+
+    // Thinner top header
+    th { height: 24px !important; }
+
+    // Denser rows
+    tr > td {
+        height: 28px !important;
+    }
+
+    // Parameter name less width than description
+    tr td:first-child {
+        width: 160px;
+    }
+}
+
+.api-json-block {
+    background-color: #0A0A0A;
+    padding: 8px;
+    margin-top: 4px;
+}
