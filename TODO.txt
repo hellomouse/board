@@ -42,11 +42,9 @@ pins:
 
 
 wip:
-- api: refactor css dont duplicate enum and docs
-
 - api documentation page
 - table of contents for docs on right somehow
-- api page for mobile users
+
 
 
 

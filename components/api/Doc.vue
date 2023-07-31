@@ -1,10 +1,10 @@
 <template>
-    <v-card rounded="0" class="mb-4 mr-4 card" width="500">
-        <div class="pa-4 api-title-bar">
+    <v-card rounded="0" class="mb-4 mr-4 api-card" width="500">
+        <div class="pa-4 api-card__title-bar">
             <h1 class="mb-2">{{ title }}</h1>
-            <div class="api-title-bar__sub">
+            <div class="api-card__title-bar__sub">
                 <span
-                    class="api-title-bar__sub__method"
+                    class="api-card__title-bar__method"
                     :class="'bg-' + methodColor"
                 >{{ method }}</span>
                 <code>{{ endpoint }}</code>
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <div class="contents pa-4">
+        <div class="api-card__contents pa-4">
             <slot />
         </div>
     </v-card>
@@ -43,29 +43,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$chip-padding: 4px;
-
-.card {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.api-title-bar {
-    background-color: rgba(var(--v-theme-on-background), 0.05);
-
-    &__sub {
-        code {
-            background-color: rgba(var(--v-theme-on-background), 0.2);
-            padding: $chip-padding;
-        }
-
-        &__method {
-            padding: $chip-padding;
-        }
-    }
-}
-
-.contents {
-    background: rgba(0, 0, 0, 0.15);
-}
+@import "~/assets/css/api-docs.scss";
 </style>

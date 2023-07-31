@@ -1,10 +1,10 @@
 <template>
-    <v-card rounded="0" class="mb-4 mr-4 card" width="500">
-        <div class="pa-4 api-title-bar">
+    <v-card rounded="0" class="mb-4 mr-4 api-card" width="500">
+        <div class="pa-4 api-card__title-bar">
             <h1>{{ title }}</h1>
         </div>
 
-        <div class="contents pa-4">
+        <div class="api-card__contents pa-4">
             {{ desc }}
             
             <v-table density="compact" class="api-parameter-table my-4">
@@ -38,20 +38,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/css/api-docs.scss";
-
-// TODO: share css
-$chip-padding: 4px;
-
-.card {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.api-title-bar {
-    background-color: rgba(var(--v-theme-on-background), 0.05);
-}
-
-.contents {
-    background: rgba(0, 0, 0, 0.15);
-}
 </style>

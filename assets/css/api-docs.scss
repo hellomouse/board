@@ -25,3 +25,30 @@
     margin-top: 4px;
     overflow-x: auto;
 }
+
+.api-card {
+    $chip-padding: 4px;
+    display: inline-block;
+    vertical-align: top;
+
+    &__contents {
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    &__title-bar {
+        background-color: rgba(var(--v-theme-on-background), 0.05);
+
+        &__sub {
+            line-height: 2rem;
+
+            code {
+                background-color: rgba(var(--v-theme-on-background), 0.2);
+                padding: $chip-padding;
+            }
+        }
+
+        &__method {
+            padding: $chip-padding;
+        }
+    }
+}

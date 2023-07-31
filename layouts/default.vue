@@ -11,7 +11,7 @@
             </template>
         </AppNavbar>
 
-        <v-main class="mx-16 mt-2">
+        <v-main class="mt-2">
             <v-container>
                 <slot />
             </v-container>
