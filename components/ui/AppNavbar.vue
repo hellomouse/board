@@ -39,8 +39,8 @@
                         class="popout-sheet"
                     >
                         <div class="py-3 px-4">
-                            <p class="text-truncate user-name">{{ user.name }}</p>
-                            <p class="text-truncate user-id">@{{ user.id }}</p>
+                            <p class="text-truncate popout-sheet__user-name">{{ user.name }}</p>
+                            <p class="text-truncate popout-sheet__user-id">@{{ user.id }}</p>
                         </div>
 
                         <button class="py-3 px-4 hoverable hover-list-item">
@@ -83,7 +83,7 @@ export default {
                 // Ignore error on logout: cookie may be invalid
                 // if server restarted, invalidate session on client side
                 // if server errors anyways
-                console.log(e);
+                console.error(e);
             }
             authStore.logout();
             this.$router.push('/login');
@@ -115,10 +115,10 @@ $popout-gap: 5px;
     margin-top: $popout-gap;
     background-color: rgb(var(--v-theme-background-light));
 
-    .user-name {
+    &__user-name {
         font-size: 1.2rem;
     }
-    .user-id {
+    &__user-id {
         opacity: $secondary-text-opacity;
         margin-top: -2px;
     }

@@ -179,45 +179,45 @@ export default {
 
 
     // Hide details until hover
-    .pin-tile__header__icon-row,
-    .pin-tile__timestamp-wrapper {
+    &__header__icon-row,
+    &__timestamp-wrapper {
         opacity: 0;
         transition: opacity 0.2s;
     }
 
     &:hover {
-        .pin-tile__header__icon-row,
-        .pin-tile__timestamp-wrapper {
+        &__header__icon-row,
+        &__timestamp-wrapper {
             opacity: 1;
             transition: opacity 0.2s;
         }
     }
 
-    .pin-tile__header {
-        .pin-tile__header__creator-wrapper {
+    &__header {
+        &__header__creator-wrapper {
             max-width: 70%;
             display: inline-block;
         }
 
-        .pin-tile__header__creator {
+        &__header__creator {
             opacity: $secondary-text-opacity
         }
         
-        .pin-tile__header__icon-row {
+        &__header__icon-row {
             float: right;
         }
     }
 
-    .pin-tile__content {
+    &__content {
         opacity: 0.9; // Temporary TODO
     }
 
-    .pin-tile__bottom {
+    &__bottom {
         display: flex;
         flex-direction: row;
         align-items: center;
 
-        .pin-tile__timestamp {
+        &__timestamp {
             display: inline-block;
             font-size: 0.75rem;
             opacity: $secondary-text-opacity;

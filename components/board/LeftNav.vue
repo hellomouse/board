@@ -7,16 +7,16 @@
         <slot></slot>
 
         <div class="mt-3">
-            <button class="px-4 hoverable hover-list-item list-item">
+            <button class="px-4 hoverable hover-list-item left-nav__list-item">
                 <v-icon icon="mdi-view-dashboard" /> My Boards
             </button>
-            <button class="px-4 hoverable hover-list-item list-item">
+            <button class="px-4 hoverable hover-list-item left-nav__list-item">
                 <v-icon icon="mdi-folder-account" /> Shared With Me
             </button>
-            <button class="mb-4 px-4 hoverable hover-list-item list-item">
+            <button class="mb-4 px-4 hoverable hover-list-item left-nav__list-item">
                 <v-icon icon="mdi-star" /> Favorites
             </button>
-            <button class="px-4 hoverable hover-list-item list-item">
+            <button class="px-4 hoverable hover-list-item left-nav__list-item">
                 <v-icon icon="mdi-cloud" /> Storage
             </button>
         </div>
@@ -37,7 +37,7 @@ export default {
     width: $left-nav-width-pc;
     position: fixed;
 
-    .list-item {
+    &__list-item {
         height: $menu-item-height;
         user-select: none;
     }

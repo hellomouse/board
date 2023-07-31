@@ -31,7 +31,7 @@ export default {
 .user__pfp {
     overflow: hidden;
     border-radius: 50%;
-    background-color: red;
+    background-color: white;
 
     img {
         object-fit: cover;

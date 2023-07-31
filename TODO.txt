@@ -17,12 +17,7 @@ board page:
 - refresh boards periodically?
 - default description in create
 - expand list of boards - show boards like channels on left
-
-
-refactors:
-
-- css, ie &__sub instead of explicitly naming - check naming schemes
-- proper console.error
+- require login for board
 
 
 - returning list of boards should return perms as well

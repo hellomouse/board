@@ -325,16 +325,16 @@ export default {
 }
 
 .user {
-    .user__username {
+    &__username {
         opacity: $secondary-text-opacity;
         font-size: 0.9rem;
     }
 
-    .user__name {
+    &__name {
         font-size: 1rem;
     }
 
-    .user__perm {
+    &__perm {
         min-width: 140px;
         max-width: 140px;
         transform: scale(0.7);

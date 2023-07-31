@@ -2,7 +2,7 @@
     <v-sheet
         elevation="0"
         width="250"
-        class="board-tile hoverable mr-3 mb-3"
+        class="board-tile hoverable [ mr-3 mb-3 ]"
         :style="{ borderColor: color }"
     >
         <div class="px-4 pt-4">
@@ -111,20 +111,20 @@ export default {
     border-right: 3px solid;
     display: inline-block;
 
-    .board-tile__menu {
+    &__menu {
         margin-left: auto;
         margin-bottom: -12px;
         margin-right: -14px;
     }
 
-    .board-tile__owner-row {
+    &__owner-row {
         display: flex;
         flex-direction: row;
         align-items: center;
         border-top: 1px solid $border-color;
     }
 
-    .board-tile__desc {
+    &__desc {
         opacity: $secondary-text-opacity;
     }
 }
