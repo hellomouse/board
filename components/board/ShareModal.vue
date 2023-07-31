@@ -57,7 +57,7 @@ export default {
         async board(newVal, _oldVal) {
             let board = newVal;
             this.shareBoardId = board.id;
-            this.sharePublicPerm = board.perms['public']?.perm_level;
+            this.sharePublicPerm = board?.perms['public']?.perm_level;
             this.shareBoardCreator = board.creator;
             this.shareBoardName = board.name;
 

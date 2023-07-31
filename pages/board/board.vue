@@ -18,11 +18,56 @@ definePageMeta({
                 </v-btn>
             </BoardLeftNav>
 
-            <v-container class="container pt-0">
+            <v-container class="container pt-0" :style="{ borderRight: `4px solid ${boardColor}` }">
 
                 <!-- TODO: full board name  + desc -->
-                <h1>{{ boardTitle }}</h1>
-                <p>{{ boardDesc }}</p>
+                <h1>
+                    <v-menu>
+                        <template #activator="{ props }">
+                            <v-btn
+                                density="comfortable"
+                                icon="mdi-dots-vertical"
+                                v-bind="props"
+                                class="board-tile__menu d-inline-block"
+                                flat color="transparent"
+                            ></v-btn>
+                        </template>
+                
+                        <v-sheet elevation="8" rounded="0">
+                            <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyShareLink">
+                                <v-icon icon="mdi-link" />Permalink
+                            </button>
+                            <button
+                                class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
+                            >
+                                <v-icon icon="mdi-information-outline" />Properties
+                            </button>
+                            <button
+                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                class="px-4 hoverable hover-list-item edit-list-item"
+                            >
+                                <v-icon icon="mdi-account-plus" />Share
+                            </button>
+                            <button
+                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                class="px-4 hoverable hover-list-item edit-list-item"
+                            >
+                                <v-icon icon="mdi-pencil" />Edit
+                            </button>
+                            <button
+                                v-if="['Owner'].includes(currentUserPerm)"
+                                class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
+                            >
+                                <v-icon icon="mdi-trash-can" color="red" />Delete
+                            </button>
+                        </v-sheet>
+                    </v-menu>
+
+                    {{ boardTitle }}
+                </h1>
+
+                <p class="ml-11 subtitle">{{ boardDesc }}</p>
+
 
                 <!-- Sort options -->
                 <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
@@ -73,6 +118,7 @@ definePageMeta({
 
 <script>
 import BoardPin from '~/components/board/Pin.vue';
+import { useAuthStore } from '~/store/auth.js';
 
 export default {
     name: 'BoardPage',
@@ -82,6 +128,8 @@ export default {
             // Board info
             boardTitle: '',
             boardDesc: '',
+            boardColor: '',
+            currentUserPerm: '',
 
             // Sorting
             selected: 'Created',
@@ -95,20 +143,25 @@ export default {
         }
     },
     // Get board info + pins on page load
-    async created() {
-        // TODO
-        try {
-            let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
-            console.log(board)
-            this.boardTitle = board.name;
-            this.boardDesc = board.desc;
-        } catch(e) {
-            console.log(e)
-        }
+    created() {
+        this.updateBoardInfo();
     },
     methods: {
         toggleSortDirection() {
             this.sortDown = !this.sortDown;
+        },
+        async updateBoardInfo() {
+            try {
+                let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
+                console.log(board)
+                this.boardTitle = board.name;
+                this.boardDesc = board.desc;
+                this.boardColor = board.color;
+                this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
+            } catch(e) {
+                console.log(e)
+                // TODO: error state
+            }
         }
     }
 }
@@ -117,11 +170,14 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
 @import "~/assets/css/sort.scss";
+@import "~/assets/css/dropdown-menu.scss";
 
 .container {
     max-width: calc(100% - $left-nav-width-pc) !important;
     margin-left: $left-nav-width-pc;
 }
+
+.subtitle { opacity: $secondary-text-opacity; }
 
 .grid {
     column-count: 3;

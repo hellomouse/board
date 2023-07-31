@@ -71,9 +71,9 @@ export default {
     },
     data() {
         return {
-            name: this.board.name,
-            description: this.board.desc,
-            color: this.board.color,
+            name: this.board?.name,
+            description: this.board?.desc,
+            color: this.board?.color,
             loading: false,
 
             swatches,
@@ -88,9 +88,9 @@ export default {
     },
     watch: {
         show() {
-            this.description = this.board.desc;
-            this.color = this.board.color || swatches[0];
-            this.name = this.board.name;
+            this.description = this.board?.desc || 'Default description';
+            this.color = this.board?.color || swatches[0];
+            this.name = this.board?.name;
             this.selectedSwatchIndex = swatches.indexOf(this.color.toUpperCase()) || 0;
         }
     },

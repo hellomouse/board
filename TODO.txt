@@ -12,10 +12,9 @@ github linting workflow
 board page:
 - get search params in route
 - refresh boards periodically?
-- default description in create
 - expand list of boards - show boards like channels on left
 - require login for board
-- save sort preference - localstorage
+- save sort preference - localstoragen
 - instead of board fixed size adaptive columns
 
 
@@ -24,11 +23,14 @@ make it so editors can also update board and share
 
 
 pins:
-- dropdown
+- pin colors
+
+- board dropdown
     - edit
     - share
     - delete
     - properties
+
 
 wip:
 - api documentation page
@@ -77,8 +79,6 @@ global state:
 - favicon
 https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
 
-
-board header 
 
 custom backgrounds on pins?
 
