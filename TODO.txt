@@ -22,7 +22,7 @@ board page:
 refactors:
 move share modal own component that uses the global share modal
 - same for board delete modal
-- css, ie &__sub instead of explicitly naming - check namijng schemes
+- css, ie &__sub instead of explicitly naming - check naming schemes
 
 proper console.error
 

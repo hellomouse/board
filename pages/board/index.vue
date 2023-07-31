@@ -42,17 +42,11 @@ definePageMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
 
-            <ShareModal
+            <BoardShareModal
                 :show="shareBoardModal"
-                :perma-share-link="shareBoardLink"
-                :creator="shareBoardCreator"
-                :resource-name="shareBoardName"
-                :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
-                :initial-users="shareUsers"
-                :initial-public-perm="sharePublicPerm"
-                :share-board-modal-loading="shareBoardModalLoading"
+                :board="currentBoard"
 
-                @update="shareModalApply"
+                @update="e => { if (e.type === 'close') shareBoardModal = false; }"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
@@ -87,15 +81,7 @@ export default {
         editBoard: false,
         createBoardModal: false,
         currentBoard: {},
-
         shareBoardModal: false,
-        sharePublicPerm: '',
-        shareBoardModalLoading: false,
-        shareUsers: [],
-        shareBoardId: '',
-        shareBoardCreator: '',
-        shareBoardName: '',
-        shareBoardLink: '',
 
         showErrorToast: false,
         showSuccessToast: false,
@@ -113,7 +99,8 @@ export default {
                 this.boards = boards.boards;
                 console.log(boards.boards)
             } catch (e) {
-                console.log(e); // TODO: toast
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);
                 return;
             }
         },
@@ -129,36 +116,12 @@ export default {
                 this.currentBoard = msg.board;
             }
             else if (msg.type === 'share') { // Open share board modal
-                // TODO: api to get the perms for the board
                 try {
-                    this.shareBoardId = msg.id;
-                    let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: msg.id });
-                    this.sharePublicPerm = board.perms['public']?.perm_level;
-                    this.shareBoardCreator = board.creator;
-                    this.shareBoardName = board.name;
-
-                    this.shareUsers = Object.keys(board.perms)
-                        .filter(key => key !== 'public')
-                        .map(key => ({
-                            id: key,
-                            level: board.perms[key].perm_level,
-                            name: 'TODO',
-                            pfp_url: 'TODO'
-                        }));
-                    
-                    // TODO: also batch get users
-
-                    // Put creator first, then sort others by id
-                    this.shareUsers.sort((a, b) => {
-                        if (a.id === board.creator) return -9999999999;
-                        if (b.id === board.creator) return  9999999999;
-                        return a.id.localeCompare(b.id);
-                    });
-
-                    console.log('GOT BOARD', board)
+                    this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: msg.id });
                     this.shareBoardModal = true;
                 } catch(e) {
-                    /* TODO */
+                    this.showErrorToast = true;
+                    this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
                 }
             }
         },
@@ -177,28 +140,6 @@ export default {
                 this.getBoards();
             }
         },
-        // Called when share modal is cancelled or applied
-        async shareModalApply(newPerms) {
-            if (Object.keys(newPerms).length === 0) {
-                this.shareBoardModal = false;
-                return;
-            }
-            this.shareBoardModalLoading = true;
-            try {
-                await this.$fetchApi('/api/board/boards', 'PUT', {
-                    id: this.shareBoardId,
-                    perms: newPerms
-                });
-                this.showSuccessToast = true;
-                this.toastSuccessMsg = 'Permissions updated!';
-            } catch (e) {
-                let errorMsg = `Failed to modify board: ${this.$apiErrorToString(e)}`;
-                this.showErrorToast = true;
-                this.toastErrorMsg = errorMsg;
-            }
-            this.shareBoardModalLoading = false;
-            this.shareBoardModal = false;
-        }
     }
 }
 </script>
