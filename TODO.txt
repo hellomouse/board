@@ -20,6 +20,7 @@ board page:
 - require login for board
 
 
+api:
 - returning list of boards should return perms as well
 - batch user search
 
@@ -31,7 +32,6 @@ make nicer:
 - board: loading + empty state
 - also maybe compact left side more?
     - toggle
-
 - autocomplete keyboard nav
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
@@ -46,7 +46,6 @@ optimize:
 
 - svg logo
 
-
 - modal to create pin
 
 
@@ -57,13 +56,12 @@ responsive mobile
 
 responsive columns for pins
 
-https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
-
 https://www.npmjs.com/package/vue-markdown-render
 https://markdown-it.github.io/markdown-it/
 
 global state:
 - favicon
+https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
 
 
 board header 

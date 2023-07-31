@@ -85,6 +85,12 @@ export default {
             get() { return this.show; },
             set(val) { this.$emit('show', val); }
         }
+    },
+    watch: {
+        show(newVal, _oldVal) {
+            if (!newVal)
+                this.inputString = ''; // Clear on close
+        }
     }
 }
 </script>
