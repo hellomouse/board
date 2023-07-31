@@ -108,7 +108,7 @@
             Delete an existing board the currently logged in user has permissions to delete (inferred from auth cookie).
             Anyone with the <code>Owner</code> permission can delete the board, even if they are not the creator.<br><br>
 
-            Returns 401 if not logged in, 403 if board does not exist, and 500 on error.<br>
+            Returns 401 if not logged in, and 500 on error. Still succeeds if board does not exist.<br>
 
             <v-table density="compact" class="api-parameter-table my-4">
                 <thead>
@@ -126,7 +126,7 @@
                 <b>Success:</b> 200 OK
                 <pre class="api-json-block"><code>{ msg: "Deleted" }</code></pre><br>
 
-                <b>Error:</b> 401 Unauthorized, 403 Forbidden, 500 Server error<br>
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
 
