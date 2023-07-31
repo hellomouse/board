@@ -1,6 +1,15 @@
 <template>
     <v-app id="main" ref="app" dark>
-        <AppNavbar />
+        <AppNavbar>
+            <template #logo>
+                <UiAppLogo 
+                    href="/"
+                    src="/logos/main.svg"
+                    title="Apps"
+                    class="mr-10"
+                />
+            </template>
+        </AppNavbar>
 
         <v-main class="mx-16 mt-2">
             <v-container>

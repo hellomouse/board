@@ -10,29 +10,45 @@ github linting workflow
 
 
 board page:
-loading + empty state
-- delete board:
-    only show delete, edit, etc.. if has perms
+- only show delete, edit, etc.. if has perms
 - click on board to go
 - get search params in route
+- sort bar
+- refresh boards periodically?
+- default description in create
+- expand list of boards - show boards like channels on left
 
 
 refactors:
 move share modal own component that uses the global share modal
 - same for board delete modal
+- css, ie &__sub instead of explicitly naming - check namijng schemes
 
 proper console.error
 
 - batch user search
 
 
+make nicer:
+- board: loading + empty state
+- make new board button taller
+- edit/create board make edit button blue not text
+- also maybe compact left side more?
+    - toggle
+- autocomplete keyboard nav
+- modal max width as percentage!
+- alt text for pfp
+- border for all modals
 
-modal max width as percentage!
 
 
-toast for errors / success
+- svg logo
+
+
 - modal to create pin
 
+
+pins are like notes just double click to edit
 
 
 responsive mobile
@@ -46,7 +62,6 @@ https://markdown-it.github.io/markdown-it/
 
 global state:
 - favicon
-- icon
 
 
 board header 

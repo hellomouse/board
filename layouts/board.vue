@@ -1,6 +1,15 @@
 <template>
     <v-app id="main" ref="app" dark>
         <UiAppNavbar>
+            <template #logo>
+                <UiAppLogo 
+                    href="/board"
+                    src="/logos/board.png"
+                    title="Board"
+                    class="mr-10"
+                />
+            </template>
+
             <v-text-field
                 label="" rounded="0"
                 placeholder="Search"

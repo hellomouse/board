@@ -1,6 +1,6 @@
 <template>
     <div class="navbar" fixed>
-        <UiAppLogo /> <!-- TODO: pass icon path from layout -->
+        <slot name="logo"></slot>
 
         <slot></slot>
 
