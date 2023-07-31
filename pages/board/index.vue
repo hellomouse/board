@@ -23,7 +23,7 @@ definePageMeta({
                 <v-select
                     v-model="sortBy" density="compact" solo-filled max-width="200"
                     flat class="select mr-2"
-                    :items="['Created', 'Modified']"
+                    :items="['Name', 'Created', 'Modified']"
                 ></v-select>
 
                 <v-btn
@@ -120,7 +120,7 @@ export default {
         toastSuccessMsg: '',
 
         // Sorting:
-        sortBy: 'Created',
+        sortBy: 'Name',
         sortDown: true,
     }),
     computed: {
@@ -129,10 +129,15 @@ export default {
             return this.sortDown ? 'down' : '';
         },
         sortedBoards() {
-            let multiplier = this.sortDown ? -1 : 1;
-            let key = this.sortBy === 'Created' ? 'created' : 'edited';
+            let multiplier = this.sortDown ? 1 : -1;
+            let key = {
+                Name: 'name',
+                Created: 'created',
+                Modified: 'edited'
+            }[this.sortBy];
+
             return this.boards.sort((a, b) => {
-                return a[key] > b[key] ? multiplier : -multiplier;
+                return a[key].toLowerCase() > b[key].toLowerCase() ? multiplier : -multiplier;
             });
         }
     },
