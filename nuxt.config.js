@@ -2,6 +2,7 @@ import vuetify from "vite-plugin-vuetify";
 
 export default {
     ssr: true,
+    modern: true,
     target: 'server',
 
     // Global page headers: https://go.nuxtjs.dev/config-head

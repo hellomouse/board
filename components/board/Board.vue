@@ -56,27 +56,20 @@
                             })">
                             <v-icon icon="mdi-pencil" />Edit
                         </button>
-                        <button class="px-4 text-red [ hoverable hover-list-item ] edit-list-item" @click="deleteModal = true">
+                        <button
+                            class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
+                            @click="$emit('update', {
+                                type: 'open_board_delete',
+                                id: boardId,
+                                title: title
+                            })"
+                        >
                             <v-icon icon="mdi-trash-can" color="red" />Delete
                         </button>
                     </v-sheet>
                 </v-menu>
             </div>
         </div>
-
-        <DeleteConfirmation
-            v-model="deleteModal"
-            title="Delete Board"
-            :loading="deleteModalLoading"
-            :confirmation-string="title"
-            @update="die => deleteBoard(die)"
-        >
-            <p>
-                Are you sure you want to delete this board?
-                This will delete the board <b>and all pins</b> associated
-                with the board and <b>cannot be undone!</b>
-            </p>
-        </DeleteConfirmation>
     </v-sheet>
 </template>
 
@@ -104,30 +97,6 @@ export default {
             type: String,
             default: "#FFFFFF",
             validator(value) { return /^#[0-9a-fA-F]{6}$/i.test(value); }
-        }
-    },
-    data: () => ({
-        deleteModal: false,
-        deleteModalLoading: false
-    }),
-    methods: {
-        async deleteBoard(shouldDelete) {
-            if (!shouldDelete) {
-                this.deleteModal = false;
-                return;
-            }
-
-            this.deleteModalLoading = true;
-            try {
-                await this.$fetchApi('/api/board/boards', 'DELETE', { id: this.boardId });
-                this.$emit('update', { type: 'board_delete' });
-            } catch(e) {
-                let errorMsg = `Failed to delete board: ${this.$apiErrorToString(e)}`;
-                this.$emit('error', errorMsg);
-            }
-
-            this.deleteModal = false;
-            this.deleteModalLoading = false;
         }
     }
 }

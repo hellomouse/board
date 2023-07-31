@@ -42,6 +42,15 @@ definePageMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
 
+            <BoardDeleteModal
+                :show="deleteBoardModal"
+                :board="currentBoard"
+
+                @update="onBoardUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
             <BoardShareModal
                 :show="shareBoardModal"
                 :board="currentBoard"
@@ -77,11 +86,12 @@ export default {
     components: { BoardBoard, BoardModal },
     data: () => ({
         boards: [],
+        currentBoard: {},
 
         editBoard: false,
         createBoardModal: false,
-        currentBoard: {},
         shareBoardModal: false,
+        deleteBoardModal: false,
 
         showErrorToast: false,
         showSuccessToast: false,
@@ -106,7 +116,14 @@ export default {
         },
         // Handle menu selection for each board
         async onBoardUpdate(msg) {
-            if (msg.type === 'board_delete') { // Board was deleted
+            if (msg.type === 'open_board_delete') { // Open board delete modal
+                this.deleteBoardModal = true;
+                this.currentBoard.id = msg.id;
+                this.currentBoard.title = msg.title;
+            }
+            else if (msg.type === 'close_board_delete') // Close board delete modal
+                this.deleteBoardModal = false;
+            else if (msg.type === 'board_delete') { // Board was deleted
                 await this.getBoards();
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
             }

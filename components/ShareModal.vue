@@ -27,7 +27,7 @@ Example usage:
     >
         <v-card rounded="0" width="500">
             <v-card-text class="my-2 px-3">
-                <h1 class="mb-4 mx-1 text-truncate">
+                <h1 class="mb-2 mx-1 text-truncate">
                     Share "{{ resourceName }}"
                 </h1>
 
