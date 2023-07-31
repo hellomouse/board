@@ -23,7 +23,7 @@ make it so editors can also update board and share
 - make it so editors cant promote others to owner
 
 
-- batch user search
+
 
 wip:
 - api documentation page

@@ -176,6 +176,44 @@
         </ApiDoc>
 
         <ApiDoc
+            title="Get info for multiple users (batch call)"
+            method="GET"
+            endpoint="/api/users/batch"
+            param-type="URLParams"
+            :auth="true"
+        >
+            Get user info by ID for multiple users at a time. Non-existent users will be skipped.
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ids: string</td>
+                        <td>
+                            Comma separated string of user IDs (no spaces)
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ users: [{
+    id: 'user id',
+    name: 'display name',
+    pfp_url: 'url to profile picture, or empty string'
+}, ...] }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 403 Forbidden<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
             title="Get user settings"
             method="GET"
             endpoint="/api/user_settings"
