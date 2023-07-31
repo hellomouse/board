@@ -31,6 +31,7 @@ definePageMeta({
                 :current-user-perm="board.perms[user.id]?.perm_level"
 
                 @update="onBoardUpdate"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             ></BoardBoard>
 

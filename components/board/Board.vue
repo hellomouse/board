@@ -30,7 +30,7 @@
                     </template>
                 
                     <v-sheet elevation="8" rounded="0">
-                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                        <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyShareLink">
                             <v-icon icon="mdi-link" />Permalink
                         </button>
                         <button
@@ -104,6 +104,13 @@ export default {
         currentUserPerm: {
             type: String,
             default: ''
+        }
+    },
+    methods: {
+        copyShareLink() {
+            if (process.client)
+                navigator.clipboard.writeText(window.location.origin + '/board/board?id=' + this.boardId);
+            this.$emit('success', 'Link copied!');
         }
     }
 }

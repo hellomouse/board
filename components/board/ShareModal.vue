@@ -16,7 +16,7 @@ Example usage:
 <template>
     <ShareModal
         :show="show"
-        :perma-share-link="shareBoardLink"
+        :perma-share-link="shareUrl()"
         :creator="shareBoardCreator"
         :resource-name="shareBoardName"
         :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
@@ -51,8 +51,7 @@ export default {
         shareUsers: [],
         shareBoardId: '',
         shareBoardCreator: '',
-        shareBoardName: '',
-        shareBoardLink: '',
+        shareBoardName: ''
     }),
     watch: {
         async board(newVal, _oldVal) {
@@ -110,6 +109,9 @@ export default {
             }
             this.showLoading = false;
             this.$emit('update', { type: 'close' });
+        },
+        shareUrl() {
+            return process.client ? (window.location.origin + '/board/board?id=' + this.board.id) : '';
         }
     }
 }
