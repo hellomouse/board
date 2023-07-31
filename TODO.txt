@@ -11,11 +11,20 @@ github linting workflow
 
 board page:
 - get search params in route
+
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left
+    - have list of boards be global, global refresh plugin
+
 - require login for board
 - save sort preference - localstoragen
 - instead of board fixed size adaptive columns
+- board: loading + empty state
+- also maybe compact left side more?
+    - toggle
+- autocomplete keyboard nav
+- fix share modal on phone
+    - different ui on phone - click on user to show dropdown popped from bottom
 
 
 make it so editors can also update board and share
@@ -33,24 +42,12 @@ pins:
 
 
 wip:
+- api: refactor css dont duplicate enum and docs
+
 - api documentation page
 - table of contents for docs on right somehow
 - api page for mobile users
-    - json block scroll no overflow
 
-
-
-[Vue warn]: Do not use built-in or reserved HTML elements as component id: menu                                                10:42:02 AM
-[Vue warn]: Property "showModal" was accessed during render but is not defined on instance.
-
-
-make nicer:
-- board: loading + empty state
-- also maybe compact left side more?
-    - toggle
-- autocomplete keyboard nav
-- fix share modal on phone
-    - different ui on phone - click on user to show dropdown popped from bottom
 
 
 optimize:

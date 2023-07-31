@@ -2,6 +2,18 @@
     <div class="container">
         <h1>Users and Authentication</h1><br>
 
+        <ApiEnum
+            title="Permission Enum"
+            desc="User permission levels, in the API should pass this as a title-cased string."
+            :enums="[
+                ['View', 'Only has permission to view the resource & sub-resources'],
+                ['Interact', 'Can interact with interact-able components (such as voting) but cannot create/edit/delete them'],
+                ['SelfEdit', 'Can create sub-resources, but can only edit/delete sub-resources that the user created themselves. User cannot edit main resource properties such as descriptions.'],
+                ['Edit', 'User can edit main resource properties and add / delete their own and other sub-resources, but cannot delete the main resource. User can edit permissions but cannot remove permissions from current owners / editors'],
+                ['Owner', 'User can delete the main resource, and add / remove permissions']
+            ]"
+        />
+
         <ApiDoc
             title="Login"
             method="POST"
