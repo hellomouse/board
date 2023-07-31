@@ -62,16 +62,24 @@ export default {
             this.shareBoardCreator = board.creator;
             this.shareBoardName = board.name;
 
+            // Batch get user info
+            let users = {};
+            try {
+                let batch = await this.$fetchApi('/api/users/batch', 'GET', { ids: Object.keys(board.perms).join(',') });
+                batch.users.forEach(user => users[user.id] = user);
+            } catch(e) {
+                this.$emit('error', 'Error getting users: ' + this.$apiErrorToString(e));
+                return;
+            }
+
             this.shareUsers = Object.keys(board.perms)
                 .filter(key => key !== 'public')
                 .map(key => ({
                     id: key,
                     level: board.perms[key].perm_level,
-                    name: 'TODO',
-                    pfp_url: 'TODO'
+                    name: users[key].name,
+                    pfp_url: users[key].pfp_url
                 }));
-
-            // TODO: also batch get users
 
             // Put creator first, then sort others by id
             this.shareUsers.sort((a, b) => {

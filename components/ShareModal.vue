@@ -260,23 +260,18 @@ export default {
         async addNewUsers() {
             // Add valid user from enter
             if (this.search) {
-                let ids = this.search.toLowerCase().split(',')
-                    .map(x => x.trim());
-                let toAdd = [];
+                let ids = this.search.toLowerCase().split(',').map(x => x.trim());
                 let existingUsers = this.users.map(u => u.id);
-
-                for (let i of ids) {
-                    // Don't duplicate users
-                    if (existingUsers.includes(i)) continue;
-
-                    try {
-                        let r = await this.$fetchApi('/api/users', 'GET', { id: i });
-                        toAdd.push(r);
-                    }
-                    catch (e) { /* */ }
+                let toAdd = [];
+                ids = ids.filter(id => !existingUsers.includes(id)); // Remove duplicates
+                
+                try {
+                    toAdd = await this.$fetchApi('/api/users/batch', 'GET', { ids: ids.join(',') });
+                    toAdd = toAdd.users;
+                } catch (e) {
+                    this.$emit('error', 'Error getting users: ' + this.$apiErrorToString(e));
+                    return;
                 }
-
-                // TODO: maybe a batch user api call
                 this.select = this.select ? this.select.concat(toAdd) : toAdd;
             }
 
