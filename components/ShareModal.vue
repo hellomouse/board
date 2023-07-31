@@ -165,6 +165,7 @@ Example usage:
 
 <script>
 const NO_ACCESS = 'No Access';
+const INPUT_RATE_LIMIT_MS = 300; // In ms
 
 export default {
     name: 'ShareModal',
@@ -221,7 +222,10 @@ export default {
         items: [],            // Store temp user search
         search: null,         // User search input text
         select: null,         // List of user objects selected in user search
-        users: []
+        users: [],
+
+        queryQueue: [],
+        nextInterval: null
     }),
     computed: {
         showModal: {
@@ -245,16 +249,28 @@ export default {
                 this.items = [];
                 return;
             }
-            this.searchLoading = true;
+            this.queryQueue = [v];
 
-            try {
-                // TODO: rate limit
-                this.items = await this.$fetchApi('/api/users/search', 'GET', { filter: v });
-                this.items = this.items.users;
-            } catch(e) {
-                this.$emit('error', 'Error getting users: ' + this.$apiErrorToString(e));
+            if (!this.nextInterval) {
+                this.nextInterval = setInterval(async () => {
+                    if (!this.queryQueue.length) {
+                        clearInterval(this.nextInterval);
+                        this.nextInterval = null;
+                        return;
+                    }
+
+                    let v = this.queryQueue.shift();
+                    this.searchLoading = true;
+
+                    try {
+                        this.items = await this.$fetchApi('/api/users/search', 'GET', { filter: v });
+                        this.items = this.items.users;
+                    } catch (e) {
+                        this.$emit('error', 'Error getting users: ' + this.$apiErrorToString(e));
+                    }
+                    this.searchLoading = false
+                }, INPUT_RATE_LIMIT_MS);
             }
-            this.searchLoading = false 
         },
         // Called when "Add button" or ENTER is pressed in the auto complete
         async addNewUsers() {
