@@ -19,7 +19,7 @@ Example usage:
         v-model="showModal"
         width="auto"
     >
-        <v-card rounded="0" max-width="500">
+        <v-card rounded="0" width="500">
             <v-card-text class="my-8">
                 <h1 class="mb-4 text-truncate">{{ title }}</h1>
                 <slot></slot>

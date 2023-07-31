@@ -18,7 +18,7 @@ Example usage:
         v-model="showModal"
         width="auto"
     >
-        <v-card rounded="0" width="500" max-width="500" class="py-2">
+        <v-card rounded="0" width="500" class="py-2">
             <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Board</h1>
 
@@ -43,7 +43,7 @@ Example usage:
             <v-card-actions class="mr-3">
                 <v-spacer />
                 <v-btn color="primary" @click="$emit('update', false)">Cancel</v-btn>
-                <v-btn color="primary" :loading="loading" @click="createBoard">{{ editMode ? 'Apply' : 'Create' }}</v-btn>
+                <v-btn color="primary" variant="elevated" :loading="loading" @click="createBoard">{{ editMode ? 'Apply' : 'Create' }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

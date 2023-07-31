@@ -31,14 +31,13 @@ proper console.error
 
 make nicer:
 - board: loading + empty state
-- make new board button taller
-- edit/create board make edit button blue not text
 - also maybe compact left side more?
     - toggle
+
 - autocomplete keyboard nav
-- modal max width as percentage!
-- alt text for pfp
-- border for all modals
+- fix share modal on phone
+    - different ui on phone - click on user to show dropdown popped from bottom
+
 
 
 

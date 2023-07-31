@@ -1,9 +1,9 @@
 
 
 <template>
-    <div class="user__pfp" :style="{ width: size, height: size }">
+    <div class="user__pfp" :style="{ width: size, height: size, flex: `0 0 ${size}` }">
         <img
-            :src="src"
+            :src="src" alt="Profile picture"
             @error="$event.target.src = '/default-pfp.png'"
         >
     </div>

@@ -11,6 +11,7 @@ definePageMeta({
         <BoardLeftNav>
             <v-btn
                 color="red" block
+                height="44"
                 @click="openCreateBoard"
             >
                 <v-icon icon="mdi-plus" /> New Board

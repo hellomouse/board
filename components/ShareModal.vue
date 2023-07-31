@@ -25,7 +25,7 @@ Example usage:
         v-model="showModal"
         width="auto"
     >
-        <v-card rounded="0" max-width="500" width="500">
+        <v-card rounded="0" width="500">
             <v-card-text class="my-2 px-3">
                 <h1 class="mb-4 mx-1 text-truncate">
                     Share "{{ resourceName }}"
@@ -335,6 +335,7 @@ export default {
     }
 
     .user__perm {
+        min-width: 140px;
         max-width: 140px;
         transform: scale(0.7);
         transform-origin: right;

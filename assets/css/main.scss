@@ -27,6 +27,11 @@ body .v-sheet.v-card {
     border-radius: 0;
 }
 
+// Modals should not exceed page width
+.v-card {
+    max-width: 100%;
+}
+
 // Table hover not round
 body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     border-radius: 0 !important;
