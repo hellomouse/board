@@ -12,12 +12,11 @@ github linting workflow
 board page:
 - click on board to go
 - get search params in route
-- sort bar
 - refresh boards periodically?
 - default description in create
 - expand list of boards - show boards like channels on left
 - require login for board
-
+- save sort preference
 
 make it so editors can also update board and share
 - make it so editors cant promote others to owner
@@ -79,8 +78,6 @@ custom backgrounds on pins?
 pin types:
 markdown rendering
 
-
-organize css more
 
 
 future todo:

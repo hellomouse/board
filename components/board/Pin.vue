@@ -185,25 +185,23 @@ export default {
         transition: opacity 0.2s;
     }
 
-    &:hover {
-        &__header__icon-row,
-        &__timestamp-wrapper {
-            opacity: 1;
-            transition: opacity 0.2s;
-        }
+    &:hover &__header__icon-row,
+    &:hover &__timestamp-wrapper {
+        opacity: 1;
+        transition: opacity 0.2s;
     }
 
     &__header {
-        &__header__creator-wrapper {
+        &__creator-wrapper {
             max-width: 70%;
             display: inline-block;
         }
 
-        &__header__creator {
+        &__creator {
             opacity: $secondary-text-opacity
         }
         
-        &__header__icon-row {
+        &__icon-row {
             float: right;
         }
     }
@@ -217,7 +215,7 @@ export default {
         flex-direction: row;
         align-items: center;
 
-        &__timestamp {
+        .pin-tile__timestamp {
             display: inline-block;
             font-size: 0.75rem;
             opacity: $secondary-text-opacity;

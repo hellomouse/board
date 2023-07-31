@@ -87,28 +87,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
-
-.select {
-    width: 200px;
-    max-width: 200px;
-    display: inline-block;
-}
-
-// Make sort options smaller
-.small-container {
-    transform: scale(0.8);
-    transform-origin: right;
-}
-
-// Sort arrow
-.sort-arrow-down {
-    transform: rotateZ(0deg);
-    transition: transform 0.2s;
-
-    &.down {
-        transform: rotateZ(180deg);
-    }
-}
+@import "~/assets/css/sort.scss";
 
 .grid {
     column-count: 3;

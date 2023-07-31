@@ -19,8 +19,24 @@ definePageMeta({
         </BoardLeftNav>
 
         <v-container class="container pt-0">
+            <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
+                <v-select
+                    v-model="sortBy" density="compact" solo-filled max-width="200"
+                    flat class="select mr-2"
+                    :items="['Created', 'Modified']"
+                ></v-select>
+
+                <v-btn
+                    icon variant="text"
+                    height="40"
+                    @click="toggleSortDirection"
+                >
+                    <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                </v-btn>
+            </div>
+    
             <BoardBoard
-                v-for="board in boards"
+                v-for="board in sortedBoards"
                 :key="board.id"
 
                 :board-id="board.id"
@@ -91,18 +107,34 @@ export default {
         boards: [],
         currentBoard: {},
 
+        // Modal show
         editBoard: false,
         createBoardModal: false,
         shareBoardModal: false,
         deleteBoardModal: false,
 
+        // Toasts
         showErrorToast: false,
         showSuccessToast: false,
         toastErrorMsg: '',
-        toastSuccessMsg: ''
+        toastSuccessMsg: '',
+
+        // Sorting:
+        sortBy: 'Created',
+        sortDown: true,
     }),
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
+        downArrowClass() {
+            return this.sortDown ? 'down' : '';
+        },
+        sortedBoards() {
+            let multiplier = this.sortDown ? -1 : 1;
+            let key = this.sortBy === 'Created' ? 'created' : 'edited';
+            return this.boards.sort((a, b) => {
+                return a[key] > b[key] ? multiplier : -multiplier;
+            });
+        }
     },
     // Get boards on page first load
     async created() {
@@ -163,12 +195,17 @@ export default {
                 this.getBoards();
             }
         },
+        // Toggle sort dir
+        toggleSortDirection() {
+            this.sortDown = !this.sortDown;
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
+@import "~/assets/css/sort.scss";
 
 .container {
     max-width: calc(100% - $left-nav-width-pc) !important;
