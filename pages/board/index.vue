@@ -26,7 +26,7 @@ definePageMeta({
             </div>
 
             <div v-if="boards.length === 0 && !initialLoad" class="center empty-state">
-                <img src="https://64.media.tumblr.com/61e089232161e2a093a510178edc2524/tumblr_inline_os8ojnK5CL1tiprmj_400.png" width="200">
+                <img src="/empty-state-board.png" width="200">
                 <h1>You have no boards</h1>
                 <p>Press the 'New Board' button on the left to create one</p>
             </div>
