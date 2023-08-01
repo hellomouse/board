@@ -15,7 +15,7 @@ board page:
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left
     - have list of boards be global, global refresh plugin
-
+- when deleting board count how many pins it has + display count 
 - share: if you are editor cant add users higher rank than u
 
 - save sort preference - localstoragen
@@ -41,6 +41,7 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 - pin colors
+- limit pin height - scroll
 
 cache user information for fast lookup
 

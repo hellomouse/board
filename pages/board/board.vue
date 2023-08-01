@@ -126,15 +126,17 @@ definePageMeta({
 
                 <div class="grid">
                     <Pin
-                        v-for="(pin, index) in pins" :key="pin.id"
+                        v-for="(pin, index) in pins" :key="pin.pin_id"
                         :content="pin.content"
-                        :pin-id="pin.id"
+                        :pin-id="pin.pin_id"
                         :creator="pin.creator"
                         :created="pin.created"
                         :edited="pin.edited"
                         :flags="pin.flags"
                         :color="['#db2d02','#ab3c00', 'green'][index]"
                         class="mb-1"
+
+                        @update="onPinUpdate"
                     />
                 </div>
             </v-container>
@@ -254,6 +256,11 @@ export default {
                 // TODO: get pins
             }
         },
+        // Pin option (such as edit / delete) triggered
+        async onPinUpdate(update) {
+            if (update.type === 'pin_delete') // Pin was just deleted
+                await this.updatePins();
+        }
     }
 }
 </script>
@@ -272,7 +279,7 @@ export default {
 
 .grid {
     column-count: 3;
-    column-gap: 10px; // TODO: variable
+    column-gap: 5px; // TODO: variable
 
     & > * {
         width: 100%;

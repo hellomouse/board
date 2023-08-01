@@ -7,6 +7,16 @@
         :color="color"
         :class="pinTileClasses"
     >
+        <div v-if="deleting" class="delete-confirmation-overlay">
+            <div class="delete-confirmation-overlay__center">
+                Deleting Pin...<br>
+
+                <v-progress-linear color="primary" indeterminate class="mb-4" />
+
+                <v-btn color="primary" @click="cancelDeletePin()">Cancel</v-btn>
+            </div>
+        </div>
+
         <div class="pin-tile__header pt-4 px-4">
             <div class="pin-tile__header__creator-wrapper text-truncate">
                 <profile-picture class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt" src="" />
@@ -77,7 +87,10 @@
                     <button class="px-4 hoverable hover-list-item edit-list-item">
                         <v-icon icon="mdi-folder-zip" />Archive
                     </button>
-                    <button class="px-4 text-red [ hoverable hover-list-item ] edit-list-item">
+                    <button
+                        class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
+                        @click="deletePin()"
+                    >
                         <v-icon icon="mdi-trash-can" color="red" />Delete
                     </button>
                 </v-sheet>
@@ -103,6 +116,13 @@ export default {
         metadata: { type: Object, default: () => {} },
         attachmentPaths: { type: Array, default: () => [] },
         color: { type: String, default: '' }
+    },
+    data() {
+        return {
+            // Deleting
+            deleting: false, // In process of deleting?
+            deletionTimeout: null,
+        };
     },
     computed: {
         pinTileClasses() {
@@ -137,6 +157,26 @@ export default {
                 });
             }
             return flags;
+        }
+    },
+    methods: {
+        deletePin() {
+            this.deleting = true;
+            this.deletionTimeout = setTimeout(async () => {
+                if (!this.deleting) return; // Cancelled
+                try {
+                    await this.$fetchApi('/api/board/pins', 'DELETE', { id: this.pinId });
+                    this.$emit('update', { type: 'pin_delete' });
+                } catch (e) {
+                    let errorMsg = `Failed to delete pin: ${this.$apiErrorToString(e)}`;
+                    this.$emit('error', errorMsg);
+                }
+                this.deleting = false;
+            }, 3000);
+        },
+        cancelDeletePin() {
+            this.deleting = false;
+            clearTimeout(this.deletionTimeout);
         }
     }
 }
@@ -230,6 +270,25 @@ export default {
             position: relative;
             margin-left: auto;
         }
+    }
+}
+</style>
+
+<style lang="scss" scoped>
+.delete-confirmation-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+
+    &__center {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        text-align: center;
     }
 }
 </style>
