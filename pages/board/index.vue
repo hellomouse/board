@@ -2,6 +2,7 @@
 // eslint-disable-next-line no-undef
 definePageMeta({
     layout: false,
+    middleware: 'auth'
 });
 </script>
 
@@ -19,6 +20,17 @@ definePageMeta({
         </BoardLeftNav>
 
         <v-container class="container pt-0">
+            <div v-if="initialLoad" class="loader center">
+                <v-progress-linear color="primary" indeterminate class="mb-2" />
+                Loading Boards...
+            </div>
+
+            <div v-if="boards.length === 0 && !initialLoad" class="center empty-state">
+                <img src="https://64.media.tumblr.com/61e089232161e2a093a510178edc2524/tumblr_inline_os8ojnK5CL1tiprmj_400.png" width="200">
+                <h1>You have no boards</h1>
+                <p>Press the 'New Board' button on the left to create one</p>
+            </div>
+            
             <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
                 <v-select
                     v-model="sortBy" density="compact" solo-filled max-width="200"
@@ -106,6 +118,7 @@ export default {
     data: () => ({
         boards: [],
         currentBoard: {},
+        initialLoad: true,
 
         // Modal show
         editBoard: false,
@@ -142,7 +155,7 @@ export default {
         }
     },
     // Get boards on page first load
-    async created() {
+    created() {
         this.getBoards();
     },
     methods: {
@@ -151,9 +164,11 @@ export default {
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {});
                 this.boards = boards.boards;
                 console.log(boards.boards)
+                this.initialLoad = false;
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);
+                this.initialLoad = false;
                 return;
             }
         },
@@ -215,5 +230,23 @@ export default {
 .container {
     max-width: calc(100% - $left-nav-width-pc) !important;
     margin-left: $left-nav-width-pc;
+    position: relative;
+    height: 100%;
+}
+
+.center {
+    position: absolute;
+    top: 50% !important;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.empty-state {
+    filter: brightness(0.7) grayscale(1);
+}
+
+.loader {
+    width: 300px;
 }
 </style>

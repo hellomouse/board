@@ -17,7 +17,7 @@
             ></v-text-field>  <!-- TODO prepend icon -->
         </UiAppNavbar>
 
-        <v-main class="mt-4">
+        <v-main class="mx-8 mt-4">
             <slot />
         </v-main>
     </v-app>

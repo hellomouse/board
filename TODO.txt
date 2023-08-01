@@ -16,10 +16,13 @@ board page:
 - expand list of boards - show boards like channels on left
     - have list of boards be global, global refresh plugin
 
-- require login for board
+- share: if you are editor cant add users higher rank than u
+
 - save sort preference - localstoragen
 - instead of board fixed size adaptive columns
-- board: loading + empty state
+
+
+
 - also maybe compact left side more?
     - toggle
 - autocomplete keyboard nav
@@ -88,4 +91,4 @@ future todo:
 navbar:
 - Logo
     + light/dark logo
-
+- pins: version history
