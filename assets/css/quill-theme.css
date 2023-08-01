@@ -1,0 +1,65 @@
+.ql-container {
+    font-family: 'Tenor Sans', Arial, sans-serif;
+    font-size: 1rem;
+    height: 250px;
+    overflow-y: auto;
+}
+
+.ql-toolbar.ql-snow {
+    background: rgba(var(--v-theme-on-surface-variant), 0.5);
+    box-shadow: 0px 11px 15px -7px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
+        0px 24px 38px 3px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
+        0px 9px 46px 8px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12));
+}
+
+.ql-snow .ql-picker-options,
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    background: rgb(var(--v-theme-on-surface-variant));
+    border: 1px solid #444;
+}
+
+/* Borders */
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow,
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-label {
+    border: 1px solid #444;
+}
+
+/* Text color in toolbar */
+.ql-snow .ql-picker {
+    color: rgba(var(--v-theme-on-surface), 0.7);
+}
+
+/* Icon fill */
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+    fill: rgb(var(--v-theme-on-surface));
+}
+.ql-snow .ql-stroke {
+    stroke: rgb(var(--v-theme-on-surface));
+}
+
+/* Active selected */
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+    background: #555;
+    color: #eee;
+}
+
+/* Hover */
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover {
+    background: #777;
+    color: #eee;
+}
+

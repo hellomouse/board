@@ -21,8 +21,6 @@ board page:
 - save sort preference - localstoragen
 - instead of board fixed size adaptive columns
 
-
-
 - also maybe compact left side more?
     - toggle
 - autocomplete keyboard nav
@@ -35,7 +33,24 @@ make it so editors can also update board and share
 
 
 pins:
+- have a dropdown in new pin
+    - select what type of modal to use
+        - markdown is current
+        - image gallery - preview images, only file upload
+        - link - select link, preview
+        - review - same as markdown, but add score
+            - no file upload 
 - pin colors
+
+pin create/edit modal:
+- show last edited in corner
+    - https://github.com/patleeman/quill-markdown-shortcuts
+    - https://github.com/visualjerk/quill-magic-url
+    - https://github.com/NoelOConnell/quill-image-uploader
+    - https://vueup.github.io/vue-quill/guide/modules.html
+- theme for the custom editor
+
+
 
 - board dropdown
     - edit

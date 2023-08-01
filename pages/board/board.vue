@@ -10,12 +10,31 @@ definePageMeta({
     <div>
         <NuxtLayout name="board">
             <BoardLeftNav>
-                <v-btn
-                    color="green" block
-                    height="44"
-                >
-                    <v-icon icon="mdi-plus" /> New Pin
-                </v-btn>
+                <v-menu>
+                    <template #activator="{ props }">
+                        <v-btn
+                            color="green" block
+                            height="44" v-bind="props"
+                        >
+                            <v-icon icon="mdi-plus" /> New Pin
+                        </v-btn>
+                    </template>
+                
+                    <v-sheet elevation="8" rounded="0">
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                            <v-icon icon="mdi-format-header-pound" />Markdown Pin
+                        </button>
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                            <v-icon icon="mdi-view-gallery" />Image Gallery Pin
+                        </button>
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                            <v-icon icon="mdi-link" />Link Pin
+                        </button>
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                            <v-icon icon="mdi-star-box" />Review Pin
+                        </button>
+                    </v-sheet>
+                </v-menu>
             </BoardLeftNav>
 
             <v-container class="container pt-0" :style="{ borderRight: `4px solid ${boardColor}` }">
@@ -66,39 +85,43 @@ definePageMeta({
                     {{ boardTitle }}
                 </h1>
 
-                <p class="ml-11 subtitle">{{ boardDesc }}</p>
+                <div class="d-flex">
+                    <p
+                        class="ml-11 subtitle text-truncate"
+                        style="vertical-align: top; margin-right: auto; margin-left: 0"
+                    >{{ boardDesc }}</p>
 
+                    <!-- Sort options -->
+                    <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
+                        <v-select
+                            v-model="selected" density="compact" solo-filled max-width="200"
+                            flat class="select mr-2"
+                            :items="['Created', 'Modified']"
+                        ></v-select>
 
-                <!-- Sort options -->
-                <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
-                    <v-select
-                        v-model="selected" density="compact" solo-filled max-width="200"
-                        flat class="select mr-2"
-                        :items="['Created', 'Modified']"
-                    ></v-select>
+                        <v-btn
+                            icon variant="text"
+                            height="40"
+                            @click="toggleSortDirection"
+                        >
+                            <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                        </v-btn>
 
-                    <v-btn
-                        icon variant="text"
-                        height="40"
-                        @click="toggleSortDirection"
-                    >
-                        <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
-                    </v-btn>
-
-                    <v-menu :close-on-content-click="false">
-                        <template #activator="{ props }">
-                            <v-btn
-                                icon variant="text"
-                                height="40"
-                                v-bind="props"
-                            >
-                                <v-icon>mdi-cog</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
-                            <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
-                        </v-sheet>
-                    </v-menu>
+                        <v-menu :close-on-content-click="false">
+                            <template #activator="{ props }">
+                                <v-btn
+                                    icon variant="text"
+                                    height="40"
+                                    v-bind="props"
+                                >
+                                    <v-icon>mdi-cog</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
+                                <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
+                            </v-sheet>
+                        </v-menu>
+                    </div>
                 </div>
 
                 <div class="grid">
@@ -112,6 +135,30 @@ definePageMeta({
                     />
                 </div>
             </v-container>
+
+            <PinModal
+                :edit-mode="editPin"
+                :show="createPinModal"
+                :pin="currentPin"
+
+                @update="onPinCreate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            />
+
+            <!-- Toasts for errors / success -->
+            <v-snackbar
+                v-model="showErrorToast" color="error" rounded="0" theme="dark"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastErrorMsg }}
+            </v-snackbar>
+            <v-snackbar
+                v-model="showSuccessToast" color="success"
+                rounded="0" theme="dark" timeout="2000"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastSuccessMsg }}
+            </v-snackbar>
         </NuxtLayout>
     </div>
 </template>
@@ -130,6 +177,18 @@ export default {
             boardDesc: '',
             boardColor: '',
             currentUserPerm: '',
+
+            currentPin: {},
+
+            // Modal show
+            editPin: false,
+            createPinModal: false,
+
+            // Toasts
+            showErrorToast: false,
+            showSuccessToast: false,
+            toastErrorMsg: '',
+            toastSuccessMsg: '',
 
             // Sorting
             selected: 'Created',
@@ -162,7 +221,16 @@ export default {
                 console.log(e)
                 // TODO: error state
             }
-        }
+        },
+        // Called when a pin is newly created or cancelled
+        async onPinCreate(created) {
+            this.createPinModal = false;
+            if (created) {
+                [this.showSuccessToast, this.toastSuccessMsg] = [true,
+                    this.editBoard ? 'Pin edited!' : 'Pin created!'];
+                // TODO: get pins
+            }
+        },
     }
 }
 </script>
