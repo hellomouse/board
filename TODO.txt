@@ -36,20 +36,23 @@ pins:
 - have a dropdown in new pin
     - select what type of modal to use
         - markdown is current
-        - image gallery - preview images, only file upload
+        - image gallery - preview images, only file upload + paste images
         - link - select link, preview
         - review - same as markdown, but add score
-            - no file upload 
+            - no file upload
 - pin colors
 
+cache user information for fast lookup
+
 pin create/edit modal:
-- show last edited in corner
     - https://github.com/patleeman/quill-markdown-shortcuts
     - https://github.com/visualjerk/quill-magic-url
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
-- theme for the custom editor
-
+- for markdown pin show link for markdown guide
+- change color on click
+    - mute palette more
+- make timestamp user local time
 
 
 - board dropdown
@@ -60,7 +63,6 @@ pin create/edit modal:
 
 
 wip:
-- api documentation page
 - table of contents for docs on right somehow
 
 

@@ -119,7 +119,7 @@ export default {
             try {
                 await this.$fetchApi('/api/board/boards', this.editMode ? 'PUT' : 'POST', params);
             } catch (e) {
-                let errorMsg = `Failed to modify board: ${this.$apiErrorToString(e)}`;
+                let errorMsg = `Failed to ${this.editMode ? 'modify' : 'create'} board: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
                 this.loading = false;
                 return;

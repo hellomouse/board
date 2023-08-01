@@ -4,6 +4,7 @@
         min-width="250"
         max-height="500"
         class="pin-tile"
+        :color="color"
         :class="pinTileClasses"
     >
         <div class="pin-tile__header pt-4 px-4">
@@ -32,18 +33,7 @@
         </div>
             
         <div class="px-4 py-1 pin-tile__content">
-            This is a pin
-
-            type: string,
-            content: string HTML content,
-            creator: (owner info as in GET /users),
-            created: Created timestamp (UNIX time),
-            edited:  Edited timestamp (UNIX time),
-            flags: “FLAG1 | FLAG2…”,
-            metadata: JSON of metadata
-            attachment_paths
-            pin_id
-            pin_type
+            <span v-html="content"></span>
         </div>
 
         <div class="pl-4 pin-tile__bottom">
@@ -62,6 +52,7 @@
                         density="comfortable"
                         icon="mdi-dots-vertical"
                         v-bind="props"
+                        :color="color"
                         flat
                     ></v-btn>
                 </template>
@@ -108,9 +99,10 @@ export default {
         created: { type: String, default: '' },
         edited: { type: String, default: '' },
         flags: { type: String, default: '' },
-        id: { type: String, default: '' },
+        pinId: { type: String, default: '' },
         metadata: { type: Object, default: () => {} },
-        attachmentPaths: { type: Array, default: () => [] }
+        attachmentPaths: { type: Array, default: () => [] },
+        color: { type: String, default: '' }
     },
     computed: {
         pinTileClasses() {
@@ -150,14 +142,27 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~/assets/variables.scss";
 @import "~/assets/css/dropdown-menu.scss";
 
 .pin-tile {
-    display: inline-block;
+    page-break-inside: avoid;
+    break-inside: avoid-column;
+    display: table;      
+
     overflow: hidden;
     position: relative;
+
+    // Limit image size
+    img {
+        max-width: 100%;
+    }
+
+    // Left margin for lists
+    ul, ol {
+        margin-left: 16px;
+    }
 
     // Faded ver. for archived posts
     &.archived:after {

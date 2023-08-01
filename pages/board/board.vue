@@ -21,7 +21,7 @@ definePageMeta({
                     </template>
                 
                     <v-sheet elevation="8" rounded="0">
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="editPin = false; createPinModal = true">
                             <v-icon icon="mdi-format-header-pound" />Markdown Pin
                         </button>
                         <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
@@ -125,12 +125,15 @@ definePageMeta({
                 </div>
 
                 <div class="grid">
-                    <BoardPin
-                        v-for="index in 10" :key="index" 
-                        creator="helloasdad1231521613123131312313131231313212312313131312"
-                        created="1:00 AM 12/12/12"
-                        edited="1:00 AM 12/12/12"
-                        flags="LOCKED"
+                    <Pin
+                        v-for="(pin, index) in pins" :key="pin.id"
+                        :content="pin.content"
+                        :pin-id="pin.id"
+                        :creator="pin.creator"
+                        :created="pin.created"
+                        :edited="pin.edited"
+                        :flags="pin.flags"
+                        :color="['#db2d02','#ab3c00', 'green'][index]"
                         class="mb-1"
                     />
                 </div>
@@ -140,6 +143,7 @@ definePageMeta({
                 :edit-mode="editPin"
                 :show="createPinModal"
                 :pin="currentPin"
+                :board-id="boardId"
 
                 @update="onPinCreate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -164,21 +168,25 @@ definePageMeta({
 </template>
 
 <script>
-import BoardPin from '~/components/board/Pin.vue';
+import Pin from '~/components/pin/Pin.vue';
 import { useAuthStore } from '~/store/auth.js';
 
 export default {
     name: 'BoardPage',
-    components: { BoardPin },
+    components: { Pin },
     data() {
         return {
             // Board info
+            boardId: '',
             boardTitle: '',
             boardDesc: '',
             boardColor: '',
             currentUserPerm: '',
 
             currentPin: {},
+
+            // Data
+            pins: [],
 
             // Modal show
             editPin: false,
@@ -202,12 +210,26 @@ export default {
         }
     },
     // Get board info + pins on page load
-    created() {
-        this.updateBoardInfo();
+    async created() {
+        await this.updateBoardInfo();
+        await this.updatePins();
     },
     methods: {
         toggleSortDirection() {
             this.sortDown = !this.sortDown;
+        },
+        async updatePins() {
+            try {
+                let pins = await this.$fetchApi('/api/board/pins', 'GET', { board_id: this.boardId });
+                for (let pin of pins.pins) {
+                    pin.created = this.$formatTimestamp(pin.created);
+                    pin.edited = this.$formatTimestamp(pin.edited);
+                }
+                this.pins = pins.pins;
+            } catch (e) {
+                console.log(e)
+                // TODO: error state
+            }
         },
         async updateBoardInfo() {
             try {
@@ -216,6 +238,7 @@ export default {
                 this.boardTitle = board.name;
                 this.boardDesc = board.desc;
                 this.boardColor = board.color;
+                this.boardId = board.id;
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
             } catch(e) {
                 console.log(e)

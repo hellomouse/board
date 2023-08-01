@@ -11,15 +11,15 @@ TODO
             <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Pin</h1>
 
-                <!-- TODO: type, content box, attachments
+                <!-- TODO: content box, attachments
                 or insert files by url?? -->
 
                 <client-only>
                     <QuillEditor
                         theme="snow" contentType="html" v-model:content="content"
-                        :toolbar="[['bold', 'italic', 'underline', 'strike'], ['image', 'link'], [{ 'align': [] }], ['clean']]"
+                        :toolbar="toolbars"
                     />
-                    <br><br>
+                    <br>
                 </client-only>
 
                 <!-- <v-textarea
@@ -44,6 +44,7 @@ TODO
                 />
             </v-card-text>
             <v-card-actions class="mr-3">
+                <p class="ml-4 d-block last-edited" v-if="pin.edited">Edited {{ pin.edited }}</p>
                 <v-spacer />
                 <v-btn color="primary" @click="$emit('update', false)">Cancel</v-btn>
                 <v-btn color="primary" variant="elevated" :loading="loading" @click="createPin">{{ editMode ? 'Apply' : 'Create' }}</v-btn>
@@ -79,6 +80,10 @@ export default {
         show: {
             type: Boolean,
             required: true
+        },
+        boardId: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -86,6 +91,7 @@ export default {
             content: this.pin?.content,
             color: this.pin?.metadata?.color,
             loading: false,
+            toolbars: [['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
 
             swatches,
             selectedSwatchIndex: 0
@@ -114,9 +120,14 @@ export default {
             }
 
             let params = {
-                name: this.name,
-                desc: this.description,
-                color: this.color,
+                pin_type: 0, // TODO
+                board_id: this.boardId,
+                flags: 0,
+                content: this.content,
+                attachment_paths: [],
+                metadata: {
+                    color: this.color
+                }
             };
 
             // Editing requires id
@@ -127,7 +138,7 @@ export default {
             try {
                 await this.$fetchApi('/api/board/pins', this.editMode ? 'PUT' : 'POST', params);
             } catch (e) {
-                let errorMsg = `Failed to modify pin: ${this.$apiErrorToString(e)}`;
+                let errorMsg = `Failed to ${this.editMode ? 'modify' : 'create'} pin: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
                 this.loading = false;
                 return;
@@ -138,3 +149,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "~/assets/variables.scss";
+
+.last-edited {
+    opacity: $secondary-text-opacity;
+}
+</style>

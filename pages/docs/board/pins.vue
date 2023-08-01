@@ -153,7 +153,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>id: string</td><td>ID of the pin to delete</td></tr>
+                    <tr><td>board_id: string?</td><td>ID of the parent board of the pin</td></tr>
+                    <tr><td>offset: number?</td><td>Search offset, default 0</td></tr>
+                    <tr><td>limit: number?</td><td>Pins returned, max 100, default 20</td></tr>
+                    <tr><td>creator: string?</td><td>Creator user ID of the pin</td></tr>
+                    <tr><td>query: string?</td><td>Pin content string contains this string</td></tr>
                 </tbody>
             </v-table>
 
