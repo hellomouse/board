@@ -41,7 +41,9 @@ pins:
         - link - select link, preview
         - review - same as markdown, but add score
             - no file upload
-
+- pin pagination
+- pin empty state
+- always show pin details - work
 
 cache user information for fast lookup
 
@@ -51,6 +53,7 @@ pin create/edit modal:
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
 - for markdown pin show link for markdown guide
+
 
 - board dropdown
     - edit

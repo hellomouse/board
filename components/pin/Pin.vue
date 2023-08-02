@@ -51,7 +51,7 @@
                 <div v-if="created" class="pin-tile__timestamp truncate-text">
                     <v-icon icon="mdi-clock"/> {{ created }}
                 </div>
-                <div v-if="edited" class="pin-tile__timestamp truncate-text">
+                <div v-if="edited && edited !== created" class="pin-tile__timestamp truncate-text">
                     &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
                 </div>
             </div>
