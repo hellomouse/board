@@ -23,11 +23,6 @@ TODO
                     <br>
                 </client-only>
 
-                <!-- <v-textarea
-                    v-model="description" density="compact" class="mb-4" label="Description"
-                    oninput="this.value = this.value.substring(0, 300)"
-                    rounded="0" variant="solo-filled"></v-textarea> -->
-
                 <v-btn
                     v-for="(col, index) in swatches" :key="col"
                     density="compact" width="40" style="min-width: 40px;"

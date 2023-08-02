@@ -4,7 +4,7 @@ Wrapper for delete confirmation modal for boards
 Example usage:
 <BoardDeleteModal
     :show="deleteBoardModal"    Show / hide modal
-    :board="currentBoard"       Must contain "id" and "title" prop
+    :board="currentBoard"       Must contain "id" and "name" prop
 
     @update="onBoardUpdate"     Emits board_delete on success and close_board_delete to close modal
     @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -17,7 +17,7 @@ Example usage:
         :show="show"
         title="Delete Board"
         :loading="deleteModalLoading"
-        :confirmation-string="board.title || ''"
+        :confirmation-string="board.name || ''"
         @update="die => deleteBoard(die)"
     >
         <p>

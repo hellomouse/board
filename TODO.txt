@@ -44,6 +44,7 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 - pin pagination
+- proper sorting
 - pin empty state
 - always show pin details - work
 - board does not exist state or board does not have permissions
@@ -58,8 +59,10 @@ pin create/edit modal:
 - for markdown pin show link for markdown guide
 
 
-/board page - rename things
-board - use .name not .title,. remove alias
+
+html stripping:
+- disallow: style tags
+- img: only src, width, height
 
 
 boards within boards

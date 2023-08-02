@@ -308,7 +308,6 @@ export default {
             try {
                 let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
                 this.currentBoard = board;
-                this.currentBoard.title = board.name; // Alias
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
             } catch(e) {
                 console.log(e)

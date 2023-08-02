@@ -52,7 +52,7 @@ definePageMeta({
                 :key="board.id"
 
                 :board-id="board.id"
-                :title="board.name"
+                :name="board.name"
                 :desc="board.desc"
                 :creator-id="board.creator"
                 :color="board.color"
@@ -68,7 +68,7 @@ definePageMeta({
                 :show="createBoardModal"
                 :board="currentBoard"
 
-                @update="onBoardCreate"
+                @update="onBoardCreateOrEdit"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
 
@@ -177,7 +177,7 @@ export default {
             if (msg.type === 'open_board_delete') { // Open board delete modal
                 this.deleteBoardModal = true;
                 this.currentBoard.id = msg.id;
-                this.currentBoard.title = msg.title;
+                this.currentBoard.name = msg.name;
             }
             else if (msg.type === 'close_board_delete') // Close board delete modal
                 this.deleteBoardModal = false;
@@ -207,7 +207,7 @@ export default {
             this.currentBoard = {};
         },
         // Called when a board is newly created or cancelled
-        async onBoardCreate(created) {
+        async onBoardCreateOrEdit(created) {
             this.createBoardModal = false;
             if (created) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,

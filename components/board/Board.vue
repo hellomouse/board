@@ -9,7 +9,7 @@
             class="px-4 pt-4"
             @dblclick="goToBoard"
         >
-            <div class="text-truncate text-h6">{{ title }}</div>
+            <div class="text-truncate text-h6">{{ name }}</div>
         </div>
         
         <div class="px-4 pb-3">
@@ -56,7 +56,7 @@
                                 type: 'edit',
                                 board: {
                                     id: boardId,
-                                    name: title,
+                                    name: name,
                                     desc,
                                     creator: creatorId,
                                     color
@@ -70,7 +70,7 @@
                             @click="$emit('update', {
                                 type: 'open_board_delete',
                                 id: boardId,
-                                title: title
+                                name: name
                             })"
                         >
                             <v-icon icon="mdi-trash-can" color="red" />Delete
@@ -90,7 +90,7 @@ export default {
             type: String,
             required: true
         },
-        title: {
+        name: {
             type: String,
             default: 'No title provided'
         },
