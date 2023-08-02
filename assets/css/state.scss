@@ -1,0 +1,23 @@
+.container-with-left-nav {
+    max-width: calc(100% - $left-nav-width-pc) !important;
+    margin-left: $left-nav-width-pc;
+    position: relative;
+    height: 100%;
+}
+
+.state-center {
+    position: absolute;
+    top: 50% !important;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.empty-state {
+    filter: brightness(0.7) grayscale(1);
+    user-select: none;
+}
+
+.state-loader {
+    width: 300px;
+}

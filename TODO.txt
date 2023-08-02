@@ -23,9 +23,11 @@ board page:
 
 - also maybe compact left side more?
     - toggle
+
 - autocomplete keyboard nav
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
+
 
 make board clickable - highlght on click 
 
@@ -43,11 +45,15 @@ pins:
         - link - select link, preview
         - review - same as markdown, but add score
             - no file upload
+
 - pin pagination
 - proper sorting
-- pin empty state
 - always show pin details - work
-- board does not exist state or board does not have permissions
+
+
+- double click pin to edit
+- bulk delete / pin / archive / favorite / change background pins
+    - select checkbox on top left or something
 
 cache user information for fast lookup
 

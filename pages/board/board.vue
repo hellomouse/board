@@ -40,94 +40,114 @@ definePageMeta({
                 </v-menu>
             </BoardLeftNav>
 
-            <v-container class="container pt-0" :style="{ borderRight: `4px solid ${currentBoard.color}` }">
+            <v-container class="container-with-left-nav pt-0" :style="{ borderRight: `4px solid ${currentBoard.color}` }">
+                <div v-if="initialLoad" class="state-loader state-center">
+                    <v-progress-linear color="primary" indeterminate class="mb-2" />
+                    Loading Pins...
+                </div>
 
-                <!-- TODO: full board name  + desc -->
-                <h1>
-                    <v-menu>
-                        <template #activator="{ props }">
-                            <v-btn
-                                density="comfortable"
-                                icon="mdi-dots-vertical"
-                                v-bind="props"
-                                class="board-tile__menu d-inline-block"
-                                flat color="transparent"
-                            ></v-btn>
-                        </template>
-                
-                        <v-sheet elevation="8" rounded="0">
-                            <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyBoardShareLink">
-                                <v-icon icon="mdi-link" />Permalink
-                            </button>
-                            <button
-                                class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
-                                @click="boardPropertiesModal = true"
-                            >
-                                <v-icon icon="mdi-information-outline" />Properties
-                            </button>
-                            <button
-                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
-                                class="px-4 hoverable hover-list-item edit-list-item"
-                                @click="openBoardShareModal"
-                            >
-                                <v-icon icon="mdi-account-plus" />Share
-                            </button>
-                            <button
-                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
-                                class="px-4 hoverable hover-list-item edit-list-item"
-                                @click="openBoardEditModal"
-                            >
-                                <v-icon icon="mdi-pencil" />Edit
-                            </button>
-                            <button
-                                v-if="['Owner'].includes(currentUserPerm)"
-                                class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
-                                @click="openBoardDeleteModal"
-                            >
-                                <v-icon icon="mdi-trash-can" color="red" />Delete
-                            </button>
-                        </v-sheet>
-                    </v-menu>
+                <div v-if="pins.length === 0 && !initialLoad && !errorState" class="state-center empty-state">
+                    <img src="/empty-state-board.png" width="200">
+                    <h1>This board has no pins</h1>
+                    <p>Press the 'New Pins' button on the left to create one</p>
+                </div>
 
-                    {{ currentBoard.name }}
-                </h1>
+                <div v-if="errorState" class="state-center">
+                    <img src="/error-state.png" width="200">
+                    <h1>Could not get board</h1>
+                    <p class="mb-4">Board does not exist or you do not have permission to view</p>
+                    <NuxtLink to="/board" style="text-decoration: none !important">
+                        <v-btn color="primary">Go back to my boards</v-btn>
+                    </NuxtLink>
+                </div>
 
-                <div class="d-flex">
-                    <p
-                        class="ml-11 subtitle text-truncate"
-                        style="vertical-align: top; margin-right: auto; margin-left: 0"
-                    >{{ currentBoard.desc }}</p>
-
-                    <!-- Sort options -->
-                    <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
-                        <v-select
-                            v-model="selected" density="compact" solo-filled max-width="200"
-                            flat class="select mr-2"
-                            :items="['Created', 'Modified']"
-                        ></v-select>
-
-                        <v-btn
-                            icon variant="text"
-                            height="40"
-                            @click="toggleSortDirection"
-                        >
-                            <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
-                        </v-btn>
-
-                        <v-menu :close-on-content-click="false">
+                <div v-if="!errorState && !initialLoad">
+                    <h1>
+                        <v-menu>
                             <template #activator="{ props }">
                                 <v-btn
-                                    icon variant="text"
-                                    height="40"
+                                    density="comfortable"
+                                    icon="mdi-dots-vertical"
                                     v-bind="props"
-                                >
-                                    <v-icon>mdi-cog</v-icon>
-                                </v-btn>
+                                    class="board-tile__menu d-inline-block"
+                                    flat color="transparent"
+                                ></v-btn>
                             </template>
-                            <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
-                                <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
+                    
+                            <v-sheet elevation="8" rounded="0">
+                                <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyBoardShareLink">
+                                    <v-icon icon="mdi-link" />Permalink
+                                </button>
+                                <button
+                                    class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
+                                    @click="boardPropertiesModal = true"
+                                >
+                                    <v-icon icon="mdi-information-outline" />Properties
+                                </button>
+                                <button
+                                    v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                    class="px-4 hoverable hover-list-item edit-list-item"
+                                    @click="openBoardShareModal"
+                                >
+                                    <v-icon icon="mdi-account-plus" />Share
+                                </button>
+                                <button
+                                    v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                    class="px-4 hoverable hover-list-item edit-list-item"
+                                    @click="openBoardEditModal"
+                                >
+                                    <v-icon icon="mdi-pencil" />Edit
+                                </button>
+                                <button
+                                    v-if="['Owner'].includes(currentUserPerm)"
+                                    class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
+                                    @click="openBoardDeleteModal"
+                                >
+                                    <v-icon icon="mdi-trash-can" color="red" />Delete
+                                </button>
                             </v-sheet>
                         </v-menu>
+
+                        {{ currentBoard.name }}
+                    </h1>
+
+                    <div class="d-flex">
+                        <p
+                            class="ml-11 subtitle text-truncate"
+                            style="vertical-align: top; margin-right: auto; margin-left: 0"
+                        >{{ currentBoard.desc }}</p>
+
+                        <!-- Sort options -->
+                        <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
+                            <v-select
+                                v-model="selected" density="compact" solo-filled max-width="200"
+                                flat class="select mr-2"
+                                :items="['Created', 'Modified']"
+                            ></v-select>
+
+                            <v-btn
+                                icon variant="text"
+                                height="40"
+                                @click="toggleSortDirection"
+                            >
+                                <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                            </v-btn>
+
+                            <v-menu :close-on-content-click="false">
+                                <template #activator="{ props }">
+                                    <v-btn
+                                        icon variant="text"
+                                        height="40"
+                                        v-bind="props"
+                                    >
+                                        <v-icon>mdi-cog</v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
+                                    <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
+                                </v-sheet>
+                            </v-menu>
+                        </div>
                     </div>
                 </div>
 
@@ -247,6 +267,7 @@ export default {
             // Board info
             currentUserPerm: '',
             currentBoard: {},
+            errorState: false,
 
             // Pin info
             currentPin: {},
@@ -286,6 +307,7 @@ export default {
     async created() {
         await this.updateBoardInfo();
         await this.updatePins();
+        this.initialLoad = false;
     },
     methods: {
         toggleSortDirection() {
@@ -310,8 +332,8 @@ export default {
                 this.currentBoard = board;
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
             } catch(e) {
-                console.log(e)
-                // TODO: error state
+                console.error(e);
+                this.errorState = true;
             }
         },
         // Called when a pin is newly created or cancelled
@@ -377,11 +399,7 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/sort.scss";
 @import "~/assets/css/dropdown-menu.scss";
-
-.container {
-    max-width: calc(100% - $left-nav-width-pc) !important;
-    margin-left: $left-nav-width-pc;
-}
+@import "~/assets/css/state.scss";
 
 .subtitle { opacity: $secondary-text-opacity; }
 

@@ -19,13 +19,13 @@ definePageMeta({
             </v-btn>
         </BoardLeftNav>
 
-        <v-container class="container pt-0">
-            <div v-if="initialLoad" class="loader center">
+        <v-container class="container-with-left-nav pt-0">
+            <div v-if="initialLoad" class="state-loader state-center">
                 <v-progress-linear color="primary" indeterminate class="mb-2" />
                 Loading Boards...
             </div>
 
-            <div v-if="boards.length === 0 && !initialLoad" class="center empty-state">
+            <div v-if="boards.length === 0 && !initialLoad" class="state-center empty-state">
                 <img src="/empty-state-board.png" width="200">
                 <h1>You have no boards</h1>
                 <p>Press the 'New Board' button on the left to create one</p>
@@ -61,7 +61,7 @@ definePageMeta({
                 @update="onBoardUpdate"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-            ></BoardBoard>
+            />
 
             <BoardModal
                 :edit-mode="editBoard"
@@ -226,27 +226,5 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
 @import "~/assets/css/sort.scss";
-
-.container {
-    max-width: calc(100% - $left-nav-width-pc) !important;
-    margin-left: $left-nav-width-pc;
-    position: relative;
-    height: 100%;
-}
-
-.center {
-    position: absolute;
-    top: 50% !important;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.empty-state {
-    filter: brightness(0.7) grayscale(1);
-}
-
-.loader {
-    width: 300px;
-}
+@import "~/assets/css/state.scss";
 </style>
