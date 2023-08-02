@@ -41,7 +41,7 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 - pin colors
-- limit pin height - scroll
+
 
 cache user information for fast lookup
 
@@ -86,7 +86,6 @@ pins are like notes just double click to edit
 
 responsive mobile
 
-responsive columns for pins
 
 https://www.npmjs.com/package/vue-markdown-render
 https://markdown-it.github.io/markdown-it/

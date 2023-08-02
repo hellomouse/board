@@ -7,94 +7,96 @@
         :color="color"
         :class="pinTileClasses"
     >
-        <div v-if="deleting" class="delete-confirmation-overlay">
-            <div class="delete-confirmation-overlay__center">
-                Deleting Pin...<br>
+        <div style="max-height: 500px; overflow-y: auto">
+            <div v-if="deleting" class="delete-confirmation-overlay">
+                <div class="delete-confirmation-overlay__center">
+                    Deleting Pin...<br>
 
-                <v-progress-linear color="primary" indeterminate class="mb-4" />
+                    <v-progress-linear color="primary" indeterminate class="mb-4" />
 
-                <v-btn color="primary" @click="cancelDeletePin()">Cancel</v-btn>
-            </div>
-        </div>
-
-        <div class="pin-tile__header pt-4 px-4">
-            <div class="pin-tile__header__creator-wrapper text-truncate">
-                <profile-picture class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt" src="" />
-                <span class="pin-tile__header__creator">@{{ creator }}</span>
-            </div>
-
-            <div class="pin-tile__header__icon-row">
-                <v-tooltip
-                    v-for="icon in flag_icons"
-                    :key="icon"
-                    :text="icon.text"
-                    location="top"
-                >
-                    <template #activator="{ props }">
-                        <v-icon
-                            v-bind="props"
-                            class="pa-2 ml-2"
-                        >
-                            {{ icon.icon }}
-                        </v-icon>
-                    </template>
-                </v-tooltip>
-            </div>
-        </div>
-            
-        <div class="px-4 py-1 pin-tile__content">
-            <span v-html="content"></span>
-        </div>
-
-        <div class="pl-4 pin-tile__bottom">
-            <div class="pin-tile__timestamp-wrapper">
-                <div v-if="created" class="pin-tile__timestamp">
-                    <v-icon icon="mdi-clock"/> {{ created }}
-                </div>
-                <div v-if="edited" class="pin-tile__timestamp">
-                    &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
+                    <v-btn color="primary" @click="cancelDeletePin()">Cancel</v-btn>
                 </div>
             </div>
 
-            <v-menu>
-                <template #activator="{ props }">
-                    <v-btn
-                        density="comfortable"
-                        icon="mdi-dots-vertical"
-                        v-bind="props"
-                        :color="color"
-                        flat
-                    ></v-btn>
-                </template>
-                
-                <v-sheet elevation="8" rounded="0">
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-link" />Permalink
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-pencil" />Edit
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item line">
-                        <v-icon icon="mdi-star" />Favorite
-                    </button>
+            <div class="pin-tile__header pt-4 px-4">
+                <div class="pin-tile__header__creator-wrapper text-truncate">
+                    <profile-picture class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt" src="" />
+                    <span class="pin-tile__header__creator">@{{ creator }}</span>
+                </div>
 
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-pin" />Pin
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-lock" />Lock
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-folder-zip" />Archive
-                    </button>
-                    <button
-                        class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
-                        @click="deletePin()"
+                <div class="pin-tile__header__icon-row">
+                    <v-tooltip
+                        v-for="icon in flag_icons"
+                        :key="icon"
+                        :text="icon.text"
+                        location="top"
                     >
-                        <v-icon icon="mdi-trash-can" color="red" />Delete
-                    </button>
-                </v-sheet>
-            </v-menu>
+                        <template #activator="{ props }">
+                            <v-icon
+                                v-bind="props"
+                                class="pa-2 ml-2"
+                            >
+                                {{ icon.icon }}
+                            </v-icon>
+                        </template>
+                    </v-tooltip>
+                </div>
+            </div>
+                
+            <div class="px-4 py-1 pin-tile__content">
+                <span v-html="content"></span>
+            </div>
+
+            <div class="pl-4 pin-tile__bottom">
+                <div class="pin-tile__timestamp-wrapper">
+                    <div v-if="created" class="pin-tile__timestamp truncate-text">
+                        <v-icon icon="mdi-clock"/> {{ created }}
+                    </div>
+                    <div v-if="edited" class="pin-tile__timestamp truncate-text">
+                        &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
+                    </div>
+                </div>
+
+                <v-menu>
+                    <template #activator="{ props }">
+                        <v-btn
+                            density="comfortable"
+                            icon="mdi-dots-vertical"
+                            v-bind="props"
+                            :color="color"
+                            flat
+                        ></v-btn>
+                    </template>
+                    
+                    <v-sheet elevation="8" rounded="0">
+                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                            <v-icon icon="mdi-link" />Permalink
+                        </button>
+                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                            <v-icon icon="mdi-pencil" />Edit
+                        </button>
+                        <button class="px-4 hoverable hover-list-item edit-list-item line">
+                            <v-icon icon="mdi-star" />Favorite
+                        </button>
+
+                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                            <v-icon icon="mdi-pin" />Pin
+                        </button>
+                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                            <v-icon icon="mdi-lock" />Lock
+                        </button>
+                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                            <v-icon icon="mdi-folder-zip" />Archive
+                        </button>
+                        <button
+                            class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
+                            @click="deletePin()"
+                        >
+                            <v-icon icon="mdi-trash-can" color="red" />Delete
+                        </button>
+                    </v-sheet>
+                </v-menu>
+            </div>
         </div>
     </v-sheet>
 </template>
@@ -189,9 +191,9 @@ export default {
 .pin-tile {
     page-break-inside: avoid;
     break-inside: avoid-column;
-    display: table;      
+    display: table;
 
-    overflow: hidden;
+    overflow: auto;
     position: relative;
 
     // Limit image size
@@ -228,6 +230,8 @@ export default {
     &__timestamp-wrapper {
         opacity: 0;
         transition: opacity 0.2s;
+        overflow-x: auto;
+        display: flex;
     }
 
     &:hover &__header__icon-row,

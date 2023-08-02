@@ -278,7 +278,7 @@ export default {
 .subtitle { opacity: $secondary-text-opacity; }
 
 .grid {
-    column-count: 3;
+    columns: 270px 5;
     column-gap: 5px; // TODO: variable
 
     & > * {
