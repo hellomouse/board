@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                     <tr><td>pin_type: Pin type enum (numeric)</td><td>Type of the pin as a number</td></tr>
-                    <tr><td>flags: number</td><td>Bit flags for the pin</td></tr>
+                    <tr><td>flags: string</td><td>Flags for the pin separated by |, ie "PINNED | LOCKED"</td></tr>
                     <tr><td>board_id: string</td><td>Board the pin belongs to, the user must have permission to create a pin</td></tr>
                     <tr><td>content: string</td><td>Raw internal content of the pin</td></tr>
                     <tr><td>attachment_paths: string[]</td><td>Paths to any files attached to the pin</td></tr>
@@ -87,7 +87,7 @@
                 <tbody>
                     <tr><td>id: string</td><td>ID of the pin to edit</td></tr>
                     <tr><td>pin_type: Pin type enum (numeric)?</td><td>Type of the pin as a number</td></tr>
-                    <tr><td>flags: number?</td><td>Bit flags for the pin</td></tr>
+                    <tr><td>flags: string?</td><td>Flags for pin (see create pin)</td></tr>
                     <tr><td>board_id: string?</td><td>Board the pin belongs to, the user must have permission to create a pin</td></tr>
                     <tr><td>content: string?</td><td>Raw internal content of the pin</td></tr>
                     <tr><td>attachment_paths: string[]?</td><td>Paths to any files attached to the pin</td></tr>
