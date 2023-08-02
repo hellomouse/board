@@ -136,7 +136,8 @@ definePageMeta({
                         :created="pin.created"
                         :edited="pin.edited"
                         :flags="pin.flags"
-                        :color="['#db2d02','#ab3c00', 'green'][index]"
+                        :color="pin.metadata.color"
+                        :metadata="pin.metadata"
                         class="mb-1"
 
                         @update="onPinUpdate"
@@ -255,7 +256,7 @@ export default {
             this.createPinModal = false;
             if (created) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
-                    this.editBoard ? 'Pin edited!' : 'Pin created!'];
+                    this.editPin ? 'Pin edited!' : 'Pin created!'];
                 this.updatePins();
             }
         },

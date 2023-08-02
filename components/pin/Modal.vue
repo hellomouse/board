@@ -16,6 +16,7 @@ TODO
 
                 <client-only>
                     <QuillEditor
+                        :style="{ backgroundColor: color }"
                         theme="snow" contentType="html" v-model:content="content"
                         :toolbar="toolbars"
                     />
@@ -58,10 +59,8 @@ const QuillEditor = process.client ? (await import('@vueup/vue-quill')).QuillEdi
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '~/assets/css/quill-theme.css';
 
-// TODO: move to shared js file
 const swatches =
-    '#F44336,#E91E63,#9C27B0,#673AB7,#3F51B5,#2196F3,#03A9F4,#009688,#4CAF50,#8BC34A,#CDDC39,#FFC107,#FF9800,#FF5722,#607D8B'.split(',');
-
+    ',#77172e,#692b17,#7c4a03,#264d3b,#0c625d,#256377,#284255,#472e5b,#6c394f,#4b443a'.split(',');
 
 export default {
     name: 'PinModal',
@@ -104,10 +103,10 @@ export default {
         }
     },
     watch: {
-        show() {
+        pin() {
             this.content = this.pin?.content || '';
             this.color = this.pin?.metadata?.color || swatches[0];
-            this.selectedSwatchIndex = Math.max(0, swatches.indexOf(this.color.toUpperCase()));
+            this.selectedSwatchIndex = Math.max(0, swatches.indexOf(this.color));
         }
     },
     methods: {
@@ -122,7 +121,7 @@ export default {
             let params = {
                 pin_type: 0, // TODO
                 board_id: this.boardId,
-                flags: 0,
+                flags: '',
                 content: this.content,
                 attachment_paths: [],
                 metadata: {
