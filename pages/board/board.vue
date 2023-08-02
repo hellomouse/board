@@ -21,7 +21,10 @@ definePageMeta({
                     </template>
                 
                     <v-sheet elevation="8" rounded="0">
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="editPin = false; createPinModal = true">
+                        <button
+                            class="px-4 py-2 hoverable hover-list-item"
+                            @click="currentPin = {}; editPin = false; createPinModal = true"
+                        >
                             <v-icon icon="mdi-format-header-pound" />Markdown Pin
                         </button>
                         <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
@@ -253,13 +256,18 @@ export default {
             if (created) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
                     this.editBoard ? 'Pin edited!' : 'Pin created!'];
-                // TODO: get pins
+                this.updatePins();
             }
         },
         // Pin option (such as edit / delete) triggered
         async onPinUpdate(update) {
             if (update.type === 'pin_delete') // Pin was just deleted
                 await this.updatePins();
+            else if (update.type === 'pin-edit') { // Edit current pin
+                this.editPin = true;
+                this.currentPin = update.pin;
+                this.createPinModal = true;
+            }
         }
     }
 }

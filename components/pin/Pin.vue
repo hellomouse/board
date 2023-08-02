@@ -72,14 +72,33 @@
                         <button class="px-4 hoverable hover-list-item edit-list-item">
                             <v-icon icon="mdi-link" />Permalink
                         </button>
-                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                        <button
+                            class="px-4 hoverable hover-list-item edit-list-item"
+                            @click="$emit('update', {
+                                type: 'pin-edit',
+                                pin: {
+                                    pin_id: pinId,
+                                    board_id: boardId,
+                                    type: type,
+                                    creator: creator,
+                                    edited: edited,
+                                    content: content,
+                                    attachment_paths: attachmentPaths,
+                                    metadata: metadata
+                                }
+                            })"
+                        >
                             <v-icon icon="mdi-pencil" />Edit
                         </button>
-                        <button class="px-4 hoverable hover-list-item edit-list-item line">
+                        <button
+                            class="px-4 hoverable hover-list-item edit-list-item line"
+                        >
                             <v-icon icon="mdi-star" />Favorite
                         </button>
 
-                        <button class="px-4 hoverable hover-list-item edit-list-item">
+                        <button
+                            class="px-4 hoverable hover-list-item edit-list-item"
+                        >
                             <v-icon icon="mdi-pin" />Pin
                         </button>
                         <button class="px-4 hoverable hover-list-item edit-list-item">
@@ -89,7 +108,7 @@
                             <v-icon icon="mdi-folder-zip" />Archive
                         </button>
                         <button
-                            class="px-4 text-red [ hoverable hover-list-item ] edit-list-item"
+                            class="px-4 text-red [ hoverable hover-list-item ] edit-list-item edit-list-item--line"
                             @click="deletePin()"
                         >
                             <v-icon icon="mdi-trash-can" color="red" />Delete

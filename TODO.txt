@@ -53,14 +53,14 @@ pin create/edit modal:
 - for markdown pin show link for markdown guide
 - change color on click
     - mute palette more
-- make timestamp user local time
-
 
 - board dropdown
     - edit
     - share
     - delete
     - properties
+
+boards within boards
 
 
 wip:

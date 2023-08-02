@@ -131,8 +131,8 @@ export default {
             };
 
             // Editing requires id
-            if (!this.editMode)
-                params.id = this.pin.id;
+            if (this.editMode)
+                params.id = this.pin.pin_id;
 
             this.loading = true;
             try {
