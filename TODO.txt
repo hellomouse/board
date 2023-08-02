@@ -29,6 +29,8 @@ board page:
 
 make board clickable - highlght on click 
 
+- press enter in create board modal to create 
+
 make it so editors can also update board and share
 - make it so editors cant promote others to owner
 
@@ -44,6 +46,7 @@ pins:
 - pin pagination
 - pin empty state
 - always show pin details - work
+- board does not exist state or board does not have permissions
 
 cache user information for fast lookup
 
@@ -55,11 +58,9 @@ pin create/edit modal:
 - for markdown pin show link for markdown guide
 
 
-- board dropdown
-    - edit
-    - share
-    - delete
-    - properties
+/board page - rename things
+board - use .name not .title,. remove alias
+
 
 boards within boards
 

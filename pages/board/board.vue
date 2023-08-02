@@ -40,7 +40,7 @@ definePageMeta({
                 </v-menu>
             </BoardLeftNav>
 
-            <v-container class="container pt-0" :style="{ borderRight: `4px solid ${boardColor}` }">
+            <v-container class="container pt-0" :style="{ borderRight: `4px solid ${currentBoard.color}` }">
 
                 <!-- TODO: full board name  + desc -->
                 <h1>
@@ -56,43 +56,47 @@ definePageMeta({
                         </template>
                 
                         <v-sheet elevation="8" rounded="0">
-                            <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyShareLink">
+                            <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyBoardShareLink">
                                 <v-icon icon="mdi-link" />Permalink
                             </button>
                             <button
                                 class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
+                                @click="boardPropertiesModal = true"
                             >
                                 <v-icon icon="mdi-information-outline" />Properties
                             </button>
                             <button
                                 v-if="['Owner', 'Edit'].includes(currentUserPerm)"
                                 class="px-4 hoverable hover-list-item edit-list-item"
+                                @click="openBoardShareModal"
                             >
                                 <v-icon icon="mdi-account-plus" />Share
                             </button>
                             <button
                                 v-if="['Owner', 'Edit'].includes(currentUserPerm)"
                                 class="px-4 hoverable hover-list-item edit-list-item"
+                                @click="openBoardEditModal"
                             >
                                 <v-icon icon="mdi-pencil" />Edit
                             </button>
                             <button
                                 v-if="['Owner'].includes(currentUserPerm)"
                                 class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
+                                @click="openBoardDeleteModal"
                             >
                                 <v-icon icon="mdi-trash-can" color="red" />Delete
                             </button>
                         </v-sheet>
                     </v-menu>
 
-                    {{ boardTitle }}
+                    {{ currentBoard.name }}
                 </h1>
 
                 <div class="d-flex">
                     <p
                         class="ml-11 subtitle text-truncate"
                         style="vertical-align: top; margin-right: auto; margin-left: 0"
-                    >{{ boardDesc }}</p>
+                    >{{ currentBoard.desc }}</p>
 
                     <!-- Sort options -->
                     <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
@@ -129,7 +133,7 @@ definePageMeta({
 
                 <div class="grid">
                     <Pin
-                        v-for="(pin, index) in pins" :key="pin.pin_id"
+                        v-for="pin in pins" :key="pin.pin_id"
                         :content="pin.content"
                         :pin-id="pin.pin_id"
                         :creator="pin.creator"
@@ -149,10 +153,68 @@ definePageMeta({
                 :edit-mode="editPin"
                 :show="createPinModal"
                 :pin="currentPin"
-                :board-id="boardId"
+                :board-id="currentBoard.id"
 
                 @update="onPinCreate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            />
+
+            <!-- For current board -->
+            <v-dialog
+                v-model="boardPropertiesModal"
+                width="auto"
+            >
+                <v-card width="500">
+                    <v-card-text>
+                        <div :style="{ borderBottom: `2px solid ${currentBoard.color}` }" class="mb-2 pb-2">
+                            <h1>{{ currentBoard.name }}</h1>
+                            <span class="subtitle">Created by {{ currentBoard.creator }}</span>
+                        </div>
+                        <p class="board-desc">{{ currentBoard.desc }}</p>
+
+                        <br>
+                        <code class="board-properties"><div class="board-properties__prop">ID:</div> {{ currentBoard.id }}</code><br>
+                        <code class="board-properties">
+                            <div class="board-properties__prop">Created:</div>
+                            {{ $formatTimestamp(currentBoard.created) }}
+                        </code><br>
+                        <code class="board-properties">
+                            <div class="board-properties__prop">Edited:</div>
+                            {{ $formatTimestamp(currentBoard.edited) }}
+                        </code>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer />
+                        <v-btn color="primary" block @click="boardPropertiesModal = false">Close</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+      
+            <BoardModal
+                :edit-mode="true"
+                :show="editBoardModal"
+                :board="currentBoard"
+
+                @update="onBoardEdit"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            />
+
+            <BoardDeleteModal
+                :show="deleteBoardModal"
+                :board="currentBoard"
+
+                @update="onBoardDeleteUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
+            <BoardShareModal
+                :show="shareBoardModal"
+                :board="currentBoard"
+
+                @update="e => { if (e.type === 'close') shareBoardModal = false; }"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
             <!-- Toasts for errors / success -->
@@ -183,13 +245,18 @@ export default {
     data() {
         return {
             // Board info
-            boardId: '',
-            boardTitle: '',
-            boardDesc: '',
-            boardColor: '',
             currentUserPerm: '',
+            currentBoard: {},
 
+            // Pin info
             currentPin: {},
+            initialLoad: true,
+
+            // Modal show
+            editBoardModal: false,
+            shareBoardModal: false,
+            deleteBoardModal: false,
+            boardPropertiesModal: false,
 
             // Data
             pins: [],
@@ -226,7 +293,7 @@ export default {
         },
         async updatePins() {
             try {
-                let pins = await this.$fetchApi('/api/board/pins', 'GET', { board_id: this.boardId });
+                let pins = await this.$fetchApi('/api/board/pins', 'GET', { board_id: this.currentBoard.id });
                 for (let pin of pins.pins) {
                     pin.created = this.$formatTimestamp(pin.created);
                     pin.edited = this.$formatTimestamp(pin.edited);
@@ -240,11 +307,8 @@ export default {
         async updateBoardInfo() {
             try {
                 let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
-                console.log(board)
-                this.boardTitle = board.name;
-                this.boardDesc = board.desc;
-                this.boardColor = board.color;
-                this.boardId = board.id;
+                this.currentBoard = board;
+                this.currentBoard.title = board.name; // Alias
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
             } catch(e) {
                 console.log(e)
@@ -269,7 +333,43 @@ export default {
                 this.currentPin = update.pin;
                 this.createPinModal = true;
             }
-        }
+        },
+
+        // Board stuff:
+        // Handle menu selection for each board
+        openBoardDeleteModal() {
+            this.deleteBoardModal = true;
+        },
+        openBoardEditModal() {
+            this.editBoardModal = true;
+        },
+        async openBoardShareModal() {
+            await this.updateBoardInfo(); // Sync information before opening
+            this.shareBoardModal = true;
+        },
+        async onBoardDeleteUpdate(msg) {
+            if (msg.type === 'close_board_delete') // Close board delete modal
+                this.deleteBoardModal = false;
+            else if (msg.type === 'board_delete') { // Board was deleted
+                [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
+                setTimeout(() => {
+                    this.$router.push('/board');
+                }, 2000);
+            }
+        },
+        // Called when a board is newly created or cancelled
+        async onBoardEdit(edited) {
+            this.editBoardModal = false;
+            if (edited) {
+                [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board edited!'];
+                this.updateBoardInfo();
+            }
+        },
+        copyBoardShareLink() {
+            if (process.client)
+                navigator.clipboard.writeText(window.location.origin + '/board/board?id=' + this.currentBoard.id);
+            [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];
+        },
     }
 }
 </script>
@@ -288,10 +388,28 @@ export default {
 
 .grid {
     columns: 270px 5;
-    column-gap: 5px; // TODO: variable
+    column-gap: 5px;
 
     & > * {
         width: 100%;
     }
+}
+
+// Board properties modal
+.board-properties {
+    color: rgb(var(--v-theme-on-surface), $secondary-text-opacity);
+
+    &__prop {
+        width: 70px;
+        display: inline-block;
+        color: rgb(var(--v-theme-primary));
+        font-weight: bold;
+    }
+}
+
+.board-desc {
+    white-space: pre;
+    max-height: 300px;
+    overflow-y: auto;
 }
 </style>
