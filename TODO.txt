@@ -23,7 +23,6 @@ board page:
 - also maybe compact left side more?
     - toggle
 
-press enter to login
 
 - autocomplete keyboard nav
 - fix share modal on phone

@@ -19,6 +19,7 @@
                 :type="show_password ? 'text' : 'password'"
                 class="mb-4"
                 @click:append="show_password = !show_password"
+                @keyup.enter="postLogin"
             ></v-text-field>
 
             <v-btn
