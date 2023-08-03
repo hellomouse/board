@@ -15,8 +15,7 @@ board page:
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left
     - have list of boards be global, global refresh plugin
-- when deleting board count how many pins it has + display count 
-- share: if you are editor cant add users higher rank than u
+
 
 - save sort preference - localstoragen
 - instead of board fixed size adaptive columns
@@ -24,14 +23,14 @@ board page:
 - also maybe compact left side more?
     - toggle
 
+press enter to login
+
 - autocomplete keyboard nav
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
 
 make board clickable - highlght on click 
-
-- press enter in create board modal to create 
 
 make it so editors can also update board and share
 - make it so editors cant promote others to owner
@@ -46,6 +45,7 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 
+locked pins - dont show edit
 
 
 meta tags

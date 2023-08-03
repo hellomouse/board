@@ -9,7 +9,7 @@ Example usage:
     :perma-share-link="shareBoardLink"
     :creator="shareBoardCreator"
     :resource-name="shareBoardName"
-    :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
+    :perm-levels="['View', 'Interact', 'Self Edit', EDIT, OWNER]"
     :initial-users="shareUsers"
     :initial-public-perm="sharePublicPerm"
     :share-board-modal-loading="shareBoardModalLoading"
@@ -102,8 +102,9 @@ Example usage:
                         </div>
 
                         <v-select
-                            v-model="publicLevel" class="user__perm"
-                            :items="permLevels.filter(x => x !== 'Owner').concat([NO_ACCESS])"
+                            v-model="publicLevel"
+                            :disabled="![OWNER, EDIT].includes(currentUserPerm)" class="user__perm"
+                            :items="permLevelsFiltered.filter(x => x !== OWNER).concat([NO_ACCESS])"
                         ></v-select>
                     </div>
                 </div>
@@ -122,13 +123,13 @@ Example usage:
 
                         <v-select
                             v-model="user.level"
-                            :disabled="user.id === creator"
+                            :disabled="canNotEditUser(user)"
                             class="user__perm mr-2"
-                            :items="permLevels"
+                            :items="permLevelsFiltered"
                         ></v-select>
 
                         <v-btn
-                            :disabled="user.id === creator"
+                            :disabled="canNotEditUser(user)"
                             variant="text" icon="mdi-close-circle" max-height="40"
                             @click="removeUser(user.id)"
                         ></v-btn>
@@ -164,7 +165,11 @@ Example usage:
 </template>
 
 <script>
+import { useAuthStore } from '~/store/auth.js';
+
 const NO_ACCESS = 'No Access';
+const OWNER = 'Owner';
+const EDIT = 'Edit';
 const INPUT_RATE_LIMIT_MS = 300; // In ms
 
 export default {
@@ -214,7 +219,7 @@ export default {
         },
     },
     data: () => ({
-        NO_ACCESS,
+        NO_ACCESS, EDIT, OWNER,
         publicLevel: NO_ACCESS,
 
         // Autocomplete:
@@ -231,6 +236,18 @@ export default {
         showModal: {
             get() { return this.show; },
             set(val) { this.$emit('show', val); }
+        },
+        currentUserPerm() {
+            let user = useAuthStore(this.$pinia).user;
+            return this.initialUsers.filter(u => u.id === user.id)[0]?.level || NO_ACCESS;
+        },
+        currentUser() {
+            return useAuthStore(this.$pinia).user;
+        },
+        permLevelsFiltered() {
+            if (this.currentUserPerm !== OWNER)
+                return this.permLevels.filter(x => x !== OWNER);
+            return this.permLevels;
         }
     },
     watch: {
@@ -321,6 +338,16 @@ export default {
             if (this.publicLevel !== NO_ACCESS)
                 newPerms['public'] = { perm_level: this.publicLevel };
             this.$emit('update', newPerms);
+        },
+        // Can the current user be not edited? (Ie disabled)
+        canNotEditUser(user) {
+            // Conditions:
+            // - Creator can never be edited
+            // - If current user does not have OWNER / EDIT perm
+            // - If current user is EDIT and the user is not the current user
+            if (this.currentUserPerm === EDIT && [OWNER, EDIT].includes(user.level) && user.id !== this.currentUser.id)
+                return true;
+            return user.id === this.creator || ![OWNER, EDIT].includes(this.currentUserPerm);
         }
     },
 }

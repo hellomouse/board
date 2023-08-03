@@ -22,7 +22,7 @@ Example usage:
     >
         <p>
             Are you sure you want to delete this board?
-            This will delete the board <b>and all pins</b> associated
+            This will delete the board <b>and all {{ board.pin_count }} pin(s)</b> associated
             with the board and <b>cannot be undone!</b>
         </p>
     </DeleteConfirmation>
