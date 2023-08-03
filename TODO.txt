@@ -46,12 +46,10 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 
-- pin pagination
-    - always at bottom
-    - specify limits in js for testing
-    - use custom pagination for typing page number manually
-    - board api should return # pins
-    - rel caonical and stuff
+
+
+meta tags
+- https://nuxt.com/docs/getting-started/seo-meta
 
 - proper sorting
     - make sticky

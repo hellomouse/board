@@ -169,8 +169,9 @@ definePageMeta({
                 </div>
 
                 <v-pagination
-                    class="mt-4"
-                    length="20" total-visible="5"
+                    v-if="pageCount > 1 && !initialLoad && !errorState"
+                    v-model="page" class="mt-4"
+                    :length="pageCount" total-visible="5"
                 />
             </v-container>
 
@@ -178,7 +179,7 @@ definePageMeta({
                 :edit-mode="editPin"
                 :show="createPinModal"
                 :pin="currentPin"
-                :board-id="currentBoard.id"
+                :board-id="currentBoard.id || ''"
 
                 @update="onPinCreate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -264,6 +265,8 @@ definePageMeta({
 import Pin from '~/components/pin/Pin.vue';
 import { useAuthStore } from '~/store/auth.js';
 
+const PINS_PER_PAGE = 40;
+
 export default {
     name: 'BoardPage',
     components: { Pin },
@@ -273,10 +276,14 @@ export default {
             currentUserPerm: '',
             currentBoard: {},
             errorState: false,
+            initialLoad: true,
+
+            pinCount: 0,
+            pageCount: 0,
+            page: 1,
 
             // Pin info
             currentPin: {},
-            initialLoad: true,
 
             // Modal show
             editBoardModal: false,
@@ -312,6 +319,9 @@ export default {
     async created() {
         await this.updateBoardInfo();
         await this.updatePins();
+
+        this.page = this.$route.query.page || 1;
+        this.$watch('page', this.pageWatch);
         this.initialLoad = false;
     },
     methods: {
@@ -320,15 +330,18 @@ export default {
         },
         async updatePins() {
             try {
-                let pins = await this.$fetchApi('/api/board/pins', 'GET', { board_id: this.currentBoard.id });
+                let pins = await this.$fetchApi('/api/board/pins', 'GET', {
+                    board_id: this.currentBoard.id,
+                    offset: (this.page - 1) * PINS_PER_PAGE,
+                    limit: PINS_PER_PAGE
+                });
                 for (let pin of pins.pins) {
                     pin.created = this.$formatTimestamp(pin.created);
                     pin.edited = this.$formatTimestamp(pin.edited);
                 }
                 this.pins = pins.pins;
             } catch (e) {
-                console.log(e)
-                // TODO: error state
+                [this.toastErrorMsg, this.showErrorToast] = ['Failed to get pins: ' + this.$apiErrorToString(e), true];
             }
         },
         async updateBoardInfo() {
@@ -336,6 +349,8 @@ export default {
                 let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
                 this.currentBoard = board;
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
+                this.pinCount = board.pin_count;
+                this.pageCount = Math.ceil(board.pin_count / PINS_PER_PAGE);
             } catch(e) {
                 console.error(e);
                 this.errorState = true;
@@ -345,6 +360,9 @@ export default {
         async onPinCreate(created) {
             this.createPinModal = false;
             if (created) {
+                this.pinCount++;
+                this.pageCount = Math.ceil(this.pinCount / PINS_PER_PAGE);
+
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
                     this.editPin ? 'Pin edited!' : 'Pin created!'];
                 this.updatePins();
@@ -352,8 +370,11 @@ export default {
         },
         // Pin option (such as edit / delete) triggered
         async onPinUpdate(update) {
-            if (update.type === 'pin_delete') // Pin was just deleted
+            if (update.type === 'pin_delete') { // Pin was just deleted
+                this.pinCount--;
+                this.pageCount = Math.ceil(this.pinCount / PINS_PER_PAGE);
                 await this.updatePins();
+            }
             else if (update.type === 'pin-edit') { // Edit current pin
                 this.editPin = true;
                 this.currentPin = update.pin;
@@ -396,6 +417,16 @@ export default {
                 navigator.clipboard.writeText(window.location.origin + '/board/board?id=' + this.currentBoard.id);
             [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];
         },
+        // On page change
+        pageWatch(page) {
+            this.page = page;
+            history.pushState({}, null,
+                this.$route.path + '?' + new URLSearchParams({
+                    id: this.currentBoard.id,
+                    page: this.page
+                }));
+            this.updatePins();
+        },
     }
 }
 </script>
@@ -411,6 +442,7 @@ export default {
 .grid {
     columns: 270px 5;
     column-gap: 5px;
+    min-height: calc(100% - 200px);
 
     & > * {
         width: 100%;

@@ -172,7 +172,8 @@
         edited: "Timestamp last modified",
         perms: {
             "logged_in_user_id": { perm_level: "Perm level enum" }
-        }
+        },
+        pin_count: number of pins (int)
     },
 ...]}</code></pre><br>
 
@@ -218,7 +219,8 @@
     perms: {
         "user_id": { perm_level: "Perm level enum" },
         ...
-    }
+    },
+    pin_count: number of pins (int)
 }</code></pre><br>
 
                 <b>Error:</b> 401 Unauthorized, 403 Forbidden, 500 Server error<br>
