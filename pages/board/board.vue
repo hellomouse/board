@@ -159,7 +159,7 @@ definePageMeta({
                         :creator="pin.creator"
                         :created="pin.created"
                         :edited="pin.edited"
-                        :flags="pin.flags"
+                        :initial-flags="pin.flags"
                         :color="pin.metadata.color"
                         :metadata="pin.metadata"
                         :perm="currentUserPerm"

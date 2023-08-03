@@ -174,22 +174,21 @@ export default {
             return classes;
         },
         flag_icons() {
-            let flagsArr = this.flags.toUpperCase().split(' | ');
             let flags = [];
 
-            if (flagsArr.includes('ARCHIVED')) {
+            if (this.archived) {
                 flags.push({
                     icon: 'mdi-folder-zip',
                     text: 'Archived'
                 });
             }
-            if (flagsArr.includes('LOCKED')) {
+            if (this.locked) {
                 flags.push({
                     icon: 'mdi-lock',
                     text: 'Locked'
                 });
             }
-            if (flagsArr.includes('PINNED')) {
+            if (this.pinned) {
                 flags.push({
                     icon: 'mdi-pin',
                     text: 'Pinned'
@@ -197,7 +196,6 @@ export default {
             }
             return flags;
         },
-
         viewerHasPerm() {
             if (!['Owner', 'Edit', 'SelfEdit'].includes(this.perm))
                 return false;
