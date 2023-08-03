@@ -11,11 +11,13 @@ github linting workflow
 
 board page:
 - get search params in route
+    - pagination 
+    - shared wiht me
 
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left
     - have list of boards be global, global refresh plugin
-
+    - use the infinite scroll thing?
 
 - save sort preference - localstoragen
 - instead of board fixed size adaptive columns
@@ -83,15 +85,11 @@ optimize:
 - https://github.com/Developmint/nuxt-purgecss
 - https://pwa.nuxtjs.org/
 - https://www.npmjs.com/package/shrink-ray
-
+- https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
+    - local material icons?
 
 
 - svg logo
-
-- modal to create pin
-
-
-pins are like notes just double click to edit
 
 
 responsive mobile

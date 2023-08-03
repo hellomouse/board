@@ -204,9 +204,9 @@ export default {
             return true;
         },
 
-        locked() { return this.flags.split('|').includes('LOCKED'); },
-        pinned() { return this.flags.split('|').includes('PINNED'); },
-        archived() { return this.flags.split('|').includes('ARCHIVED'); }
+        locked() { return this.flags.split(' | ').includes('LOCKED'); },
+        pinned() { return this.flags.split(' | ').includes('PINNED'); },
+        archived() { return this.flags.split(' | ').includes('ARCHIVED'); }
     },
     methods: {
         deletePin() {
