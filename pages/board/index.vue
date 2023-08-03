@@ -47,21 +47,23 @@ definePageMeta({
                 </v-btn>
             </div>
     
-            <BoardBoard
-                v-for="board in sortedBoards"
-                :key="board.id"
+            <div>
+                <BoardBoard
+                    v-for="board in sortedBoards"
+                    :key="board.id"
 
-                :board-id="board.id"
-                :name="board.name"
-                :desc="board.desc"
-                :creator-id="board.creator"
-                :color="board.color"
-                :current-user-perm="board.perms[user.id]?.perm_level"
+                    :board-id="board.id"
+                    :name="board.name"
+                    :desc="board.desc"
+                    :creator-id="board.creator"
+                    :color="board.color"
+                    :current-user-perm="board.perms[user.id]?.perm_level"
 
-                @update="onBoardUpdate"
-                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-            />
+                    @update="onBoardUpdate"
+                    @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+                    @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                />
+            </div>
 
             <BoardModal
                 :edit-mode="editBoard"

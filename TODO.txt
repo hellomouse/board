@@ -11,8 +11,8 @@ github linting workflow
 
 board page:
 - get search params in route
-    - pagination 
-    - shared wiht me
+    - inf scroll?
+    - shared with me
 
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left
@@ -20,7 +20,7 @@ board page:
     - use the infinite scroll thing?
 
 - save sort preference - localstoragen
-- instead of board fixed size adaptive columns
+
 
 - also maybe compact left side more?
     - toggle
@@ -75,7 +75,6 @@ html stripping:
 boards within boards
 
 
-wip:
 - table of contents for docs on right somehow
 
 

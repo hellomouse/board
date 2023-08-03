@@ -208,6 +208,10 @@ definePageMeta({
                         <code class="board-properties">
                             <div class="board-properties__prop">Edited:</div>
                             {{ $formatTimestamp(currentBoard.edited) }}
+                        </code><br>
+                        <code class="board-properties">
+                            <div class="board-properties__prop">Pins:</div>
+                            {{ currentBoard.pin_count }}
                         </code>
                     </v-card-text>
                     <v-card-actions>
