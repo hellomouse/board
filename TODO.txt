@@ -11,8 +11,10 @@ github linting workflow
 
 board page:
 - get search params in route
-    - inf scroll?
-    - shared with me
+
+
+- inf scroll?
+
 
 - refresh boards periodically?
 - expand list of boards - show boards like channels on left

@@ -20,12 +20,12 @@ definePageMeta({
         </BoardLeftNav>
 
         <v-container class="container-with-left-nav pt-0">
-            <div v-if="initialLoad" class="state-loader state-center">
+            <div v-if="loadingBoards" class="state-loader state-center">
                 <v-progress-linear color="primary" indeterminate class="mb-2" />
                 Loading Boards...
             </div>
 
-            <div v-if="boards.length === 0 && !initialLoad" class="state-center empty-state">
+            <div v-if="boards.length === 0 && !loadingBoards" class="state-center empty-state">
                 <img src="/empty-state-board.png" width="200">
                 <h1>You have no boards</h1>
                 <p>Press the 'New Board' button on the left to create one</p>
@@ -120,7 +120,7 @@ export default {
     data: () => ({
         boards: [],
         currentBoard: {},
-        initialLoad: true,
+        loadingBoards: true,
 
         // Modal show
         editBoard: false,
@@ -156,21 +156,30 @@ export default {
             });
         }
     },
+    watch: {
+        '$route.query'() {
+            this.getBoards();
+        }
+    },
     // Get boards on page first load
     created() {
         this.getBoards();
     },
     methods: {
         async getBoards() {
+            this.boards = [];
+            this.loadingBoards = true;
             try {
-                let boards = await this.$fetchApi('/api/board/boards', 'GET', {});
+                let boards = await this.$fetchApi('/api/board/boards', 'GET', {
+                    not_self: this.$route.query.shared_with_me ? true : false
+                });
                 this.boards = boards.boards;
                 console.log(boards.boards)
-                this.initialLoad = false;
+                this.loadingBoards = false;
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);
-                this.initialLoad = false;
+                this.loadingBoards = false;
                 return;
             }
         },
