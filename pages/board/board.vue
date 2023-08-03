@@ -167,6 +167,11 @@ definePageMeta({
                         @update="onPinUpdate"
                     />
                 </div>
+
+                <v-pagination
+                    class="mt-4"
+                    length="20" total-visible="5"
+                />
             </v-container>
 
             <PinModal

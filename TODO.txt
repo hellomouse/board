@@ -47,13 +47,20 @@ pins:
             - no file upload
 
 - pin pagination
-- proper sorting
-- always show pin details - work
+    - always at bottom
+    - specify limits in js for testing
+    - use custom pagination for typing page number manually
+    - board api should return # pins
+    - rel caonical and stuff
 
+- proper sorting
+    - make sticky
+- always show pin details - work
 
 - double click pin to edit
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
+    - make bulk endpoint
 
 cache user information for fast lookup
 
