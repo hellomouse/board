@@ -31,10 +31,6 @@ board page:
 
 make board clickable - highlght on click 
 
-make it so editors can also update board and share
-- make it so editors cant promote others to owner
-
-
 pins:
 - have a dropdown in new pin
     - select what type of modal to use
@@ -44,7 +40,6 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 
-locked pins - dont show edit
 
 
 meta tags

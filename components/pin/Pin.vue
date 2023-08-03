@@ -72,7 +72,9 @@
                         <v-icon icon="mdi-link" />Permalink
                     </button>
                     <button
+                        v-if="viewerHasPerm"
                         class="px-4 hoverable hover-list-item edit-list-item"
+                        :disabled="locked"
                         @click="$emit('update', {
                             type: 'pin-edit',
                             pin: {
@@ -96,17 +98,31 @@
                     </button>
 
                     <button
+                        v-if="viewerHasPerm"
                         class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('PINNED')"
                     >
-                        <v-icon icon="mdi-pin" />Pin
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-lock" />Lock
-                    </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
-                        <v-icon icon="mdi-folder-zip" />Archive
+                        <v-icon :icon="pinned ? 'mdi-pin-off' : 'mdi-pin'" />
+                        {{ pinned ? 'Unpin' : 'Pin' }}
                     </button>
                     <button
+                        v-if="viewerHasPerm"
+                        class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('LOCKED')"
+                    >
+                        <v-icon :icon="locked ? 'mdi-lock-open' : 'mdi-lock'" />
+                        {{ locked ? 'Unlock' : 'Lock' }}
+                    </button>
+                    <button
+                        v-if="viewerHasPerm"
+                        class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('ARCHIVED')"
+                    >
+                        <v-icon :icon="archived ? 'mdi-folder-off' : 'mdi-folder-zip'" />
+                        {{ archived ? 'Unarchive' : 'Archive' }}
+                    </button>
+                    <button
+                        v-if="viewerHasPerm"
                         class="px-4 text-red [ hoverable hover-list-item ] edit-list-item edit-list-item--line"
                         @click="deletePin()"
                     >
@@ -119,6 +135,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/auth.js';
+
 export default {
     name: 'BoardPin',
     props: {
@@ -130,17 +148,19 @@ export default {
         },
         created: { type: String, default: '' },
         edited: { type: String, default: '' },
-        flags: { type: String, default: '' },
+        initialFlags: { type: String, default: '' },
         pinId: { type: String, default: '' },
         metadata: { type: Object, default: () => {} },
         attachmentPaths: { type: Array, default: () => [] },
-        color: { type: String, default: '' }
+        color: { type: String, default: '' },
+        perm: { type: String, default: '' }
     },
     data() {
         return {
             // Deleting
             deleting: false, // In process of deleting?
             deletionTimeout: null,
+            flags: this.initialFlags
         };
     },
     computed: {
@@ -176,7 +196,19 @@ export default {
                 });
             }
             return flags;
-        }
+        },
+
+        viewerHasPerm() {
+            if (!['Owner', 'Edit', 'SelfEdit'].includes(this.perm))
+                return false;
+            if (this.perm === 'SelfEdit')
+                return this.creator === useAuthStore(this.$pinia).user.id;
+            return true;
+        },
+
+        locked() { return this.flags.split('|').includes('LOCKED'); },
+        pinned() { return this.flags.split('|').includes('PINNED'); },
+        archived() { return this.flags.split('|').includes('ARCHIVED'); }
     },
     methods: {
         deletePin() {
@@ -196,6 +228,20 @@ export default {
         cancelDeletePin() {
             this.deleting = false;
             clearTimeout(this.deletionTimeout);
+        },
+        async toggleFlag(flag) {
+            let newFlags = this.flags.split(' | ');
+            newFlags = newFlags.includes(flag) ?
+                newFlags.filter(f => f !== flag) :
+                newFlags.concat([flag]).filter(x => x);
+            this.flags = newFlags.join(' | ');
+
+            try {
+                await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, flags: this.flags });
+            } catch (e) {
+                let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
+                this.$emit('error', errorMsg);
+            }
         }
     }
 }

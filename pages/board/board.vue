@@ -162,6 +162,7 @@ definePageMeta({
                         :flags="pin.flags"
                         :color="pin.metadata.color"
                         :metadata="pin.metadata"
+                        :perm="currentUserPerm"
                         class="mb-1"
 
                         @update="onPinUpdate"
@@ -277,6 +278,7 @@ export default {
             currentBoard: {},
             errorState: false,
             initialLoad: true,
+            viewerHasPerm: false,
 
             pinCount: 0,
             pageCount: 0,

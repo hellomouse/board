@@ -19,7 +19,7 @@ Example usage:
         :perma-share-link="shareUrl()"
         :creator="shareBoardCreator"
         :resource-name="shareBoardName"
-        :perm-levels="['View', 'Interact', 'Self Edit', 'Edit', 'Owner']"
+        :perm-levels="['View', 'Interact', 'SelfEdit', 'Edit', 'Owner']"
         :initial-users="shareUsers"
         :initial-public-perm="sharePublicPerm"
         :share-board-modal-loading="showLoading"

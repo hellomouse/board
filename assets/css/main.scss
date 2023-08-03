@@ -59,7 +59,7 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     transition: background-color 0.2s;
 }
 
-.hoverable:hover {
+.hoverable:not(:disabled):hover {
     background-color: #444; // TODO
 }
 

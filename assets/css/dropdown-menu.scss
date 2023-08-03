@@ -2,6 +2,8 @@
 
 .edit-list-item {
     &:not(:hover) { background-color: rgb(var(--v-theme-background-light)); }
+    &:disabled { color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity)); }
+
     height: $menu-item-height;
 
     &--line {
