@@ -31,22 +31,28 @@ definePageMeta({
                 <p>Press the 'New Board' button on the left to create one</p>
             </div>
             
-            <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
-                <v-select
-                    v-model="sortBy" density="compact" solo-filled max-width="200"
-                    flat class="select mr-2"
-                    :items="['Name', 'Created', 'Modified']"
-                ></v-select>
+            <div class="d-flex flex-direction-row">
+                <h1>{{ title }}</h1>
 
-                <v-btn
-                    icon variant="text"
-                    height="40"
-                    @click="toggleSortDirection"
-                >
-                    <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
-                </v-btn>
+                <v-spacer />
+
+                <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
+                    <v-select
+                        v-model="sortBy" density="compact" solo-filled max-width="200"
+                        flat class="select mr-2"
+                        :items="['Name', 'Created', 'Modified']"
+                    ></v-select>
+
+                    <v-btn
+                        icon variant="text"
+                        height="40"
+                        @click="toggleSortDirection"
+                    >
+                        <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                    </v-btn>
+                </div>
             </div>
-    
+            
             <div>
                 <BoardBoard
                     v-for="board in sortedBoards"
@@ -121,6 +127,7 @@ export default {
         boards: [],
         currentBoard: {},
         loadingBoards: true,
+        title: 'My boards',
 
         // Modal show
         editBoard: false,
@@ -159,6 +166,10 @@ export default {
     watch: {
         '$route.query'() {
             this.getBoards();
+            
+            this.title = 'My boards';
+            if (this.$route.query.shared_with_me)
+                this.title = 'Shared with me'
         }
     },
     // Get boards on page first load

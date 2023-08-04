@@ -21,6 +21,10 @@ board page:
     - have list of boards be global, global refresh plugin
     - use the infinite scroll thing?
 
+make board clickable - highlght on click 
+    - also does selection - mass share / delete
+
+
 - save sort preference - localstoragen
 
 
@@ -33,7 +37,6 @@ board page:
     - different ui on phone - click on user to show dropdown popped from bottom
 
 
-make board clickable - highlght on click 
 
 pins:
 - have a dropdown in new pin
