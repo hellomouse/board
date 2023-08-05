@@ -17,15 +17,20 @@ board page:
 
 
 - refresh boards periodically?
-- expand list of boards - show boards like channels on left
-    - have list of boards be global, global refresh plugin
-    - use the infinite scroll thing?
+
 
 make board clickable - highlght on click 
     - also does selection - mass share / delete
 
-
 - save sort preference - localstoragen
+    - use store, also save whether side panel is open
+
+navigating by params doesn't update the page, ie board
+don't update left nav on nav
+
+left nav board list
+- - have list of boards be global, global refresh plugin
+- use the infinite scroll thing?
 
 
 - also maybe compact left side more?
