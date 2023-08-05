@@ -281,6 +281,7 @@ export default {
             errorState: false,
             initialLoad: true,
             viewerHasPerm: false,
+            unwatch: () => {},
 
             pinCount: 0,
             pageCount: 0,
@@ -322,14 +323,20 @@ export default {
     },
     // Get board info + pins on page load
     async created() {
-        await this.updateBoardInfo();
-        await this.updatePins();
-
-        this.page = this.$route.query.page || 1;
-        this.$watch('page', this.pageWatch);
-        this.initialLoad = false;
+        await this.onLoad();
+        this.$watch('$route.query', this.onLoad);
     },
     methods: {
+        async onLoad() {
+            this.initialLoad = true;
+            await this.updateBoardInfo();
+            await this.updatePins();
+
+            this.unwatch();
+            this.page = this.$route.query.page || 1;
+            this.unwatch = this.$watch('page', this.pageWatch);
+            this.initialLoad = false;
+        },
         toggleSortDirection() {
             this.sortDown = !this.sortDown;
         },
@@ -359,6 +366,7 @@ export default {
             } catch(e) {
                 console.error(e);
                 this.errorState = true;
+                this.initialLoad = false;
             }
         },
         // Called when a pin is newly created or cancelled

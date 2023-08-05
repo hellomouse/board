@@ -1,10 +1,17 @@
 // eslint-disable-next-line no-undef
 export default defineNuxtPlugin(nuxtApp => {
+    AbortSignal.timeout??= function timeout(ms) {
+        const ctrl = new AbortController()
+        setTimeout(() => ctrl.abort(), ms)
+        return ctrl.signal
+    }
+
     nuxtApp.provide('fetchApi', async (url, method, body) => {
         let requestOptions = {
             method: method,
             mode: 'cors',
-            credentials: 'include'
+            credentials: 'include',
+            signal: AbortSignal.timeout(10000)
         };
         if (method !== 'GET') {
             requestOptions.body = JSON.stringify(body);
@@ -18,6 +25,8 @@ export default defineNuxtPlugin(nuxtApp => {
 
     nuxtApp.provide('apiErrorToString', e => {
         e = e + '';
+        if (e.includes('The user aborted a request'))
+            return 'Request timeout';
         if (e.includes('400 Bad Request'))
             return 'Malformed request';
         if (e.includes('401 '))

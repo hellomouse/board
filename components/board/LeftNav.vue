@@ -7,24 +7,24 @@
         <slot></slot>
 
         <div class="mt-3">
-            <div class="pl-2 hoverable hover-list-item left-nav__list-item">
-                <NuxtLink to="/board" class="d-flex">
+            <NuxtLink to="/board">
+                <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex">
                     <button class="left-nav__list-item">
                         <v-icon icon="mdi-view-dashboard" /> My Boards
                     </button>
                     <v-spacer />
+                
                     <button
                         class="[ text-center ] hoverable left-nav__board-item-btn"
                         :class="expandSideBoards ? 'left-nav__board-item-btn--expanded' : ''"
-                        @click="expandSideBoards = !expandSideBoards"
+                        @click="expandSideBoards = !expandSideBoards; console.log('Yay')"
                         @click.prevent=""
                     >
                         <v-icon icon="mdi-chevron-up" />
                     </button>
-                </NuxtLink>
-            </div>
-            
-
+                </div>
+            </NuxtLink>
+           
             <div 
                 class="expand-boards-container" :style="{
                     maxHeight: expandSideBoards ? '2000px' : '0px',
@@ -32,15 +32,14 @@
                     marginBottom: expandSideBoards ? '8px' : '0px'
                 }"
             >
-                <div
-                    v-for="board in boards" :key="board.id"
-                    class="hoverable hover-list-item left-nav__list-item left-nav__board-item
+                <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
+                    <div
+                        class="hoverable hover-list-item left-nav__list-item left-nav__board-item
                         [ pl-3 text-truncate text-medium-emphasis ]"
-                >
-                    <NuxtLink :to="`/board/board?id=${board.id}`">
+                    >
                         <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
-                    </NuxtLink>
-                </div>
+                    </div>
+                </NuxtLink>
             </div>
 
             <NuxtLink to="/board?shared_with_me=true">
@@ -80,7 +79,6 @@ export default {
                     not_self: this.$route.query.shared_with_me ? true : false
                 });
                 this.boards = boards.boards;
-                console.log(boards.boards)
                 this.loadingBoards = false;
             } catch (e) {
                 this.showErrorToast = true;
@@ -124,6 +122,14 @@ export default {
         cursor: pointer;
         line-height: $height;
         height: $height;
+
+        a {
+            display: block;
+            width: 100%;
+
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     }
 
     &__board-item-btn {

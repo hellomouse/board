@@ -21,16 +21,15 @@ board page:
 
 make board clickable - highlght on click 
     - also does selection - mass share / delete
+    - double click doesnt work on mobile
 
 - save sort preference - localstoragen
     - use store, also save whether side panel is open
 
-navigating by params doesn't update the page, ie board
-don't update left nav on nav
-
 left nav board list
 - - have list of boards be global, global refresh plugin
-- use the infinite scroll thing?
+- use the infinite scroll thing? - or just list top 100?
+- left side: sort by name always
 
 
 - also maybe compact left side more?
