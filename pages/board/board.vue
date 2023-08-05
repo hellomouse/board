@@ -21,19 +21,16 @@ definePageMeta({
                     </template>
                 
                     <v-sheet elevation="8" rounded="0">
-                        <button
-                            class="px-4 py-2 hoverable hover-list-item"
-                            @click="currentPin = {}; editPin = false; createPinModal = true"
-                        >
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
                             <v-icon icon="mdi-format-header-pound" />Markdown Pin
                         </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
                             <v-icon icon="mdi-view-gallery" />Image Gallery Pin
                         </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(2)">
                             <v-icon icon="mdi-link" />Link Pin
                         </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="createPinModal = true">
+                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(3)">
                             <v-icon icon="mdi-star-box" />Review Pin
                         </button>
                     </v-sheet>
@@ -180,6 +177,7 @@ definePageMeta({
                 :edit-mode="editPin"
                 :show="createPinModal"
                 :pin="currentPin"
+                :pin-title="pinTitle"
                 :board-id="currentBoard.id || ''"
 
                 @update="onPinCreate"
@@ -287,6 +285,7 @@ export default {
             pinCount: 0,
             pageCount: 0,
             page: 1,
+            pinTitle: '',
 
             // Pin info
             currentPin: {},
@@ -433,6 +432,13 @@ export default {
                 }));
             this.updatePins();
         },
+        // Left create pin dropdown
+        openCreatePin(type) {
+            this.currentPin = { type };
+            this.editPin = false;
+            this.createPinModal = true
+            this.pinTitle = ['Markdown', 'Image Gallery', 'Link', 'Review'][type] || '';
+        }
     }
 }
 </script>

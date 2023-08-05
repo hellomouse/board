@@ -9,20 +9,38 @@ TODO
     >
         <v-card rounded="0" width="720" class="py-2">
             <v-card-text class="px-4">
-                <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Pin</h1>
+                <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} {{ pinTitle }} Pin</h1>
 
                 <!-- TODO: content box, attachments
                 or insert files by url?? -->
 
-                <client-only>
-                    <QuillEditor
-                        :style="{ backgroundColor: color }"
-                        theme="snow" contentType="html" v-model:content="content"
-                        :toolbar="toolbars"
-                    />
-                    <br>
-                </client-only>
+                <!-- Markdown -->
+                <div v-if="pin?.type === 0 || !pin.type">
+                    <client-only>
+                        <QuillEditor
+                            :style="{ backgroundColor: color }"
+                            theme="snow" contentType="html" v-model:content="content"
+                            :toolbar="toolbars"
+                        />
+                        <br>
+                    </client-only>
 
+                    <v-file-input 
+                        label="Attachments" variant="solo-filled"
+                        multiple show-size rounded=0 chips
+                        density="compact" style="min-height: 47px"
+                        clearable counter class="mt-2 mb-4"
+                    />
+                </div>
+
+                <!-- Image gallery -->
+                <div v-if="pin.type === 1">
+                    - file attachments
+                    - image gallery preview
+                </div>
+
+
+                <!-- Colors -->
                 <v-btn
                     v-for="(col, index) in swatches" :key="col"
                     density="compact" width="40" style="min-width: 40px;"
@@ -31,13 +49,6 @@ TODO
                 >
                     <v-icon v-if="selectedSwatchIndex === index" icon="mdi-check" />
                 </v-btn>
-
-                <v-file-input 
-                    label="Attachments" variant="solo-filled"
-                    multiple show-size rounded=0 chips
-                    density="compact" style="min-height: 47px"
-                    clearable counter class="mt-2 mb-4"
-                />
             </v-card-text>
             <v-card-actions class="mr-3">
                 <p class="ml-4 d-block last-edited" v-if="pin.edited">Edited {{ pin.edited }}</p>
@@ -66,6 +77,10 @@ export default {
         editMode: { // Edit existing pin instead of create
             type: Boolean,
             default: false
+        },
+        pinTitle: {
+            type: String,
+            default: ''
         },
         pin: {
             type: Object,
