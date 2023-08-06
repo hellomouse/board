@@ -160,6 +160,7 @@ definePageMeta({
                         :color="pin.metadata.color"
                         :metadata="pin.metadata"
                         :perm="currentUserPerm"
+                        :always-show-details="alwaysShowCardDetails"
                         class="mb-1"
 
                         @update="onPinUpdate"
@@ -316,7 +317,8 @@ export default {
                 'Created' : useOptionStore(this.$pinia).sort_pins[0],
             sortDown: useOptionStore(this.$pinia).sort_pins[1] === undefined ?
                 true : useOptionStore(this.$pinia).sort_pins[1],
-            alwaysShowCardDetails: false,
+            alwaysShowCardDetails: useOptionStore(this.$pinia).always_show_pin_details === undefined ?
+                false : useOptionStore(this.$pinia).always_show_pin_details
         };
     },
     computed: {
@@ -330,6 +332,9 @@ export default {
         },
         sortDown() {
             useOptionStore(this.$pinia).sort_pins[1] = this.sortDown;
+        },
+        alwaysShowCardDetails() {
+            useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
         }
     },
     // Get board info + pins on page load

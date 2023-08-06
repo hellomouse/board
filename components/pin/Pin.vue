@@ -153,7 +153,8 @@ export default {
         metadata: { type: Object, default: () => {} },
         attachmentPaths: { type: Array, default: () => [] },
         color: { type: String, default: '' },
-        perm: { type: String, default: '' }
+        perm: { type: String, default: '' },
+        alwaysShowDetails: { type: Boolean, default: false }
     },
     data() {
         return {
@@ -171,6 +172,8 @@ export default {
                 classes.push('archived');
             if (flagsArr.includes('PINNED'))
                 classes.push('pinned');
+            if (this.alwaysShowDetails)
+                classes.push('pin-tile--always-show-details');
             return classes;
         },
         flag_icons() {
@@ -289,10 +292,15 @@ export default {
     // Hide details until hover
     &__header__icon-row,
     &__timestamp-wrapper {
-        opacity: 0;
+        
         transition: opacity 0.2s;
         overflow-x: auto;
         display: flex;
+    }
+
+    &:not(.pin-tile--always-show-details) &__header__icon-row,
+    &:not(.pin-tile--always-show-details) &__timestamp-wrapper{
+        opacity: 0;
     }
 
     &:hover &__header__icon-row,

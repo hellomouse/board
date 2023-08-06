@@ -8,7 +8,8 @@ export const useOptionStore = defineStore({
         return {
             expand_board_nav: true,
             sort_pins: [],
-            sort_boards: []
+            sort_boards: [],
+            always_show_pin_details: false
         };
     }
 });

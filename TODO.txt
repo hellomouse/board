@@ -58,7 +58,7 @@ meta tags
 
 - proper sorting
     - make sticky
-- always show pin details - work
+
 
 - double click pin to edit
 - bulk delete / pin / archive / favorite / change background pins
@@ -113,9 +113,6 @@ https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
 
 custom backgrounds on pins?
 
-
-pin types:
-markdown rendering
 
 
 
