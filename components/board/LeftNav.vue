@@ -98,6 +98,7 @@ export default {
     border-right: 1px solid $border-color;
     width: $left-nav-width-pc;
     position: fixed;
+    top: 72px;
 
     max-height: calc(100% - 80px);
     overflow-y: auto;
