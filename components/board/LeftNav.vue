@@ -58,14 +58,22 @@
 </template>
 
 <script>
+import { useOptionStore } from '~/store/optionStore.js';
+
 export default {
     name: 'BoardLeftNav',
 
-    data: () => ({
-        boards: [],
-        expandSideBoards: true
-    }),
-
+    data() {
+        return {
+            boards: [],
+            expandSideBoards: useOptionStore(this.$pinia).expand_board_nav
+        };
+    },
+    watch: {
+        expandSideBoards(newVal) {
+            useOptionStore(this.$pinia).expand_board_nav = newVal;
+        }
+    },
     // TODO: use a global store
     created() {
         this.getBoards();

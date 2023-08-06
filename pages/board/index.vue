@@ -117,34 +117,40 @@ definePageMeta({
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
+import { useOptionStore } from '~/store/optionStore.js';
+
 import BoardBoard from '~/components/board/Board.vue';
 import BoardModal from '~/components/board/Modal.vue';
 
 export default {
     name: 'BoardIndexPage',
     components: { BoardBoard, BoardModal },
-    data: () => ({
-        boards: [],
-        currentBoard: {},
-        loadingBoards: true,
-        title: 'My boards',
+    data() {
+        return {
+            boards: [],
+            currentBoard: {},
+            loadingBoards: true,
+            title: 'My boards',
 
-        // Modal show
-        editBoard: false,
-        createBoardModal: false,
-        shareBoardModal: false,
-        deleteBoardModal: false,
+            // Modal show
+            editBoard: false,
+            createBoardModal: false,
+            shareBoardModal: false,
+            deleteBoardModal: false,
 
-        // Toasts
-        showErrorToast: false,
-        showSuccessToast: false,
-        toastErrorMsg: '',
-        toastSuccessMsg: '',
+            // Toasts
+            showErrorToast: false,
+            showSuccessToast: false,
+            toastErrorMsg: '',
+            toastSuccessMsg: '',
 
-        // Sorting:
-        sortBy: 'Name',
-        sortDown: true,
-    }),
+            // Sorting:
+            sortBy: useOptionStore(this.$pinia).sort_boards[0] === undefined ?
+                'Name' : useOptionStore(this.$pinia).sort_boards[0],
+            sortDown: useOptionStore(this.$pinia).sort_boards[1] === undefined ?
+                true : useOptionStore(this.$pinia).sort_boards[1],
+        };
+    },
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
         downArrowClass() {
@@ -164,6 +170,12 @@ export default {
         }
     },
     watch: {
+        sortBy() {
+            useOptionStore(this.$pinia).sort_boards[0] = this.sortBy;
+        },
+        sortDown() {
+            useOptionStore(this.$pinia).sort_boards[1] = this.sortDown;
+        },
         '$route.query'() {
             this.getBoards();
             

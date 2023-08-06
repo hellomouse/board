@@ -23,8 +23,8 @@ make board clickable - highlght on click
     - also does selection - mass share / delete
     - double click doesnt work on mobile
 
-- save sort preference - localstoragen
-    - use store, also save whether side panel is open
+
+keeps saying user has aborted an request
 
 left nav board list
 - - have list of boards be global, global refresh plugin

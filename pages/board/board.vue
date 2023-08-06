@@ -267,6 +267,7 @@ definePageMeta({
 <script>
 import Pin from '~/components/pin/Pin.vue';
 import { useAuthStore } from '~/store/auth.js';
+import { useOptionStore } from '~/store/optionStore.js';
 
 const PINS_PER_PAGE = 40;
 
@@ -311,14 +312,24 @@ export default {
             toastSuccessMsg: '',
 
             // Sorting
-            selected: 'Created',
-            sortDown: true,
+            selected: useOptionStore(this.$pinia).sort_pins[0] === undefined ?
+                'Created' : useOptionStore(this.$pinia).sort_pins[0],
+            sortDown: useOptionStore(this.$pinia).sort_pins[1] === undefined ?
+                true : useOptionStore(this.$pinia).sort_pins[1],
             alwaysShowCardDetails: false,
         };
     },
     computed: {
         downArrowClass() {
             return this.sortDown ? 'down' : '';
+        }
+    },
+    watch: {
+        selected() {
+            useOptionStore(this.$pinia).sort_pins[0] = this.selected;
+        },
+        sortDown() {
+            useOptionStore(this.$pinia).sort_pins[1] = this.sortDown;
         }
     },
     // Get board info + pins on page load
