@@ -9,10 +9,9 @@ github linting workflow
 - Search bar
 
 
+
 board page:
-- get search params in route
-
-
+- search bar
 - inf scroll?
 
 

@@ -177,27 +177,32 @@ export default {
             useOptionStore(this.$pinia).sort_boards[1] = this.sortDown;
         },
         '$route.query'() {
+            this.updatePageTitle();
             this.getBoards();
-            
-            this.title = 'My boards';
-            if (this.$route.query.shared_with_me)
-                this.title = 'Shared with me'
         }
     },
     // Get boards on page first load
     created() {
+        this.updatePageTitle();
         this.getBoards();
     },
     methods: {
+        updatePageTitle() {
+            this.title = 'My boards';
+            if (this.$route.query.shared_with_me)
+                this.title = 'Shared with me';
+            if (this.$route.query.search)
+                this.title = 'Search Results';
+        },
         async getBoards() {
             this.boards = [];
             this.loadingBoards = true;
             try {
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {
-                    not_self: this.$route.query.shared_with_me ? true : false
+                    not_self: this.$route.query.shared_with_me ? true : false,
+                    query: this.$route.query.search || undefined
                 });
                 this.boards = boards.boards;
-                console.log(boards.boards)
                 this.loadingBoards = false;
             } catch (e) {
                 this.showErrorToast = true;
