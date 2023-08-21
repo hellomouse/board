@@ -7,262 +7,264 @@ definePageMeta({
 
 <template>
     <!-- A page to show pins within a single board -->
-    <div>
-        <NuxtLayout name="board">
-            <BoardLeftNav>
-                <v-menu>
-                    <template #activator="{ props }">
-                        <v-btn
-                            color="green" block
-                            height="44" v-bind="props"
-                        >
-                            <v-icon icon="mdi-plus" /> New Pin
-                        </v-btn>
-                    </template>
+    <NuxtLayout name="board">
+        <BoardLeftNav>
+            <v-menu>
+                <template #activator="{ props }">
+                    <v-btn
+                        color="green" block
+                        height="44" v-bind="props"
+                    >
+                        <v-icon icon="mdi-plus" /> New Pin
+                    </v-btn>
+                </template>
+            
+                <v-sheet elevation="8" rounded="0">
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
+                        <v-icon icon="mdi-format-header-pound" />Markdown Pin
+                    </button>
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
+                        <v-icon icon="mdi-view-gallery" />Image Gallery Pin
+                    </button>
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(2)">
+                        <v-icon icon="mdi-link" />Link Pin
+                    </button>
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(3)">
+                        <v-icon icon="mdi-star-box" />Review Pin
+                    </button>
+                </v-sheet>
+            </v-menu>
+        </BoardLeftNav>
+
+        <v-container 
+            :class="containerClass"
+            class="container-with-left-nav pt-0"
+            :style="{ borderRight: `4px solid ${currentBoard.color}` }"
+        >
+            <div v-if="initialLoad" class="state-loader state-center">
+                <v-progress-linear color="primary" indeterminate class="mb-2" />
+                Loading Pins...
+            </div>
+
+            <div v-if="pins.length === 0 && !initialLoad && !errorState" class="state-center empty-state">
+                <img src="/empty-state-board.png" width="200">
+                <h1>This board has no pins</h1>
+                <p>Press the 'New Pins' button on the left to create one</p>
+            </div>
+
+            <div v-if="errorState" class="state-center">
+                <img src="/error-state.png" width="200">
+                <h1>Could not get board</h1>
+                <p class="mb-4">Board does not exist or you do not have permission to view</p>
+                <NuxtLink to="/board" style="text-decoration: none !important">
+                    <v-btn color="primary">Go back to my boards</v-btn>
+                </NuxtLink>
+            </div>
+
+            <div v-if="!errorState && !initialLoad">
+                <h1>
+                    <v-menu>
+                        <template #activator="{ props }">
+                            <v-btn
+                                density="comfortable"
+                                icon="mdi-dots-vertical"
+                                v-bind="props"
+                                class="board-tile__menu d-inline-block"
+                                flat color="transparent"
+                            ></v-btn>
+                        </template>
                 
-                    <v-sheet elevation="8" rounded="0">
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
-                            <v-icon icon="mdi-format-header-pound" />Markdown Pin
-                        </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
-                            <v-icon icon="mdi-view-gallery" />Image Gallery Pin
-                        </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(2)">
-                            <v-icon icon="mdi-link" />Link Pin
-                        </button>
-                        <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(3)">
-                            <v-icon icon="mdi-star-box" />Review Pin
-                        </button>
-                    </v-sheet>
-                </v-menu>
-            </BoardLeftNav>
+                        <v-sheet elevation="8" rounded="0">
+                            <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyBoardShareLink">
+                                <v-icon icon="mdi-link" />Permalink
+                            </button>
+                            <button
+                                class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
+                                @click="boardPropertiesModal = true"
+                            >
+                                <v-icon icon="mdi-information-outline" />Properties
+                            </button>
+                            <button
+                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                class="px-4 hoverable hover-list-item edit-list-item"
+                                @click="openBoardShareModal"
+                            >
+                                <v-icon icon="mdi-account-plus" />Share
+                            </button>
+                            <button
+                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                class="px-4 hoverable hover-list-item edit-list-item"
+                                @click="openBoardEditModal"
+                            >
+                                <v-icon icon="mdi-pencil" />Edit
+                            </button>
+                            <button
+                                v-if="['Owner'].includes(currentUserPerm)"
+                                class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
+                                @click="openBoardDeleteModal"
+                            >
+                                <v-icon icon="mdi-trash-can" color="red" />Delete
+                            </button>
+                        </v-sheet>
+                    </v-menu>
 
-            <v-container class="container-with-left-nav pt-0" :style="{ borderRight: `4px solid ${currentBoard.color}` }">
-                <div v-if="initialLoad" class="state-loader state-center">
-                    <v-progress-linear color="primary" indeterminate class="mb-2" />
-                    Loading Pins...
-                </div>
+                    {{ currentBoard.name }}
+                </h1>
 
-                <div v-if="pins.length === 0 && !initialLoad && !errorState" class="state-center empty-state">
-                    <img src="/empty-state-board.png" width="200">
-                    <h1>This board has no pins</h1>
-                    <p>Press the 'New Pins' button on the left to create one</p>
-                </div>
+                <div class="d-flex">
+                    <p
+                        class="ml-11 subtitle text-truncate"
+                        style="vertical-align: top; margin-right: auto; margin-left: 0"
+                    >{{ currentBoard.desc }}</p>
 
-                <div v-if="errorState" class="state-center">
-                    <img src="/error-state.png" width="200">
-                    <h1>Could not get board</h1>
-                    <p class="mb-4">Board does not exist or you do not have permission to view</p>
-                    <NuxtLink to="/board" style="text-decoration: none !important">
-                        <v-btn color="primary">Go back to my boards</v-btn>
-                    </NuxtLink>
-                </div>
+                    <!-- Sort options -->
+                    <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
+                        <v-select
+                            v-model="selected" density="compact" solo-filled max-width="200"
+                            flat class="select mr-2"
+                            :items="['Created', 'Modified']"
+                        ></v-select>
 
-                <div v-if="!errorState && !initialLoad">
-                    <h1>
-                        <v-menu>
+                        <v-btn
+                            icon variant="text"
+                            height="40"
+                            @click="toggleSortDirection"
+                        >
+                            <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
+                        </v-btn>
+
+                        <v-menu :close-on-content-click="false">
                             <template #activator="{ props }">
                                 <v-btn
-                                    density="comfortable"
-                                    icon="mdi-dots-vertical"
+                                    icon variant="text"
+                                    height="40"
                                     v-bind="props"
-                                    class="board-tile__menu d-inline-block"
-                                    flat color="transparent"
-                                ></v-btn>
+                                >
+                                    <v-icon>mdi-cog</v-icon>
+                                </v-btn>
                             </template>
-                    
-                            <v-sheet elevation="8" rounded="0">
-                                <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyBoardShareLink">
-                                    <v-icon icon="mdi-link" />Permalink
-                                </button>
-                                <button
-                                    class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
-                                    @click="boardPropertiesModal = true"
-                                >
-                                    <v-icon icon="mdi-information-outline" />Properties
-                                </button>
-                                <button
-                                    v-if="['Owner', 'Edit'].includes(currentUserPerm)"
-                                    class="px-4 hoverable hover-list-item edit-list-item"
-                                    @click="openBoardShareModal"
-                                >
-                                    <v-icon icon="mdi-account-plus" />Share
-                                </button>
-                                <button
-                                    v-if="['Owner', 'Edit'].includes(currentUserPerm)"
-                                    class="px-4 hoverable hover-list-item edit-list-item"
-                                    @click="openBoardEditModal"
-                                >
-                                    <v-icon icon="mdi-pencil" />Edit
-                                </button>
-                                <button
-                                    v-if="['Owner'].includes(currentUserPerm)"
-                                    class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
-                                    @click="openBoardDeleteModal"
-                                >
-                                    <v-icon icon="mdi-trash-can" color="red" />Delete
-                                </button>
+                            <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
+                                <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
                             </v-sheet>
                         </v-menu>
-
-                        {{ currentBoard.name }}
-                    </h1>
-
-                    <div class="d-flex">
-                        <p
-                            class="ml-11 subtitle text-truncate"
-                            style="vertical-align: top; margin-right: auto; margin-left: 0"
-                        >{{ currentBoard.desc }}</p>
-
-                        <!-- Sort options -->
-                        <div class="[ small-container ] mb-2 d-inline-flex flex-direction-row justify-end">
-                            <v-select
-                                v-model="selected" density="compact" solo-filled max-width="200"
-                                flat class="select mr-2"
-                                :items="['Created', 'Modified']"
-                            ></v-select>
-
-                            <v-btn
-                                icon variant="text"
-                                height="40"
-                                @click="toggleSortDirection"
-                            >
-                                <v-icon class="sort-arrow-down" :class="downArrowClass">mdi-arrow-up</v-icon>
-                            </v-btn>
-
-                            <v-menu :close-on-content-click="false">
-                                <template #activator="{ props }">
-                                    <v-btn
-                                        icon variant="text"
-                                        height="40"
-                                        v-bind="props"
-                                    >
-                                        <v-icon>mdi-cog</v-icon>
-                                    </v-btn>
-                                </template>
-                                <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
-                                    <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
-                                </v-sheet>
-                            </v-menu>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="grid">
-                    <Pin
-                        v-for="pin in pins" :key="pin.pin_id"
-                        :content="pin.content"
-                        :pin-id="pin.pin_id"
-                        :creator="pin.creator"
-                        :created="pin.created"
-                        :edited="pin.edited"
-                        :initial-flags="pin.flags"
-                        :color="pin.metadata.color"
-                        :metadata="pin.metadata"
-                        :perm="currentUserPerm"
-                        :always-show-details="alwaysShowCardDetails"
-                        class="mb-1"
+            <div class="grid">
+                <Pin
+                    v-for="pin in pins" :key="pin.pin_id"
+                    :content="pin.content"
+                    :pin-id="pin.pin_id"
+                    :creator="pin.creator"
+                    :created="pin.created"
+                    :edited="pin.edited"
+                    :initial-flags="pin.flags"
+                    :color="pin.metadata.color"
+                    :metadata="pin.metadata"
+                    :perm="currentUserPerm"
+                    :always-show-details="alwaysShowCardDetails"
+                    class="mb-1"
 
-                        @update="onPinUpdate"
-                    />
-                </div>
-
-                <v-pagination
-                    v-if="pageCount > 1 && !initialLoad && !errorState"
-                    v-model="page" class="mt-4"
-                    :length="pageCount" total-visible="5"
+                    @update="onPinUpdate"
                 />
-            </v-container>
+            </div>
 
-            <PinModal
-                :edit-mode="editPin"
-                :show="createPinModal"
-                :pin="currentPin"
-                :pin-title="pinTitle"
-                :board-id="currentBoard.id || ''"
-
-                @update="onPinCreate"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            <v-pagination
+                v-if="pageCount > 1 && !initialLoad && !errorState"
+                v-model="page" class="mt-4"
+                :length="pageCount" total-visible="5"
             />
+        </v-container>
 
-            <!-- For current board -->
-            <v-dialog
-                v-model="boardPropertiesModal"
-                width="auto"
-            >
-                <v-card width="500">
-                    <v-card-text>
-                        <div :style="{ borderBottom: `2px solid ${currentBoard.color}` }" class="mb-2 pb-2">
-                            <h1>{{ currentBoard.name }}</h1>
-                            <span class="subtitle">Created by {{ currentBoard.creator }}</span>
-                        </div>
-                        <p class="board-desc">{{ currentBoard.desc }}</p>
+        <PinModal
+            :edit-mode="editPin"
+            :show="createPinModal"
+            :pin="currentPin"
+            :pin-title="pinTitle"
+            :board-id="currentBoard.id || ''"
 
-                        <br>
-                        <code class="board-properties"><div class="board-properties__prop">ID:</div> {{ currentBoard.id }}</code><br>
-                        <code class="board-properties">
-                            <div class="board-properties__prop">Created:</div>
-                            {{ $formatTimestamp(currentBoard.created) }}
-                        </code><br>
-                        <code class="board-properties">
-                            <div class="board-properties__prop">Edited:</div>
-                            {{ $formatTimestamp(currentBoard.edited) }}
-                        </code><br>
-                        <code class="board-properties">
-                            <div class="board-properties__prop">Pins:</div>
-                            {{ currentBoard.pin_count }}
-                        </code>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer />
-                        <v-btn color="primary" block @click="boardPropertiesModal = false">Close</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-      
-            <BoardModal
-                :edit-mode="true"
-                :show="editBoardModal"
-                :board="currentBoard"
+            @update="onPinCreate"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+        />
 
-                @update="onBoardEdit"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-            />
+        <!-- For current board -->
+        <v-dialog
+            v-model="boardPropertiesModal"
+            width="auto"
+        >
+            <v-card width="500">
+                <v-card-text>
+                    <div :style="{ borderBottom: `2px solid ${currentBoard.color}` }" class="mb-2 pb-2">
+                        <h1>{{ currentBoard.name }}</h1>
+                        <span class="subtitle">Created by {{ currentBoard.creator }}</span>
+                    </div>
+                    <p class="board-desc">{{ currentBoard.desc }}</p>
 
-            <BoardDeleteModal
-                :show="deleteBoardModal"
-                :board="currentBoard"
+                    <br>
+                    <code class="board-properties"><div class="board-properties__prop">ID:</div> {{ currentBoard.id }}</code><br>
+                    <code class="board-properties">
+                        <div class="board-properties__prop">Created:</div>
+                        {{ $formatTimestamp(currentBoard.created) }}
+                    </code><br>
+                    <code class="board-properties">
+                        <div class="board-properties__prop">Edited:</div>
+                        {{ $formatTimestamp(currentBoard.edited) }}
+                    </code><br>
+                    <code class="board-properties">
+                        <div class="board-properties__prop">Pins:</div>
+                        {{ currentBoard.pin_count }}
+                    </code>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn color="primary" block @click="boardPropertiesModal = false">Close</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+    
+        <BoardModal
+            :edit-mode="true"
+            :show="editBoardModal"
+            :board="currentBoard"
 
-                @update="onBoardDeleteUpdate"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
-            />
+            @update="onBoardEdit"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+        />
 
-            <BoardShareModal
-                :show="shareBoardModal"
-                :board="currentBoard"
+        <BoardDeleteModal
+            :show="deleteBoardModal"
+            :board="currentBoard"
 
-                @update="e => { if (e.type === 'close') shareBoardModal = false; }"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
-            />
+            @update="onBoardDeleteUpdate"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+        />
 
-            <!-- Toasts for errors / success -->
-            <v-snackbar
-                v-model="showErrorToast" color="error" rounded="0" theme="dark"
-                transition="scroll-y-reverse-transition"
-            >
-                {{ toastErrorMsg }}
-            </v-snackbar>
-            <v-snackbar
-                v-model="showSuccessToast" color="success"
-                rounded="0" theme="dark" timeout="2000"
-                transition="scroll-y-reverse-transition"
-            >
-                {{ toastSuccessMsg }}
-            </v-snackbar>
-        </NuxtLayout>
-    </div>
+        <BoardShareModal
+            :show="shareBoardModal"
+            :board="currentBoard"
+
+            @update="e => { if (e.type === 'close') shareBoardModal = false; }"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+        />
+
+        <!-- Toasts for errors / success -->
+        <v-snackbar
+            v-model="showErrorToast" color="error" rounded="0" theme="dark"
+            transition="scroll-y-reverse-transition"
+        >
+            {{ toastErrorMsg }}
+        </v-snackbar>
+        <v-snackbar
+            v-model="showSuccessToast" color="success"
+            rounded="0" theme="dark" timeout="2000"
+            transition="scroll-y-reverse-transition"
+        >
+            {{ toastSuccessMsg }}
+        </v-snackbar>
+    </NuxtLayout>
 </template>
 
 <script>
@@ -324,6 +326,9 @@ export default {
     computed: {
         downArrowClass() {
             return this.sortDown ? 'down' : '';
+        },
+        containerClass() {
+            return useOptionStore(this.$pinia).expand_left_nav ? '' : 'sidenav-hidden';
         }
     },
     watch: {

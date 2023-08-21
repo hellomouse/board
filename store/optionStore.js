@@ -9,7 +9,8 @@ export const useOptionStore = defineStore({
             expand_board_nav: true,
             sort_pins: [],
             sort_boards: [],
-            always_show_pin_details: false
+            always_show_pin_details: false,
+            expand_left_nav: true
         };
     }
 });

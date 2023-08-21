@@ -3,6 +3,25 @@
     margin-left: $left-nav-width-pc;
     position: relative;
     height: 100%;
+    transition: max-width 0.2s;
+
+    $sidenav-hidden-left-margin: 24px;
+
+    &.sidenav-hidden {
+        max-width: 100% !important;
+        margin-left: $sidenav-hidden-left-margin;
+    }
+
+    @media only screen and (max-width: 600px)  {
+        max-width: 100% !important;
+        margin-left: calc($sidenav-hidden-left-margin / 2);
+
+        // Hide background content on mobile when left nav
+        // is expanded
+        &:not(.sidenav-hidden) {
+            opacity: 0.02;
+        }
+    }
 }
 
 .state-center {

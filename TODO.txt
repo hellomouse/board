@@ -9,13 +9,11 @@ github linting workflow
 - Search bar
 
 
-
 board page:
 - search bar
+    - search params like owner:....
+    - have a store for search params + search bar ig
 - inf scroll?
-
-
-- refresh boards periodically?
 
 
 make board clickable - highlght on click 
@@ -31,15 +29,9 @@ left nav board list
 - left side: sort by name always
 
 
-- also maybe compact left side more?
-    - toggle
-
-
 - autocomplete keyboard nav
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
-
-
 
 pins:
 - have a dropdown in new pin
@@ -54,6 +46,7 @@ pins:
 
 meta tags
 - https://nuxt.com/docs/getting-started/seo-meta
+- title tag as well per page
 
 - proper sorting
     - make sticky

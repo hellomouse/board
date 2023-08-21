@@ -1,60 +1,72 @@
 <template>
-    <v-sheet
-        elevation="0"
-        class="pr-3 mb-3 left-nav"
-        color="transparent"
-    >
-        <slot></slot>
+    <div>
+        <v-sheet
+            elevation="0"
+            class="pr-3 mb-3 left-nav"
+            color="transparent"
+            :style="{ left: showNav ? '32px' : '-210px' }"
+        >
+            <slot></slot>
 
-        <div class="mt-3">
-            <NuxtLink to="/board">
-                <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex">
-                    <button class="left-nav__list-item">
-                        <v-icon icon="mdi-view-dashboard" /> My Boards
-                    </button>
-                    <v-spacer />
-                
-                    <button
-                        class="[ text-center ] hoverable left-nav__board-item-btn"
-                        :class="expandSideBoards ? 'left-nav__board-item-btn--expanded' : ''"
-                        @click="expandSideBoards = !expandSideBoards; console.log('Yay')"
-                        @click.prevent=""
-                    >
-                        <v-icon icon="mdi-chevron-up" />
-                    </button>
-                </div>
-            </NuxtLink>
-           
-            <div 
-                class="expand-boards-container" :style="{
-                    maxHeight: expandSideBoards ? '2000px' : '0px',
-                    overflowY: expandSideBoards ? 'auto' : 'hidden',
-                    marginBottom: expandSideBoards ? '8px' : '0px'
-                }"
-            >
-                <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
-                    <div
-                        class="hoverable hover-list-item left-nav__list-item left-nav__board-item
-                        [ pl-3 text-truncate text-medium-emphasis ]"
-                    >
-                        <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
+            <div class="mt-3">
+                <NuxtLink to="/board">
+                    <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex">
+                        <button class="left-nav__list-item">
+                            <v-icon icon="mdi-view-dashboard" /> My Boards
+                        </button>
+                        <v-spacer />
+                    
+                        <button
+                            class="[ text-center ] hoverable left-nav__board-item-btn"
+                            :class="expandSideBoards ? 'left-nav__board-item-btn--expanded' : ''"
+                            @click="expandSideBoards = !expandSideBoards;"
+                            @click.prevent=""
+                        >
+                            <v-icon icon="mdi-chevron-up" />
+                        </button>
                     </div>
                 </NuxtLink>
-            </div>
+            
+                <div 
+                    class="expand-boards-container" :style="{
+                        maxHeight: expandSideBoards ? '2000px' : '0px',
+                        overflowY: expandSideBoards ? 'auto' : 'hidden',
+                        marginBottom: expandSideBoards ? '8px' : '0px'
+                    }"
+                >
+                    <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
+                        <div
+                            class="hoverable hover-list-item left-nav__list-item left-nav__board-item
+                            [ pl-3 text-truncate text-medium-emphasis ]"
+                        >
+                            <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
+                        </div>
+                    </NuxtLink>
+                </div>
 
-            <NuxtLink to="/board?shared_with_me=true">
-                <button class="pl-2 hoverable hover-list-item left-nav__list-item">
-                    <v-icon icon="mdi-folder-account" /> Shared With Me
+                <NuxtLink to="/board?shared_with_me=true">
+                    <button class="pl-2 hoverable hover-list-item left-nav__list-item">
+                        <v-icon icon="mdi-folder-account" /> Shared With Me
+                    </button>
+                </NuxtLink>
+                <button class="pl-2 mb-4 hoverable hover-list-item left-nav__list-item">
+                    <v-icon icon="mdi-star" /> Favorites
                 </button>
-            </NuxtLink>
-            <button class="pl-2 mb-4 hoverable hover-list-item left-nav__list-item">
-                <v-icon icon="mdi-star" /> Favorites
-            </button>
-            <button class="pl-2 hoverable hover-list-item left-nav__list-item">
-                <v-icon icon="mdi-cloud" /> Storage
-            </button>
-        </div>
-    </v-sheet>
+                <button class="pl-2 hoverable hover-list-item left-nav__list-item">
+                    <v-icon icon="mdi-cloud" /> Storage
+                </button>
+            </div>
+        </v-sheet>
+
+        <v-btn
+            elevation="2" fab small
+            :icon="showNav ? 'mdi-chevron-left' : 'mdi-chevron-right'"
+            class="toggle-btn"
+            :class="!showNav ? 'closed' : ''"
+
+            @click="showNav = !showNav"
+        ></v-btn>
+    </div>
 </template>
 
 <script>
@@ -65,6 +77,7 @@ export default {
 
     data() {
         return {
+            showNav: true,
             boards: [],
             expandSideBoards: useOptionStore(this.$pinia).expand_board_nav
         };
@@ -72,11 +85,15 @@ export default {
     watch: {
         expandSideBoards(newVal) {
             useOptionStore(this.$pinia).expand_board_nav = newVal;
-        }
+        },
+        showNav() {
+            useOptionStore(this.$pinia).expand_left_nav = this.showNav;
+        },
     },
     // TODO: use a global store
     created() {
         this.getBoards();
+        this.showNav = useOptionStore(this.$pinia).expand_left_nav;
     },
     methods: {
         async getBoards() {
@@ -102,14 +119,29 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
 
+.toggle-btn {
+    position: fixed;
+    left: $left-nav-width-pc + 15px;
+    top: 50vh;
+    transition: left 0.2s;
+    z-index: 2;
+
+    width: 24px;
+    height: 128px;
+
+    &.closed {
+        left: 0;
+    }
+}
+
 .left-nav {
     border-right: 1px solid $border-color;
     width: $left-nav-width-pc;
     position: fixed;
     top: 72px;
-
-    max-height: calc(100% - 80px);
-    overflow-y: auto;
+    transition: left 0.2s;
+    height: calc(100% - 80px);
+    z-index: 1;
 
     $height: 26px;
 
@@ -119,6 +151,7 @@ export default {
     }
 
     .expand-boards-container {
+        max-height: 70%;
         transition: max-height 0.2s;
     }
 

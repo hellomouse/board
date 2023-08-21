@@ -19,7 +19,7 @@ definePageMeta({
             </v-btn>
         </BoardLeftNav>
 
-        <v-container class="container-with-left-nav pt-0">
+        <v-container class="container-with-left-nav pt-0" :class="containerClass">
             <div v-if="loadingBoards" class="state-loader state-center">
                 <v-progress-linear color="primary" indeterminate class="mb-2" />
                 Loading Boards...
@@ -167,6 +167,9 @@ export default {
             return this.boards.sort((a, b) => {
                 return a[key].toLowerCase() > b[key].toLowerCase() ? multiplier : -multiplier;
             });
+        },
+        containerClass() {
+            return useOptionStore(this.$pinia).expand_left_nav ? '' : 'sidenav-hidden';
         }
     },
     watch: {
@@ -198,10 +201,12 @@ export default {
             this.boards = [];
             this.loadingBoards = true;
             try {
-                let boards = await this.$fetchApi('/api/board/boards', 'GET', {
-                    not_self: this.$route.query.shared_with_me ? true : false,
-                    query: this.$route.query.search || undefined
-                });
+                let opts = {
+                    not_self: this.$route.query.shared_with_me ? true : false
+                };
+                if (this.$route.query.search && this.$route.query.search.length > 3)
+                    opts.query = this.$route.query.search;
+                let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
                 this.boards = boards.boards;
                 this.loadingBoards = false;
             } catch (e) {
