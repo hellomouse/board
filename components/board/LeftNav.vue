@@ -101,7 +101,9 @@ export default {
             this.loadingBoards = true;
             try {
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {
-                    not_self: false
+                    not_self: false,
+                    limit: 100,
+                    sort_by: 'Name'
                 });
                 this.boards = boards.boards;
                 this.loadingBoards = false;

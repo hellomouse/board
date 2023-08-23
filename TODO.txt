@@ -24,8 +24,8 @@ keeps saying user has aborted an request
 
 left nav board list
 - - have list of boards be global, global refresh plugin
-- use the infinite scroll thing? - or just list top 100?
-- left side: sort by name always
+
+
 
 - autocomplete keyboard nav
 - fix share modal on phone

@@ -156,6 +156,7 @@
                     <tr><td>not_self: boolean? | false</td><td>Return only boards that the user did not create</td></tr>
                     <tr><td>owner_search: string?</td><td>Filter boards by this owner ID</td></tr>
                     <tr><td>query: string?</td><td>Filter by board name and description (that include this query)</td></tr>
+                    <tr><td>sort_by: Name | Created | Edited</td><td>Sort for searching in DB</td></tr>
                 </tbody>
             </v-table>
 
