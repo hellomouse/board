@@ -10,13 +10,14 @@ export default defineNuxtPlugin(nuxtApp => {
         let requestOptions = {
             method: method,
             mode: 'cors',
+            connection: 'close',
             credentials: 'include',
             signal: AbortSignal.timeout(10000)
         };
         if (method !== 'GET') {
             requestOptions.body = JSON.stringify(body);
             requestOptions.headers = { 'Content-Type': 'application/json' };
-        } else if (body)
+        } else if (method === 'GET' && body)
             url += '?' + new URLSearchParams(body);
 
         // eslint-disable-next-line no-undef

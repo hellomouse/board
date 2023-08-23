@@ -15,7 +15,6 @@ board page:
     - have a store for search params + search bar ig
 - inf scroll?
 
-
 make board clickable - highlght on click 
     - also does selection - mass share / delete
     - double click doesnt work on mobile
@@ -27,7 +26,6 @@ left nav board list
 - - have list of boards be global, global refresh plugin
 - use the infinite scroll thing? - or just list top 100?
 - left side: sort by name always
-
 
 - autocomplete keyboard nav
 - fix share modal on phone

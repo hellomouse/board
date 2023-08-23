@@ -60,7 +60,7 @@ export default {
             pathRewrite: { '^/api': '/v1' },
             pathFilter: [ '/api' ],
             secure: false,
-            cookieDomainRewrite: "localhost",
+            cookieDomainRewrite: 'localhost',
             debug: true
         },
     },

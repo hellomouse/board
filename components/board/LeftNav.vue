@@ -101,7 +101,7 @@ export default {
             this.loadingBoards = true;
             try {
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {
-                    not_self: this.$route.query.shared_with_me ? true : false
+                    not_self: false
                 });
                 this.boards = boards.boards;
                 this.loadingBoards = false;

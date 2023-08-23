@@ -349,6 +349,7 @@ export default {
     },
     methods: {
         async onLoad() {
+            this.pins = [];
             this.initialLoad = true;
             await this.updateBoardInfo();
             await this.updatePins();
