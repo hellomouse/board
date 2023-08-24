@@ -8,8 +8,6 @@ github linting workflow
 - Apps list
 
 board page:
-- search bar
-    - search params like owner:....
 - inf scroll?
 
 make board clickable - highlght on click 

@@ -206,6 +206,17 @@ export default {
                 };
                 if (this.$route.query.search && this.$route.query.search.length > 3)
                     opts.query = this.$route.query.search;
+
+                if (opts.query) {
+                    // Parse: owner: name
+                    let result = opts.query.match(/owner:([A-Za-z0-9_-]+)/g);
+                    if (result) {
+                        opts.query = opts.query.replace(result[0], '').trim();
+                        if (!opts.query) delete opts.query;
+                        opts.owner_search = result[0].split('owner:')[1].trim();
+                    }
+                }
+
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
                 this.boards = boards.boards;
                 this.loadingBoards = false;
