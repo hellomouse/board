@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-undef
 useHead({
     title: 'Hellomouse Board',
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/board.png' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/board.svg' }],
 })
 </script>
 
@@ -12,7 +12,7 @@ useHead({
             <template #logo>
                 <UiAppLogo 
                     href="/board"
-                    src="/logos/board.png"
+                    src="/logos/board.svg"
                     title="Board"
                 />
             </template>

@@ -19,7 +19,7 @@
                     >
                         <ui-app-button
                             href="/board"
-                            src="/logos/board.png"
+                            src="/logos/board.svg"
                             title="Board"
                         />
                     </v-sheet>

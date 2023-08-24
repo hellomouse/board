@@ -77,7 +77,6 @@ optimize:
     - local material icons?
 
 
-- svg logo
 
 
 responsive mobile
@@ -87,7 +86,6 @@ https://www.npmjs.com/package/vue-markdown-render
 https://markdown-it.github.io/markdown-it/
 
 
-custom backgrounds on pins?
 
 
 
@@ -98,3 +96,5 @@ navbar:
 - Logo
     + light/dark logo
 - pins: version history
+
+custom backgrounds on pins?
