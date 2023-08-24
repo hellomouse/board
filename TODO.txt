@@ -8,14 +8,15 @@ github linting workflow
 - Apps list
 
 board page:
+search: should search both shared and unshared boards
+
 - inf scroll?
+
+search pins
 
 make board clickable - highlght on click 
     - also does selection - mass share / delete
     - double click doesnt work on mobile
-
-
-keeps saying user has aborted an request
 
 
 - autocomplete keyboard nav
@@ -35,7 +36,6 @@ pins:
 
 meta tags
 - https://nuxt.com/docs/getting-started/seo-meta
-- title tag as well per page
 
 - proper sorting
     - make sticky
@@ -86,10 +86,6 @@ responsive mobile
 
 https://www.npmjs.com/package/vue-markdown-render
 https://markdown-it.github.io/markdown-it/
-
-global state:
-- favicon
-https://stackoverflow.com/questions/64001841/nuxt-change-favicon-by-page
 
 
 custom backgrounds on pins?

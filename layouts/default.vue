@@ -1,3 +1,11 @@
+<script setup>
+// eslint-disable-next-line no-undef
+useHead({
+    title: 'Hellomouse Apps',
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/main.svg' }],
+})
+</script>
+
 <template>
     <v-app id="main" ref="app" dark>
         <AppNavbar>
