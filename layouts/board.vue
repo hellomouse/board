@@ -6,17 +6,11 @@
                     href="/board"
                     src="/logos/board.png"
                     title="Board"
-                    class="mr-10"
                 />
             </template>
 
-            <v-text-field
-                label="" rounded="0"
-                prepend-inner-icon="mdi-magnify"
-                placeholder="Search"
-                clearable
-                flat variant="solo-filled"
-            ></v-text-field>
+            <ui-app-search-bar :placeholder="placeholder" @search="search" />
+            <v-spacer />
         </UiAppNavbar>
 
         <v-main class="mx-8 mt-4">
@@ -24,3 +18,26 @@
         </v-main>
     </v-app>
 </template>
+
+<script>
+export default {
+    computed: {
+        placeholder() {
+            return this.isPinSearch() ?
+                'Search pins in board' :
+                'Search boards';
+        }
+    },
+    methods: {
+        isPinSearch() {
+            return this.$route.path.includes('/board/board');
+        },
+        search(v) {
+            const isPinSearch = this.isPinSearch();
+            if (isPinSearch) { /* TODO */ }
+            else
+                this.$router.push('/board?search=' + v);
+        }
+    }
+}
+</script>

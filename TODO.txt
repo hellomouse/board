@@ -6,13 +6,10 @@ github linting workflow
 -----
 
 - Apps list
-- Search bar
-
 
 board page:
 - search bar
     - search params like owner:....
-    - have a store for search params + search bar ig
 - inf scroll?
 
 make board clickable - highlght on click 

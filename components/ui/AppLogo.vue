@@ -26,8 +26,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "~/assets/variables.scss";
+
 .logo {
     height: 100%;
+    width: $left-nav-width-pc;
     text-decoration: none !important;
 
     &__img {

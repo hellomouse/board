@@ -143,7 +143,7 @@ $popout-gap: 5px;
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    justify-content: space-between;
+    justify-content: start;
     padding: 0 20px;
     background-color: rgb(var(--v-theme-background));
 
@@ -152,10 +152,6 @@ $popout-gap: 5px;
     top: 0;
     z-index: 999;
 
-    &__logo {
-        height: $height;
-        background-color: inherit;
-    }
 
     &__links {
         background-color: transparent;
