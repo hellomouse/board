@@ -71,6 +71,7 @@
 
 <script>
 import { useOptionStore } from '~/store/optionStore.js';
+import { useLeftNavStore } from '~/store/leftNavStore.js';
 
 export default {
     name: 'BoardLeftNav',
@@ -78,7 +79,7 @@ export default {
     data() {
         return {
             showNav: true,
-            boards: [],
+            boards: useLeftNavStore(this.$pinia).boards,
             expandSideBoards: useOptionStore(this.$pinia).expand_board_nav
         };
     },
@@ -90,13 +91,18 @@ export default {
             useOptionStore(this.$pinia).expand_left_nav = this.showNav;
         },
     },
-    // TODO: use a global store
     created() {
         this.getBoards();
         this.showNav = useOptionStore(this.$pinia).expand_left_nav;
     },
     methods: {
         async getBoards() {
+            // Last fetched recently, abort
+            // Last fetch is 60 min
+            if (Date.now() - useLeftNavStore(this.$pinia).lastFetch < 1000 * 60)
+                return;
+
+            // Get board
             this.boards = [];
             this.loadingBoards = true;
             try {
@@ -107,6 +113,9 @@ export default {
                 });
                 this.boards = boards.boards;
                 this.loadingBoards = false;
+
+                useLeftNavStore(this.$pinia).lastFetch = Date.now();
+                useLeftNavStore(this.$pinia).boards = this.boards;
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);

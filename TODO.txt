@@ -22,10 +22,6 @@ make board clickable - highlght on click
 
 keeps saying user has aborted an request
 
-left nav board list
-- - have list of boards be global, global refresh plugin
-
-
 
 - autocomplete keyboard nav
 - fix share modal on phone
