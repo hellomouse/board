@@ -14,10 +14,14 @@
                 <div>
                     <v-sheet
                         elevation="6"
-                        width="200"
+                        width="210"
                         class="popout-sheet pa-2"
                     >
-                        TODO
+                        <ui-app-button
+                            href="/board"
+                            src="/logos/board.png"
+                            title="Board"
+                        />
                     </v-sheet>
                 </div>
             </v-menu>

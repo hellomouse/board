@@ -5,7 +5,6 @@ github linting workflow
 
 -----
 
-- Apps list
 
 board page:
 search: should search both shared and unshared boards
