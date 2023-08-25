@@ -8,24 +8,12 @@ pin - save sort in search params as well
 - show single pin
 - search pins
 
-
 - proper sorting
     - make sticky
 
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
     - make bulk endpoint
-
-
-pins:
-- have a dropdown in new pin
-    - select what type of modal to use
-        - markdown is current
-        - image gallery - preview images, only file upload + paste images
-        - link - select link, preview
-        - review - same as markdown, but add score
-            - no file upload
-
 
 
 meta tags
@@ -38,20 +26,6 @@ pin create/edit modal:
     - https://vueup.github.io/vue-quill/guide/modules.html
 - for markdown pin show link for markdown guide
 
-html stripping:
-- disallow: style tags
-- img: only src, width, height
-
-
-boards within boards
-- folders
-
-
-board / pin api - return pfp url as well
--  cache user information for fast lookup
-- or just make /pfp/username.png or something
-    - then can remove pfp url from user
-
 
 optimize:
 - https://github.com/Developmint/nuxt-purgecss
@@ -62,6 +36,26 @@ optimize:
 
 
 
+later:
+
+pins:
+- have a dropdown in new pin
+    - select what type of modal to use
+        - markdown is current
+        - image gallery - preview images, only file upload + paste images
+        - link - select link, preview
+        - review - same as markdown, but add score
+            - no file upload
+
+html stripping:
+- disallow: style tags
+- img: only src, width, height
+
+
+board / pin api - return pfp url as well
+-  cache user information for fast lookup
+- or just make /pfp/username.png or something
+    - then can remove pfp url from user
 
 
 
@@ -90,3 +84,8 @@ board:
 - when delete don't refresh everything just delete in place
 - same for adding
 - option to download board
+
+
+
+boards within boards
+- folders

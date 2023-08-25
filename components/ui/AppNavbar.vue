@@ -4,7 +4,7 @@
 
         <slot></slot>
 
-        <div class="navbar__links">
+        <div class="navbar__links" style="margin-left: auto">
             <v-menu>
                 <template #activator="{ props }">
                     <v-btn
