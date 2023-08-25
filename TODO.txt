@@ -9,14 +9,7 @@ github linting workflow
 board page:
 - inf scroll?
 
-board / pin api - return pfp url as well
--  cache user information for fast lookup
-
 search pins
-
-make board clickable - highlght on click 
-    - single click is select, double is open
-    - double click doesnt work on mobile
 
 
 
@@ -65,6 +58,10 @@ boards within boards
 - table of contents for docs on right somehow
 
 
+board / pin api - return pfp url as well
+-  cache user information for fast lookup
+- or just make /pfp/username.png or something
+
 
 
 optimize:
@@ -92,3 +89,4 @@ custom backgrounds on pins?
 
 boardas:
     - also does selection - mass share / delete
+

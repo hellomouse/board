@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useLeftNavStore = defineStore({
+export const useBoardStore = defineStore({
     id: 'leftNav',
     persist: {
         // eslint-disable-next-line no-undef
@@ -12,5 +12,5 @@ export const useLeftNavStore = defineStore({
             boards: [],
             lastFetch: 0
         };
-    }
+    },
 });

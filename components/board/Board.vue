@@ -4,10 +4,12 @@
         width="250"
         class="board-tile hoverable [ mr-3 mb-3 ]"
         :style="{ borderColor: color }"
+        :class="selected ? 'selected' : ''"
     >
         <div
             class="px-4 pt-4"
-            @dblclick="goToBoard"
+            style="cursor: pointer"
+            @click="clickHandler"
         >
             <div class="text-truncate text-h6">{{ name }}</div>
         </div>
@@ -15,7 +17,8 @@
         <div class="px-4 pb-3">
             <div
                 class="board-tile__desc text-truncate"
-                @dblclick="goToBoard"
+                style="cursor: pointer"
+                @click="clickHandler"
             >{{ desc }}</div>
             <div class="board-tile__owner-row pt-1 mt-1">
                 <profile-picture class="mr-1" size="12pt" src="" />
@@ -112,11 +115,28 @@ export default {
             default: ''
         }
     },
+    data: () => ({
+        numClicks: 0,
+        selected: false
+    }),
     methods: {
         copyShareLink() {
             if (process.client)
                 navigator.clipboard.writeText(window.location.origin + '/board/board?id=' + this.boardId);
             this.$emit('success', 'Link copied!');
+        },
+        clickHandler() {
+            this.numClicks++;
+            if (this.numClicks === 1) {
+                let self = this;
+                setTimeout(() => {
+                    if (self.numClicks === 1) // Single click: select
+                        self.selected = !self.selected;
+                    else                      // Double click: go to board
+                        self.goToBoard();
+                    self.numClicks = 0;
+                }, 200);
+            }
         },
         goToBoard() {
             this.$router.push('/board/board?id=' + this.boardId);
@@ -133,6 +153,10 @@ export default {
     max-width: 100%;
     border-right: 3px solid;
     display: inline-block;
+
+    &.selected {
+        outline: 1px solid rgb(var(--v-theme-primary)) !important;
+    }
     
     &__menu {
         margin-left: auto;
