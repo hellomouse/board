@@ -52,10 +52,13 @@ Example usage:
                         return-object
                         hide-details chips closable-chips
 
+                        auto-select-first
                         multiple
                         :loading="searchLoading"
                         :items="items"
-                        @keyup.enter="addNewUsers"
+                        @keyup.enter="onEnter"
+                        @keydown.down="autocompleteArrow" 
+                        @keydown.up="autocompleteArrow"
                     >
                         <template #chip="{ props, item }">
                             <v-chip
@@ -67,8 +70,9 @@ Example usage:
                     
                         <template #item="{ props, item }">
                             <div
-                                v-bind="props" class="[ user ] d-flex flex-row mx-2 align-center"
+                                v-bind="props" class="[ user ] d-flex flex-row px-2 py-1 align-center"
                                 style="cursor: pointer"
+                                :class="item.value.selected ? 'user--selected' : ''"
                                 @click="search = ''"
                             >
                                 <profile-picture
@@ -228,6 +232,7 @@ export default {
         search: null,         // User search input text
         select: null,         // List of user objects selected in user search
         users: [],
+        selected: 0,
 
         queryQueue: [],
         nextInterval: null
@@ -289,6 +294,15 @@ export default {
                 }, INPUT_RATE_LIMIT_MS);
             }
         },
+        // Called when ENTER is pressed
+        onEnter() {
+            // Add from autocomplete dropdown
+            if (this.items.length && this.items[this.selected].selected) {
+                this.items[this.selected].selected = false;
+                this.search = '';
+            }
+            else this.addNewUsers();
+        },
         // Called when "Add button" or ENTER is pressed in the auto complete
         async addNewUsers() {
             // Add valid user from enter
@@ -348,6 +362,16 @@ export default {
             if (this.currentUserPerm === EDIT && [OWNER, EDIT].includes(user.level) && user.id !== this.currentUser.id)
                 return true;
             return user.id === this.creator || ![OWNER, EDIT].includes(this.currentUserPerm);
+        },
+        // Used to navigate autocomplete
+        autocompleteArrow(event) {
+            if (this.items.length) {
+                this.selected = event.code === 'ArrowDown' ?
+                    (this.selected - 1 + this.items.length) % this.items.length :
+                    this.selected = (this.selected + 1) % this.items.length;
+                this.items.forEach(i => i.selected = false);
+                this.items[this.selected].selected = true;
+            }
         }
     },
 }
@@ -363,6 +387,10 @@ export default {
 }
 
 .user {
+    &.user--selected {
+        background-color: rgba(var(--v-theme-on-surface), var(--v-focus-opacity));
+    }
+
     &__username {
         opacity: $secondary-text-opacity;
         font-size: 0.9rem;

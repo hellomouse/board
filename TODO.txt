@@ -12,8 +12,6 @@ board page:
 search pins
 
 
-
-- autocomplete keyboard nav
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
@@ -61,7 +59,7 @@ boards within boards
 board / pin api - return pfp url as well
 -  cache user information for fast lookup
 - or just make /pfp/username.png or something
-
+    - then can remove pfp url from user
 
 
 optimize:
@@ -74,7 +72,6 @@ optimize:
 
 
 
-responsive mobile
 
 
 
@@ -87,6 +84,8 @@ navbar:
 
 custom backgrounds on pins?
 
-boardas:
-    - also does selection - mass share / delete
+boards:
+    - right click menu -> change color there?
+    - also does selection - mass Share
 
+responsive mobile
