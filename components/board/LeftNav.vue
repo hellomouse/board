@@ -61,19 +61,21 @@
         </v-sheet>
 
         <v-btn
+            v-if="isLoggedIn"
             elevation="2" fab small
             :icon="showNav ? 'mdi-chevron-left' : 'mdi-chevron-right'"
             class="toggle-btn"
             :class="!showNav ? 'closed' : ''"
 
             @click="showNav = !showNav"
-        ></v-btn>
+        />
     </div>
 </template>
 
 <script>
 import { useOptionStore } from '~/store/optionStore.js';
 import { useBoardStore } from '~/store/boardStore.js';
+import { useAuthStore } from '~/store/auth.js';
 
 export default {
     name: 'BoardLeftNav',
@@ -85,6 +87,11 @@ export default {
             expandSideBoards: useOptionStore(this.$pinia).expand_board_nav
         };
     },
+    computed: {
+        isLoggedIn() { 
+            return useAuthStore(this.$pinia).isLoggedIn;
+        }
+    },
     watch: {
         expandSideBoards(newVal) {
             useOptionStore(this.$pinia).expand_board_nav = newVal;
@@ -95,7 +102,7 @@ export default {
     },
     created() {
         this.getBoards();
-        this.showNav = useOptionStore(this.$pinia).expand_left_nav;
+        this.showNav = useOptionStore(this.$pinia).expand_left_nav && this.isLoggedIn;
     },
     methods: {
         async getBoards() {

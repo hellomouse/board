@@ -3,7 +3,6 @@ github linting workflow
 
 -----
 
-hide left nav if not logged in?
 
 - pin proper sorting
 
