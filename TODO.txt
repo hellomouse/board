@@ -3,7 +3,6 @@ github linting workflow
 
 -----
 
-cannot load board page directly - quill errors
 
 pin - save sort in search params as well
 - show single pin

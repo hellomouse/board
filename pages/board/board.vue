@@ -177,16 +177,18 @@ definePageMeta({
             />
         </v-container>
 
-        <PinModal
-            :edit-mode="editPin"
-            :show="createPinModal"
-            :pin="currentPin"
-            :pin-title="pinTitle"
-            :board-id="currentBoard.id || ''"
+        <client-only>
+            <lazy-PinModal
+                :edit-mode="editPin"
+                :show="createPinModal"
+                :pin="currentPin"
+                :pin-title="pinTitle"
+                :board-id="currentBoard.id || ''"
 
-            @update="onPinCreate"
-            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-        />
+                @update="onPinCreate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            />
+        </client-only>
 
         <!-- For current board -->
         <v-dialog
@@ -268,7 +270,6 @@ definePageMeta({
 </template>
 
 <script>
-import Pin from '~/components/pin/Pin.vue';
 import { useAuthStore } from '~/store/auth.js';
 import { useOptionStore } from '~/store/optionStore.js';
 
@@ -276,7 +277,6 @@ const PINS_PER_PAGE = 40;
 
 export default {
     name: 'BoardPage',
-    components: { Pin },
     data() {
         return {
             // Board info
