@@ -5,12 +5,12 @@ github linting workflow
 
 hide left nav if not logged in?
 
-- proper sorting
-    - make sticky
+- pin proper sorting
+
 
 - show single pin
     - hide top + sort, + center pin
-
+    - dont watch route params
 
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
@@ -19,6 +19,8 @@ hide left nav if not logged in?
 
 meta tags
 - https://nuxt.com/docs/getting-started/seo-meta
+    - show defualt board page + image
+    - otherwise show board with color and board desc
 
 
 
