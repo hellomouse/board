@@ -7,7 +7,6 @@ github linting workflow
 
 search pins
 
-scrollbar css
 
 pins:
 - have a dropdown in new pin
@@ -83,3 +82,8 @@ responsive mobile
     - different ui on phone - click on user to show dropdown popped from bottom
 
 - table of contents for docs on right somehow
+
+board:
+- left nav scroll
+- when delete don't refresh everything just delete in place
+- same for adding
