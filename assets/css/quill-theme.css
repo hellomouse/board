@@ -63,3 +63,7 @@
     color: #eee;
 }
 
+/* Align images for blot formatter */
+.blot-formatter__toolbar-button svg {
+    background: black !important;
+}

@@ -9,12 +9,18 @@ github linting workflow
 board page:
 search: should search both shared and unshared boards
 
+board / pin api - return pfp url as well
+
+dont always load quill
+-  cache user information for fast lookup
+
+
 - inf scroll?
 
 search pins
 
 make board clickable - highlght on click 
-    - also does selection - mass share / delete
+    - single click is select, double is open
     - double click doesnt work on mobile
 
 
@@ -45,15 +51,11 @@ meta tags
     - select checkbox on top left or something
     - make bulk endpoint
 
-cache user information for fast lookup
-
 pin create/edit modal:
-    - https://github.com/patleeman/quill-markdown-shortcuts
-    - https://github.com/visualjerk/quill-magic-url
+    - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
 - for markdown pin show link for markdown guide
-
 
 
 html stripping:
@@ -98,3 +100,6 @@ navbar:
 - pins: version history
 
 custom backgrounds on pins?
+
+boardas:
+    - also does selection - mass share / delete

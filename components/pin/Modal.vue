@@ -20,6 +20,7 @@ TODO
                         <QuillEditor
                             :style="{ backgroundColor: color }"
                             theme="snow" contentType="html" v-model:content="content"
+                            :modules="modules"
                             :toolbar="toolbars"
                         />
                         <br>
@@ -65,6 +66,10 @@ const QuillEditor = process.client ? (await import('@vueup/vue-quill')).QuillEdi
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '~/assets/css/quill-theme.css';
 
+import MarkdownShortcuts from 'quill-markdown-shortcuts';
+import MagicUrl from 'quill-magic-url';
+import BlotFormatter from 'quill-blot-formatter';
+
 const swatches =
     ',#77172e,#692b17,#7c4a03,#264d3b,#0c625d,#256377,#284255,#472e5b,#6c394f,#4b443a'.split(',');
 
@@ -72,6 +77,26 @@ export default {
     name: 'PinModal',
     components: {
         QuillEditor
+    },
+    setup: () => {
+        const modules = [
+            {
+                name: 'markdownShortcuts',
+                module: MarkdownShortcuts,
+                options: {}
+            },
+            {
+                name: 'magicUrl',
+                module: MagicUrl,
+                options: {}
+            },
+            {
+                name: 'blotFormatter',
+                module: BlotFormatter,
+                options: {}
+            },
+        ];
+        return { modules }
     },
     props: {
         editMode: { // Edit existing pin instead of create
@@ -100,7 +125,7 @@ export default {
             content: this.pin?.content,
             color: this.pin?.metadata?.color,
             loading: false,
-            toolbars: [['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
+            toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
 
             swatches,
             selectedSwatchIndex: 0
