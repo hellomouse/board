@@ -38,4 +38,15 @@ export default defineNuxtPlugin(nuxtApp => {
             return 'Server error';
         return 'Unknown error';
     });
+
+    nuxtApp.provide('processSearchParams', (opts, owner_key) => {
+        // Parse: owner: name
+        let result = opts.query.match(/owner:([A-Za-z0-9_-]+)/g);
+        if (result) {
+            opts.query = opts.query.replace(result[0], '').trim();
+            if (!opts.query) delete opts.query;
+            opts[owner_key] = result[0].split('owner:')[1].trim();
+        }
+        return opts;
+    });
 });

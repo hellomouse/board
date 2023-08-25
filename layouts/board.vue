@@ -42,8 +42,11 @@ export default {
         },
         search(v) {
             const isPinSearch = this.isPinSearch();
-            if (isPinSearch) { /* TODO */ }
-            else
+            if (isPinSearch) {
+                let params = { ...this.$route.query };
+                params.search = v;
+                this.$router.push('/board/board?' + new URLSearchParams(params).toString());
+            } else
                 this.$router.push('/board?search=' + v);
         }
     }

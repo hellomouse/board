@@ -108,7 +108,7 @@ definePageMeta({
                         </v-sheet>
                     </v-menu>
 
-                    {{ currentBoard.name }}
+                    {{ currentBoard.name }}{{ $route.query.search ? ' - Search Results' : '' }}
                 </h1>
 
                 <div class="d-flex">
@@ -364,11 +364,19 @@ export default {
         },
         async updatePins() {
             try {
-                let pins = await this.$fetchApi('/api/board/pins', 'GET', {
+                let opts = {
                     board_id: this.currentBoard.id,
                     offset: (this.page - 1) * PINS_PER_PAGE,
                     limit: PINS_PER_PAGE
-                });
+                };
+
+                if (this.$route.query.search && this.$route.query.search.length > 3)
+                    opts.query = this.$route.query.search;
+
+                if (opts.query)
+                    opts = this.$processSearchParams(opts, 'creator');
+
+                let pins = await this.$fetchApi('/api/board/pins', 'GET', opts);
                 for (let pin of pins.pins) {
                     pin.created = this.$formatTimestamp(pin.created);
                     pin.edited = this.$formatTimestamp(pin.edited);
