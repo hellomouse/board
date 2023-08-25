@@ -1,11 +1,20 @@
-https://github.com/nuxt-community/vuetify-module/issues/213
-https://github.com/BayBreezy/nuxt3-vuetify3-starter/blob/main/plugins/vuetify.ts
 
 github linting workflow
 
 -----
 
-search pins
+
+pin - save sort in search params as well
+- show single pin
+- search pins
+
+
+- proper sorting
+    - make sticky
+
+- bulk delete / pin / archive / favorite / change background pins
+    - select checkbox on top left or something
+    - make bulk endpoint
 
 
 pins:
@@ -22,13 +31,6 @@ pins:
 meta tags
 - https://nuxt.com/docs/getting-started/seo-meta
 
-- proper sorting
-    - make sticky
-
-- double click pin to edit
-- bulk delete / pin / archive / favorite / change background pins
-    - select checkbox on top left or something
-    - make bulk endpoint
 
 pin create/edit modal:
     - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
@@ -87,3 +89,4 @@ board:
 - left nav scroll
 - when delete don't refresh everything just delete in place
 - same for adding
+- option to download board

@@ -6,6 +6,8 @@
         class="pin-tile"
         :color="color"
         :class="pinTileClasses"
+
+        @click="clickHandler"
     >
         <div v-if="deleting" class="delete-confirmation-overlay">
             <div class="delete-confirmation-overlay__center">
@@ -75,19 +77,7 @@
                         v-if="viewerHasPerm"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         :disabled="locked"
-                        @click="$emit('update', {
-                            type: 'pin-edit',
-                            pin: {
-                                pin_id: pinId,
-                                board_id: boardId,
-                                type: type,
-                                creator: creator,
-                                edited: edited,
-                                content: content,
-                                attachment_paths: attachmentPaths,
-                                metadata: metadata
-                            }
-                        })"
+                        @click="emitEditUpdate()"
                     >
                         <v-icon icon="mdi-pencil" />Edit
                     </button>
@@ -161,7 +151,10 @@ export default {
             // Deleting
             deleting: false, // In process of deleting?
             deletionTimeout: null,
-            flags: this.initialFlags
+            flags: this.initialFlags,
+
+            // Click
+            numClicks: 0
         };
     },
     computed: {
@@ -243,7 +236,33 @@ export default {
                 let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
             }
-        }
+        },
+        emitEditUpdate() {
+            this.$emit('update', {
+                type: 'pin-edit',
+                pin: {
+                    pin_id: this.pinId,
+                    board_id: this.boardId,
+                    type: this.type,
+                    creator: this.creator,
+                    edited: this.edited,
+                    content: this.content,
+                    attachment_paths: this.attachmentPaths,
+                    metadata: this.metadata
+                }
+            });
+        },
+        clickHandler() {
+            this.numClicks++;
+            if (this.numClicks === 1) {
+                let self = this;
+                setTimeout(() => {
+                    if (self.numClicks >= 3)
+                        this.emitEditUpdate();
+                    self.numClicks = 0;
+                }, 300);
+            }
+        },
     }
 }
 </script>
