@@ -215,8 +215,9 @@ export default {
                         if (!opts.query) delete opts.query;
                         opts.owner_search = result[0].split('owner:')[1].trim();
                     }
-                }
-
+                } else
+                    opts.owner_search = useAuthStore(this.$pinia).user.id;
+                
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
                 this.boards = boards.boards;
                 this.loadingBoards = false;

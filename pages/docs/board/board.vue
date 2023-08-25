@@ -139,8 +139,6 @@
         >
             Search for boards by parameters. Only boards the current user can access will be returned.
 
-            TODO: updated
-
             Returns 401 if not logged in, and 500 on error.<br>
 
             <v-table density="compact" class="api-parameter-table my-4">

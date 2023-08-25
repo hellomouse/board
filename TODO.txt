@@ -7,7 +7,6 @@ github linting workflow
 
 
 board page:
-search: should search both shared and unshared boards
 - inf scroll?
 
 board / pin api - return pfp url as well
