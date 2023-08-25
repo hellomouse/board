@@ -21,7 +21,7 @@ definePageMeta({
             
                 <v-sheet elevation="8" rounded="0">
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
-                        <v-icon icon="mdi-format-header-pound" />Markdown Pin
+                        <v-icon icon="mdi-format-header-pound" />Rich Text Pin
                     </button>
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
                         <v-icon icon="mdi-view-gallery" />Image Gallery Pin

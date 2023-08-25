@@ -8,20 +8,17 @@ github linting workflow
 
 board page:
 search: should search both shared and unshared boards
+- inf scroll?
 
 board / pin api - return pfp url as well
-
-dont always load quill
 -  cache user information for fast lookup
-
-
-- inf scroll?
 
 search pins
 
 make board clickable - highlght on click 
     - single click is select, double is open
     - double click doesnt work on mobile
+
 
 
 - autocomplete keyboard nav
@@ -82,13 +79,6 @@ optimize:
 
 
 responsive mobile
-
-
-https://www.npmjs.com/package/vue-markdown-render
-https://markdown-it.github.io/markdown-it/
-
-
-
 
 
 
