@@ -334,9 +334,11 @@ export default {
     watch: {
         selected() {
             useOptionStore(this.$pinia).sort_pins[0] = this.selected;
+            this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, sort: this.selected } });
         },
         sortDown() {
             useOptionStore(this.$pinia).sort_pins[1] = this.sortDown;
+            this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, sort_down: this.sortDown } });
         },
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
@@ -349,6 +351,11 @@ export default {
     },
     methods: {
         async onLoad() {
+            if (this.$route.query.sort)
+                this.selected = this.$route.query.sort;
+            if (this.$route.query.sort_down)
+                this.sortDown = this.$route.query.sort_down === 'true';
+
             this.pins = [];
             this.initialLoad = true;
             await this.updateBoardInfo();

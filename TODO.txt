@@ -3,12 +3,14 @@ github linting workflow
 
 -----
 
-
-pin - save sort in search params as well
-- show single pin
+hide left nav if not logged in?
 
 - proper sorting
     - make sticky
+
+- show single pin
+    - hide top + sort, + center pin
+
 
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
@@ -18,20 +20,6 @@ pin - save sort in search params as well
 meta tags
 - https://nuxt.com/docs/getting-started/seo-meta
 
-
-pin create/edit modal:
-    - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
-    - https://github.com/NoelOConnell/quill-image-uploader
-    - https://vueup.github.io/vue-quill/guide/modules.html
-- for markdown pin show link for markdown guide
-
-
-optimize:
-- https://github.com/Developmint/nuxt-purgecss
-- https://pwa.nuxtjs.org/
-- https://www.npmjs.com/package/shrink-ray
-- https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
-    - local material icons?
 
 
 
@@ -46,6 +34,13 @@ pins:
         - review - same as markdown, but add score
             - no file upload
 
+pin create/edit modal:
+    - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
+    - https://github.com/NoelOConnell/quill-image-uploader
+    - https://vueup.github.io/vue-quill/guide/modules.html
+- for markdown pin show link for markdown guide
+
+
 html stripping:
 - disallow: style tags
 - img: only src, width, height
@@ -57,6 +52,7 @@ board / pin api - return pfp url as well
     - then can remove pfp url from user
 
 
+-------
 
 
 future todo:
@@ -88,3 +84,12 @@ board:
 
 boards within boards
 - folders
+
+
+optimize:
+- https://github.com/Developmint/nuxt-purgecss
+- https://pwa.nuxtjs.org/
+- https://www.npmjs.com/package/shrink-ray
+- https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
+    - local material icons?
+
