@@ -27,21 +27,23 @@
                     </div>
                 </NuxtLink>
             
-                <div 
-                    class="expand-boards-container" :style="{
-                        maxHeight: expandSideBoards ? '2000px' : '0px',
-                        overflowY: expandSideBoards ? 'auto' : 'hidden',
-                        marginBottom: expandSideBoards ? '8px' : '0px'
-                    }"
-                >
-                    <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
-                        <div
-                            class="hoverable hover-list-item left-nav__list-item left-nav__board-item
-                            [ pl-3 text-truncate text-medium-emphasis ]"
-                        >
-                            <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
-                        </div>
-                    </NuxtLink>
+                <div style="max-height: calc(100vh - 300px); overflow-y: auto">
+                    <div 
+                        class="expand-boards-container" :style="{
+                            maxHeight: expandSideBoards ? '2000px' : '0px',
+                            overflowY: expandSideBoards ? 'auto' : 'hidden',
+                            marginBottom: expandSideBoards ? '8px' : '0px'
+                        }"
+                    >
+                        <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
+                            <div
+                                class="hoverable hover-list-item left-nav__list-item left-nav__board-item
+                                [ pl-3 text-truncate text-medium-emphasis ]"
+                            >
+                                <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
+                            </div>
+                        </NuxtLink>
+                    </div>
                 </div>
 
                 <NuxtLink to="/board?shared_with_me=true">

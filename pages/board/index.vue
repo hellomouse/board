@@ -53,11 +53,9 @@ definePageMeta({
                 </div>
             </div>
             
-            <div>
+            <div @scroll="onScroll" class="scroll-container">
                 <BoardBoard
-                    v-for="board in sortedBoards"
-                    :key="board.id"
-
+                    v-for="board in sortedBoards" :key="board.id"
                     :board-id="board.id"
                     :name="board.name"
                     :desc="board.desc"
@@ -122,6 +120,8 @@ import { useOptionStore } from '~/store/optionStore.js';
 import BoardBoard from '~/components/board/Board.vue';
 import BoardModal from '~/components/board/Modal.vue';
 
+const BOARDS_PER_CHUNK = 40;
+
 export default {
     name: 'BoardIndexPage',
     components: { BoardBoard, BoardModal },
@@ -149,6 +149,9 @@ export default {
                 'Name' : useOptionStore(this.$pinia).sort_boards[0],
             sortDown: useOptionStore(this.$pinia).sort_boards[1] === undefined ?
                 true : useOptionStore(this.$pinia).sort_boards[1],
+
+            // Inf scroll
+            reachedEnd: false
         };
     },
     computed: {
@@ -197,36 +200,52 @@ export default {
             if (this.$route.query.search)
                 this.title = 'Search Results';
         },
+        async load() {
+            if (this.reachedEnd) return;
+            let boards = [];
+            try {
+                boards = await this.loadBoards(this.boards.length, BOARDS_PER_CHUNK);
+                this.boards = this.boards.concat(boards);
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);
+            }
+            if (!boards.length)
+                this.reachedEnd = true;
+        },
+        async loadBoards(offset, limit) {
+            this.reachedEnd = false;
+            let opts = {
+                not_self: this.$route.query.shared_with_me ? true : false,
+                offset, limit
+            };
+            if (this.$route.query.search && this.$route.query.search.length > 3)
+                opts.query = this.$route.query.search;
+
+            if (opts.query) {
+                // Parse: owner: name
+                let result = opts.query.match(/owner:([A-Za-z0-9_-]+)/g);
+                if (result) {
+                    opts.query = opts.query.replace(result[0], '').trim();
+                    if (!opts.query) delete opts.query;
+                    opts.owner_search = result[0].split('owner:')[1].trim();
+                }
+            } else
+                opts.owner_search = useAuthStore(this.$pinia).user.id;
+
+            let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
+            return boards.boards;
+        },
         async getBoards() {
             this.boards = [];
             this.loadingBoards = true;
             try {
-                let opts = {
-                    not_self: this.$route.query.shared_with_me ? true : false
-                };
-                if (this.$route.query.search && this.$route.query.search.length > 3)
-                    opts.query = this.$route.query.search;
-
-                if (opts.query) {
-                    // Parse: owner: name
-                    let result = opts.query.match(/owner:([A-Za-z0-9_-]+)/g);
-                    if (result) {
-                        opts.query = opts.query.replace(result[0], '').trim();
-                        if (!opts.query) delete opts.query;
-                        opts.owner_search = result[0].split('owner:')[1].trim();
-                    }
-                } else
-                    opts.owner_search = useAuthStore(this.$pinia).user.id;
-                
-                let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
-                this.boards = boards.boards;
-                this.loadingBoards = false;
+                this.boards = await this.loadBoards(0, BOARDS_PER_CHUNK);
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get boards: ' + this.$apiErrorToString(e);
-                this.loadingBoards = false;
-                return;
             }
+            this.loadingBoards = false;
         },
         // Handle menu selection for each board
         async onBoardUpdate(msg) {
@@ -274,6 +293,11 @@ export default {
         // Toggle sort dir
         toggleSortDirection() {
             this.sortDown = !this.sortDown;
+        },
+        // Infinite scroll
+        onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+            if (scrollTop + clientHeight >= scrollHeight) 
+                this.load();
         }
     }
 }
@@ -283,4 +307,9 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/sort.scss";
 @import "~/assets/css/state.scss";
+
+.scroll-container {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
 </style>

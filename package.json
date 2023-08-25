@@ -34,6 +34,6 @@
     "quill-magic-url": "^4.2.0",
     "quill-markdown-shortcuts": "^0.0.10",
     "vite-plugin-vuetify": "^1.0.2",
-    "vuetify": "^3.3.10"
+    "vuetify": "^3.3.14"
   }
 }
