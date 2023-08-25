@@ -7,10 +7,6 @@ github linting workflow
 - pin proper sorting
 
 
-- show single pin
-    - hide top + sort, + center pin
-    - dont watch route params
-
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
     - make bulk endpoint

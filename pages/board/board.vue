@@ -61,7 +61,7 @@ definePageMeta({
                 </NuxtLink>
             </div>
 
-            <div v-if="!errorState && !initialLoad">
+            <div v-if="!errorState && !initialLoad && !isSinglePin">
                 <h1>
                     <v-menu>
                         <template #activator="{ props }">
@@ -151,7 +151,7 @@ definePageMeta({
                 </div>
             </div>
 
-            <div class="grid">
+            <div :class="isSinglePin ? 'single-pin-grid' : 'grid'">
                 <Pin
                     v-for="pin in pins" :key="pin.pin_id"
                     :content="pin.content"
@@ -167,6 +167,7 @@ definePageMeta({
                     class="mb-1"
 
                     @update="onPinUpdate"
+                    @success="[this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];"
                 />
             </div>
 
@@ -285,6 +286,7 @@ export default {
             errorState: false,
             initialLoad: true,
             viewerHasPerm: false,
+            isSinglePin: false,
             unwatch: () => {},
 
             pinCount: 0,
@@ -356,14 +358,31 @@ export default {
             if (this.$route.query.sort_down)
                 this.sortDown = this.$route.query.sort_down === 'true';
 
+            this.isSinglePin = this.$route.query.pin_id && this.$route.query.pin_id.length;
             this.pins = [];
             this.initialLoad = true;
-            await this.updateBoardInfo();
-            await this.updatePins();
+            
+            if (!this.isSinglePin) {
+                await this.updateBoardInfo();
+                await this.updatePins();
 
-            this.unwatch();
-            this.page = this.$route.query.page || 1;
-            this.unwatch = this.$watch('page', this.pageWatch);
+                this.unwatch();
+                this.page = this.$route.query.page || 1;
+                this.unwatch = this.$watch('page', this.pageWatch);
+            } else {
+                try {
+                    let opts = { id: this.$route.query.pin_id };
+                    let pins = await this.$fetchApi('/api/board/pins/single', 'GET', opts);
+                    pins = [pins];
+                    for (let pin of pins) {
+                        pin.created = this.$formatTimestamp(pin.created);
+                        pin.edited = this.$formatTimestamp(pin.edited);
+                    }
+                    this.pins = pins;
+                } catch (e) {
+                    [this.toastErrorMsg, this.showErrorToast] = ['Failed to get pin: ' + this.$apiErrorToString(e), true];
+                }
+            }
             this.initialLoad = false;
         },
         toggleSortDirection() {
@@ -495,6 +514,16 @@ export default {
 @import "~/assets/css/state.scss";
 
 .subtitle { opacity: $secondary-text-opacity; }
+
+.single-pin-grid {
+    max-width: 370px;
+    margin: 0 auto;
+    padding-top: 64px;
+
+    & > * {
+        width: 100%;
+    }
+}
 
 .grid {
     columns: 270px 5;

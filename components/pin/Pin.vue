@@ -70,7 +70,7 @@
                 </template>
                 
                 <v-sheet elevation="8" rounded="0">
-                    <button class="px-4 hoverable hover-list-item edit-list-item">
+                    <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyPermaLink">
                         <v-icon icon="mdi-link" />Permalink
                     </button>
                     <button
@@ -262,6 +262,11 @@ export default {
                     self.numClicks = 0;
                 }, 300);
             }
+        },
+        copyPermaLink() {
+            if (process.client)
+                navigator.clipboard.writeText(window.location.origin + '/board/board?pin_id=' + this.pinId);
+            this.$emit('success', 'Link copied!');
         },
     }
 }
