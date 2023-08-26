@@ -5,18 +5,11 @@ github linting workflow
 
 
 - pin proper sorting
-
+- board proper sorting
 
 - bulk delete / pin / archive / favorite / change background pins
     - select checkbox on top left or something
     - make bulk endpoint
-
-
-meta tags
-- https://nuxt.com/docs/getting-started/seo-meta
-    - show defualt board page + image
-    - otherwise show board with color and board desc
-
 
 
 
@@ -57,6 +50,7 @@ future todo:
 navbar:
 - Logo
     + light/dark logo
+
 - pins: version history
 
 custom backgrounds on pins?

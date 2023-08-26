@@ -3,7 +3,17 @@
 useHead({
     title: 'Hellomouse Apps',
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/main.svg' }],
-})
+});
+
+// eslint-disable-next-line no-undef
+useSeoMeta({
+    title: 'Hellomouse Apps',
+    ogTitle: 'Hellomouse Apps',
+    description: 'An app suite for Hellomouse',
+    ogDescription: 'An app suite for Hellomouse',
+    ogImage: '/logos/meta/main.png',
+    twitterCard: 'summary_large_image',
+});
 </script>
 
 <template>

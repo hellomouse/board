@@ -8,6 +8,11 @@ definePageMeta({
 <template>
     <!-- A page to show pins within a single board -->
     <NuxtLayout name="board">
+        <Title>{{ pageTitle }}</Title>
+        <Meta name="og:title" :content="pageTitle" />
+        <Meta name="description" :content="pageDescription" />
+        <Meta name="og:description" :content="pageDescription" />
+
         <BoardLeftNav>
             <v-menu>
                 <template #activator="{ props }">
@@ -322,7 +327,11 @@ export default {
             sortDown: useOptionStore(this.$pinia).sort_pins[1] === undefined ?
                 true : useOptionStore(this.$pinia).sort_pins[1],
             alwaysShowCardDetails: useOptionStore(this.$pinia).always_show_pin_details === undefined ?
-                false : useOptionStore(this.$pinia).always_show_pin_details
+                false : useOptionStore(this.$pinia).always_show_pin_details,
+            
+            // Meta
+            pageTitle: 'Hellomouse Board',
+            pageDescription: 'Default board description'
         };
     },
     computed: {
@@ -379,6 +388,9 @@ export default {
                         pin.edited = this.$formatTimestamp(pin.edited);
                     }
                     this.pins = pins;
+
+                    this.pageTitle = `Hellomouse Board - Pin`;
+                    this.pageDescription = this.pins[0].content.replace(/(<([^>]+)>)/gi, '') || 'No description provided';
                 } catch (e) {
                     [this.toastErrorMsg, this.showErrorToast] = ['Failed to get pin: ' + this.$apiErrorToString(e), true];
                 }
@@ -419,6 +431,9 @@ export default {
                 this.currentUserPerm = board.perms[useAuthStore(this.$pinia).user.id]?.perm_level || '';
                 this.pinCount = board.pin_count;
                 this.pageCount = Math.ceil(board.pin_count / PINS_PER_PAGE);
+
+                this.pageTitle = `Hellomouse Board - ${this.currentBoard.name}`;
+                this.pageDescription = this.currentBoard.desc;
             } catch(e) {
                 console.error(e);
                 this.errorState = true;

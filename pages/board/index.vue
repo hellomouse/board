@@ -4,6 +4,19 @@ definePageMeta({
     layout: false,
     middleware: 'auth'
 });
+
+// Default board page desc - will be overwritten later
+const BOARD_DESC = 'Make pins to save your random snippets and thoughts';
+
+// eslint-disable-next-line no-undef
+useSeoMeta({
+    title: 'Hellomouse Board',
+    ogTitle: 'Hellomouse Board',
+    description: BOARD_DESC,
+    ogDescription: BOARD_DESC,
+    ogImage: '/logos/meta/board.png',
+    twitterCard: 'summary_large_image',
+});
 </script>
 
 <template>

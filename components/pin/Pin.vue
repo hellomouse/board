@@ -284,6 +284,10 @@ export default {
     overflow: auto;
     position: relative;
 
+    &:hover .pin-select {
+        opacity: 1;
+    }
+
     // Limit image size
     img {
         max-width: 100%;

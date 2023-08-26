@@ -3,7 +3,7 @@
 useHead({
     title: 'Hellomouse Board',
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/board.svg' }],
-})
+});
 </script>
 
 <template>
