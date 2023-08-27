@@ -3,6 +3,15 @@ github linting workflow
 
 -----
 
+bug: "could not get board" flickers before loading in
+
+
+board:
+- left nav scroll
+- when delete don't refresh everything just delete in place
+- same for adding
+
+
 - pin proper sorting
 - board proper sorting
 
@@ -55,14 +64,8 @@ responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
-- table of contents for docs on right somehow
 
-board:
-- left nav scroll
-- when delete don't refresh everything just delete in place
-- same for adding
 - option to download board
-
 
 
 boards within boards

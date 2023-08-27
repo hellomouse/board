@@ -153,6 +153,7 @@ export default {
     max-width: 100%;
     border-right: 3px solid;
     display: inline-block;
+    outline-offset: -1px;
 
     &.selected {
         outline: 1px solid rgb(var(--v-theme-primary)) !important;
