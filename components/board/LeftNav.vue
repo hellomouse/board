@@ -155,7 +155,7 @@ export default {
 }
 
 .left-nav {
-    border-right: 1px solid $border-color;
+    border-right: 1px solid var(--border-color);
     width: $left-nav-width-pc;
     position: fixed;
     top: 72px;

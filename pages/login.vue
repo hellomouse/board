@@ -122,7 +122,7 @@ definePageMeta({
     $padding: 100px;
 
     text-align: left;
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     overflow: auto; // Clearfix
     background-color: rgba(255, 255, 255, 0.01);
     padding-top: calc($padding / 2);

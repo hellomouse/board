@@ -298,6 +298,12 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/dropdown-menu.scss";
 
+.v-theme--light {
+    .pin-tile.pin-tile--selected {
+        border: 1px solid black !important;
+    }
+}
+
 .pin-tile {
     page-break-inside: avoid;
     break-inside: avoid-column;
@@ -395,7 +401,7 @@ export default {
     }
 
     &__content {
-        opacity: 0.9; // Temporary TODO
+        opacity: 0.9;
     }
 
     &__bottom {

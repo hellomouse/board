@@ -1,7 +1,7 @@
 @import "../variables.scss";
 
 .api-parameter-table {
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     max-width: 470px;
     margin: 12px 0;
 
@@ -24,6 +24,12 @@
     padding: 8px;
     margin-top: 4px;
     overflow-x: auto;
+}
+
+.v-theme--light {
+    .api-json-block {
+        background-color: #fafafa;
+    }
 }
 
 .api-card {

@@ -60,9 +60,14 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
 }
 
 .hoverable:not(:disabled):hover {
-    background-color: #444; // TODO
+    background-color: #444;
 }
 
+.v-theme--light {
+    .hoverable:not(:disabled):hover {
+        background-color: #dfdfdf;
+    }
+}
 
 // Hide extra padding below from empty details
 .v-input__details {

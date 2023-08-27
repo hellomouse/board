@@ -168,7 +168,7 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border-color);
     }
 
     &__desc {

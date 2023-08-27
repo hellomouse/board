@@ -7,6 +7,6 @@
     height: $menu-item-height;
 
     &--line {
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border-color);
     }
 }

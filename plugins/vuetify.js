@@ -19,7 +19,7 @@ export default defineNuxtPlugin(nuxtApp => {
 
         sets: { mdi },
         theme: {
-            defaultTheme: "dark",
+            defaultTheme: 'dark',
             themes: {
                 dark: {
                     dark: true,
@@ -34,6 +34,20 @@ export default defineNuxtPlugin(nuxtApp => {
                         background: '#0D0D0D',
                         surface: '#1A1A1A',
                         'background-light': '#222'
+                    }
+                },
+                light: {
+                    colors: {
+                        primary: colors.blue.base,
+                        accent: colors.grey.darken3,
+                        secondary: colors.amber.darken3,
+                        info: colors.teal.lighten1,
+                        warning: colors.amber.base,
+                        error: colors.deepOrange.accent4,
+                        success: colors.green.accent3,
+                        background: '#ffffff',
+                        surface: '#f7f7f7',
+                        'background-light': '#f2f2f2'
                     }
                 },
             },

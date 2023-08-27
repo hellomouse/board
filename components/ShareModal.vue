@@ -381,7 +381,7 @@ export default {
 @import "~/assets/variables.scss";
 
 .user-list {
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     overflow-y: auto;
     max-height: 300px;
 }

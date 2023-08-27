@@ -3,6 +3,7 @@ github linting workflow
 
 -----
 
+bug: http://localhost:3000/board/board?id=27f68c9e-fe2d-4e59-ba7a-e06dba2e5af5 - extends extra
 
 - pin proper sorting
 - board proper sorting
@@ -43,9 +44,6 @@ board / pin api - return pfp url as well
 
 future todo:
 
-navbar:
-- Logo
-    + light/dark logo
 
 - pins: version history
 
@@ -83,3 +81,7 @@ optimize:
 favorite pins
 
 pin mass change color
+
+light theme
+- light analogs for pin colors
+- selection improvement

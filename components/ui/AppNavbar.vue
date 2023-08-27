@@ -50,6 +50,12 @@
                         <button class="py-3 px-4 hoverable hover-list-item">
                             <v-icon icon="mdi-cog" /> Settings
                         </button>
+                        <button
+                            class="py-3 px-4 hoverable hover-list-item"
+                            @click="toggleDarkMode()"
+                        >
+                            <v-icon :icon="isDarkMode ? 'mdi-weather-sunny' : 'mdi-moon-waning-crescent'" /> To {{ isDarkMode ? 'Light' : 'Dark' }} Mode
+                        </button>
                         <button class="py-3 px-4 hoverable hover-list-item" @click="logout">
                             <v-icon icon="mdi-logout" /> Sign Out
                         </button>
@@ -65,11 +71,21 @@
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
+import { useOptionStore } from '~/store/optionStore.js';
+import { useTheme } from 'vuetify';
 
 export default {
+    setup() {
+        const theme = useTheme();
+        return { theme };
+    },
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
-        isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; }
+        isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; },
+        isDarkMode() { return useOptionStore(this.$pinia).dark_theme; }
+    },
+    mounted() {
+        this.theme.global.name.value = useOptionStore(this.$pinia).dark_theme ? 'dark' : 'light';
     },
     methods: {
         async logout() {
@@ -91,6 +107,10 @@ export default {
             }
             authStore.logout();
             this.$router.push('/login');
+        },
+        toggleDarkMode() {
+            this.theme.global.name.value = this.theme.global.current.value.dark ? 'light' : 'dark';
+            useOptionStore(this.$pinia).dark_theme = this.theme.global.name.value === 'dark';
         }
     }
 };
@@ -99,10 +119,16 @@ export default {
 <style lang="scss">
 @import "~/assets/variables.scss";
 
+.v-theme--light {
+    .navbar-btn {
+        color: #555 !important;
+    }
+}
+
 $height: 64px;
 
 .login-link {
-    color: white;
+    color: rgb(var(--v-on-surface));
     text-decoration: none;
 }
 
@@ -128,7 +154,7 @@ $popout-gap: 5px;
     }
 
     & > button:first-of-type {
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border-color);
     }
 
     & > button {
@@ -138,7 +164,7 @@ $popout-gap: 5px;
         outline: none;
 
         text-align: left;
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid var(--border-color);
     }
 }
 
