@@ -229,7 +229,7 @@ definePageMeta({
                 </div>
             </div>
 
-            <div :class="isSinglePin ? 'single-pin-grid' : 'grid'">
+            <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]">
                 <Pin
                     v-for="pin in pins" :key="pin.key || pin.pin_id"
                     :content="pin.content"
@@ -421,6 +421,15 @@ export default {
         },
         containerClass() {
             return useOptionStore(this.$pinia).expand_left_nav ? '' : 'sidenav-hidden';
+        },
+
+        // Special cases for grid if not enough pins to fill columns
+        specialGridClass() {
+            if (this.pins.length === 1) return 'grid--1';
+            if (this.pins.length === 2) return 'grid--2';
+            if (this.pins.length === 3) return 'grid--3';
+            if (this.pins.length === 4) return 'grid--4';
+            return '';
         },
 
         allSelectedPinned() { return this.doAllSelectedPinsHaveFlags('PINNED'); },
@@ -706,6 +715,24 @@ export default {
     columns: 270px 5;
     column-gap: 5px;
     min-height: calc(100% - 200px);
+
+    // Special cases when number of pins can't fill columns
+    &.grid--1 {
+        columns: unset;
+        max-width: 370px;
+    }
+     &.grid--2 {
+        columns: 270px 2;
+        max-width: 600px;
+    }
+     &.grid--3 {
+        columns: 270px 3;
+        max-width: 900px;
+    }
+     &.grid--4 {
+        columns: 270px 4;
+        max-width: 1200px;
+    }
 
     & > * {
         width: 100%;

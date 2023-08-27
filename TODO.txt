@@ -3,8 +3,6 @@ github linting workflow
 
 -----
 
-bug: http://localhost:3000/board/board?id=27f68c9e-fe2d-4e59-ba7a-e06dba2e5af5 - extends extra
-
 - pin proper sorting
 - board proper sorting
 
