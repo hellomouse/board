@@ -9,6 +9,8 @@
 
         @click="clickHandler"
     >
+        <div class="toggle" @click="onSelect" />
+
         <div v-if="deleting" class="delete-confirmation-overlay">
             <div class="delete-confirmation-overlay__center">
                 Deleting Pin...<br>
@@ -144,7 +146,8 @@ export default {
         attachmentPaths: { type: Array, default: () => [] },
         color: { type: String, default: '' },
         perm: { type: String, default: '' },
-        alwaysShowDetails: { type: Boolean, default: false }
+        alwaysShowDetails: { type: Boolean, default: false },
+        deselectTrigger: { type: Boolean, default: false }
     },
     data() {
         return {
@@ -154,7 +157,8 @@ export default {
             flags: this.initialFlags,
 
             // Click
-            numClicks: 0
+            numClicks: 0,
+            selected: false
         };
     },
     computed: {
@@ -167,6 +171,8 @@ export default {
                 classes.push('pinned');
             if (this.alwaysShowDetails)
                 classes.push('pin-tile--always-show-details');
+            if (this.selected)
+                classes.push('pin-tile--selected');
             return classes;
         },
         flag_icons() {
@@ -203,6 +209,11 @@ export default {
         locked() { return this.flags.split(' | ').includes('LOCKED'); },
         pinned() { return this.flags.split(' | ').includes('PINNED'); },
         archived() { return this.flags.split(' | ').includes('ARCHIVED'); }
+    },
+    watch: {
+        deselectTrigger() {
+            this.selected = false;
+        }
     },
     methods: {
         deletePin() {
@@ -268,6 +279,13 @@ export default {
                 navigator.clipboard.writeText(window.location.origin + '/board/board?pin_id=' + this.pinId);
             this.$emit('success', 'Link copied!');
         },
+        onSelect() {
+            this.selected = !this.selected;
+            this.$emit('select', {
+                id: this.pinId,
+                selected: this.selected
+            });
+        }
     }
 }
 </script>
@@ -283,8 +301,28 @@ export default {
 
     overflow: auto;
     position: relative;
+    border: 1px solid transparent;
+    transition: border 0.2s;
 
-    &:hover .pin-select {
+    &.pin-tile--selected {
+        border: 1px solid white;
+        .toggle { opacity: 1; }
+    }
+
+    .toggle {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+
+        opacity: 0;
+        transition: opacity 0.2s;
+        cursor: pointer;
+        background: linear-gradient(to right bottom, white 50%, rgba(0, 0, 0, 0) 50.3%);
+    }
+
+    &:hover .toggle {
         opacity: 1;
     }
 

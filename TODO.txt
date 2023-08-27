@@ -8,9 +8,12 @@ github linting workflow
 - board proper sorting
 
 - bulk delete / pin / archive / favorite / change background pins
-    - select checkbox on top left or something
+    - 2nd navbar with delete, pin, archive, favorite, and background options
     - make bulk endpoint
-
+        - /delete
+        - /pin_flags - set ids + new flags
+            - add or remove flag
+            - flags to set
 
 
 later:
@@ -84,3 +87,4 @@ optimize:
 - https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
     - local material icons?
 
+favorite pins

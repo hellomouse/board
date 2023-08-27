@@ -13,6 +13,18 @@ definePageMeta({
         <Meta name="description" :content="pageDescription" />
         <Meta name="og:description" :content="pageDescription" />
 
+        <v-toolbar class="bulk-pin-edits" color="grey-darken-4" :style="{ top: selectedPins.size ? '0px' : '-100px' }">
+            <v-btn icon="mdi-close" @click="deselectAllPins" />
+            <h1>{{ selectedPins.size }} Selected</h1>
+            <v-spacer />
+
+            <v-btn icon="mdi-star" />
+            <v-btn icon="mdi-pin" />
+            <v-btn icon="mdi-lock" />
+            <v-btn icon="mdi-folder-zip" />
+            <v-btn icon="mdi-trash-can" color="red" />
+        </v-toolbar>
+
         <BoardLeftNav>
             <v-menu>
                 <template #activator="{ props }">
@@ -169,10 +181,12 @@ definePageMeta({
                     :metadata="pin.metadata"
                     :perm="currentUserPerm"
                     :always-show-details="alwaysShowCardDetails"
+                    :deselect-trigger="deselectTrigger"
                     class="mb-1"
 
                     @update="onPinUpdate"
                     @success="[this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];"
+                    @select="updateSelected"
                 />
             </div>
 
@@ -331,7 +345,11 @@ export default {
             
             // Meta
             pageTitle: 'Hellomouse Board',
-            pageDescription: 'Default board description'
+            pageDescription: 'Default board description',
+
+            // Pin selection
+            selectedPins: new Set(),
+            deselectTrigger: false   // When this updates all pins are deselected
         };
     },
     computed: {
@@ -517,6 +535,17 @@ export default {
             this.editPin = false;
             this.createPinModal = true
             this.pinTitle = ['Markdown', 'Image Gallery', 'Link', 'Review'][type] || '';
+        },
+        // On pin select / deselect
+        updateSelected(update) {
+            if (update.selected)
+                this.selectedPins.add(update.id);
+            else
+                this.selectedPins.delete(update.id);
+        },
+        deselectAllPins() {
+            this.deselectTrigger = !this.deselectTrigger; // Change triggers deselect for all pins
+            this.selectedPins.clear();
         }
     }
 }
@@ -529,6 +558,14 @@ export default {
 @import "~/assets/css/state.scss";
 
 .subtitle { opacity: $secondary-text-opacity; }
+
+.bulk-pin-edits {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+}
 
 .single-pin-grid {
     max-width: 370px;
