@@ -86,6 +86,11 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     .v-select__selection { font-size: 14px; }
 }
 
+// Tooltips not round
+.v-tooltip > .v-overlay__content {
+    border-radius: 0 !important;
+}
+
 .v-select__content {
     // Dropdown list not round
     &, .v-list { border-radius: 0 !important; }

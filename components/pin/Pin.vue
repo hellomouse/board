@@ -305,7 +305,7 @@ export default {
     transition: border 0.2s;
 
     &.pin-tile--selected {
-        border: 1px solid white;
+        border: 1px solid white !important;
         .toggle { opacity: 1; }
     }
 

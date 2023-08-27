@@ -18,11 +18,53 @@ definePageMeta({
             <h1>{{ selectedPins.size }} Selected</h1>
             <v-spacer />
 
-            <v-btn icon="mdi-star" />
-            <v-btn icon="mdi-pin" />
-            <v-btn icon="mdi-lock" />
-            <v-btn icon="mdi-folder-zip" />
-            <v-btn icon="mdi-trash-can" color="red" />
+            <v-tooltip text="Favorite" location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        icon="mdi-star"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('PINNED') ? 'Unpin' : 'Pin'" location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        :icon="this.doAllSelectedPinsHaveFlags('PINNED') ? 'mdi-pin-off' : 'mdi-pin'"
+                        @click="bulkModifyPins('PINNED')"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('LOCKED') ? 'Unlock' : 'Lock'" location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        :icon="this.doAllSelectedPinsHaveFlags('LOCKED') ? 'mdi-lock-open' : 'mdi-lock'"
+                        @click="bulkModifyPins('LOCKED')"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('ARCHIVED') ? 'Unarchive' : 'Archive'" location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        :icon="this.doAllSelectedPinsHaveFlags('ARCHIVED') ? 'mdi-folder-off' : 'mdi-folder-zip'"
+                        @click="bulkModifyPins('ARCHIVED')"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-tooltip text="Delete" location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        icon="mdi-trash-can" color="red"
+                    />
+                </template>
+            </v-tooltip>
         </v-toolbar>
 
         <BoardLeftNav>
@@ -170,7 +212,7 @@ definePageMeta({
 
             <div :class="isSinglePin ? 'single-pin-grid' : 'grid'">
                 <Pin
-                    v-for="pin in pins" :key="pin.pin_id"
+                    v-for="pin in pins" :key="pin.key || pin.pin_id"
                     :content="pin.content"
                     :pin-id="pin.pin_id"
                     :creator="pin.creator"
@@ -546,6 +588,43 @@ export default {
         deselectAllPins() {
             this.deselectTrigger = !this.deselectTrigger; // Change triggers deselect for all pins
             this.selectedPins.clear();
+        },
+        // Bulk modify pins
+        doAllSelectedPinsHaveFlags(flag) {
+            for (let pin of this.pins) {
+                if (this.selectedPins.has(pin.pin_id) && !pin.flags.split(' | ').includes(flag))
+                    return false;
+            }
+            return true;
+        },
+        async bulkModifyPins(flag) {
+            try {
+                let addFlags = !this.doAllSelectedPinsHaveFlags(flag);
+                let opts = {
+                    pin_ids: [...this.selectedPins],
+                    new_flags: flag,
+                    add_flags: addFlags
+                };
+                await this.$fetchApi('/api/board/pins/bulk_flags', 'PUT', opts);
+
+                for (let pin of this.pins) {
+                    if (this.selectedPins.has(pin.pin_id)) {
+                        let flags = pin.flags.split(' | ');
+                        if (addFlags && !flags.includes(flag))
+                            flags.push(flag);
+                        else if (!addFlags && flags.includes(flag))
+                            flags = flags.filter(f => f !== flag);
+                        pin.flags = flags.filter(x => x).join(' | ');
+
+                        if (!pin.key) pin.key = 1;
+                        else pin.key++;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
+            }
+            this.deselectAllPins();
         }
     }
 }
@@ -564,7 +643,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 99999;
+    z-index: 1999;
 }
 
 .single-pin-grid {

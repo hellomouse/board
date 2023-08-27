@@ -7,13 +7,11 @@ github linting workflow
 - pin proper sorting
 - board proper sorting
 
-- bulk delete / pin / archive / favorite / change background pins
-    - 2nd navbar with delete, pin, archive, favorite, and background options
-    - make bulk endpoint
-        - /delete
-        - /pin_flags - set ids + new flags
-            - add or remove flag
-            - flags to set
+- bulk Delete
+- make the thing computed or something (function)
+
+- setting flags doesn't update pin array - requires refresh??
+    - from pin itself, have something to update
 
 
 later:

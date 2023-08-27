@@ -5,7 +5,7 @@
         <ApiEnum
             title="Pin Type Enum"
             desc="Determines the type of the pin. Has both string and numeric values. You should pass a
-            number when setting. The API will return a string variant, ie 'Markdown'"
+            string when setting. The API will return a string variant, ie 'Markdown'"
             :enums="[
                 ['Markdown = 0', 'A simple markdown note'],
                 ['ImageGallery = 1', 'A gallery of images in attachment_paths'],
@@ -210,6 +210,37 @@
 }</code></pre><br>
 
                 <b>Error:</b> 401 Unauthorized, 403 Forbidden, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Bulk add or remove flags from pins"
+            method="PUT"
+            endpoint="/api/board/pins/bulk_flags"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_ids: array of strings</td><td>IDs of the pins to modify. Limited to length 100, pins the user cannot edit are ignored</td></tr>
+                    <tr><td>new_flags: string</td><td>Flags to add or remove separated by ' | '</td></tr>
+                    <tr><td>add_flags: boolean</td><td>If true flags will be added to all pins, otherwise flag will be removed from all pins</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Updated pin flags" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
     </div>
