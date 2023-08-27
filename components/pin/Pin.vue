@@ -240,6 +240,10 @@ export default {
                 newFlags.filter(f => f !== flag) :
                 newFlags.concat([flag]).filter(x => x);
             this.flags = newFlags.join(' | ');
+            this.$emit('flagsUpdate', {
+                id: this.pinId,
+                flags: this.flags
+            });
 
             try {
                 await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, flags: this.flags });

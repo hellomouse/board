@@ -248,6 +248,7 @@ definePageMeta({
                     @update="onPinUpdate"
                     @success="[this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];"
                     @select="updateSelected"
+                    @flagsUpdate="updatePinFlags"
                 />
             </div>
 
@@ -661,6 +662,15 @@ export default {
             }
             this.deleteDialog = false;
             this.deselectAllPins();
+        },
+        // Called when pin changes its flag data
+        updatePinFlags(update) {
+            for (let pin of this.pins) {
+                if (pin.pin_id === update.id) {
+                    pin.flags = update.flags;
+                    break;
+                }
+            }
         }
     }
 }
