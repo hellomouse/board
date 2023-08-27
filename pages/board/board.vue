@@ -19,7 +19,7 @@ definePageMeta({
             <v-spacer />
 
             <v-tooltip text="Favorite" location="bottom">
-                <template v-slot:activator="{ props }">
+                <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
                         icon="mdi-star"
@@ -27,45 +27,64 @@ definePageMeta({
                 </template>
             </v-tooltip>
 
-            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('PINNED') ? 'Unpin' : 'Pin'" location="bottom">
-                <template v-slot:activator="{ props }">
+            <v-tooltip :text="allSelectedPinned ? 'Unpin' : 'Pin'" location="bottom">
+                <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        :icon="this.doAllSelectedPinsHaveFlags('PINNED') ? 'mdi-pin-off' : 'mdi-pin'"
+                        :icon="allSelectedPinned ? 'mdi-pin-off' : 'mdi-pin'"
                         @click="bulkModifyPins('PINNED')"
                     />
                 </template>
             </v-tooltip>
 
-            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('LOCKED') ? 'Unlock' : 'Lock'" location="bottom">
-                <template v-slot:activator="{ props }">
+            <v-tooltip :text="allSelectedLocked ? 'Unlock' : 'Lock'" location="bottom">
+                <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        :icon="this.doAllSelectedPinsHaveFlags('LOCKED') ? 'mdi-lock-open' : 'mdi-lock'"
+                        :icon="allSelectedLocked ? 'mdi-lock-open' : 'mdi-lock'"
                         @click="bulkModifyPins('LOCKED')"
                     />
                 </template>
             </v-tooltip>
 
-            <v-tooltip :text="this.doAllSelectedPinsHaveFlags('ARCHIVED') ? 'Unarchive' : 'Archive'" location="bottom">
-                <template v-slot:activator="{ props }">
+            <v-tooltip :text="allSelectedArchived ? 'Unarchive' : 'Archive'" location="bottom">
+                <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        :icon="this.doAllSelectedPinsHaveFlags('ARCHIVED') ? 'mdi-folder-off' : 'mdi-folder-zip'"
+                        :icon="allSelectedArchived ? 'mdi-folder-off' : 'mdi-folder-zip'"
                         @click="bulkModifyPins('ARCHIVED')"
                     />
                 </template>
             </v-tooltip>
 
             <v-tooltip text="Delete" location="bottom">
-                <template v-slot:activator="{ props }">
+                <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
                         icon="mdi-trash-can" color="red"
+                        @click="deleteDialog = true"
                     />
                 </template>
             </v-tooltip>
         </v-toolbar>
+
+        <v-dialog
+            v-model="deleteDialog"
+            width="350"
+        >
+            <v-card rounded="0">
+                <v-card-text>
+                    Are you sure you want to <b>permanently</b> delete {{ selectedPins.size }} pin(s)? This action cannot be undone.
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn color="primary" @click="deleteDialog = false">Cancel</v-btn>
+                    <v-btn color="primary" @click="deleteSelectedPins">Delete</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
 
         <BoardLeftNav>
             <v-menu>
@@ -391,7 +410,8 @@ export default {
 
             // Pin selection
             selectedPins: new Set(),
-            deselectTrigger: false   // When this updates all pins are deselected
+            deselectTrigger: false,   // When this updates all pins are deselected
+            deleteDialog: false
         };
     },
     computed: {
@@ -400,7 +420,11 @@ export default {
         },
         containerClass() {
             return useOptionStore(this.$pinia).expand_left_nav ? '' : 'sidenav-hidden';
-        }
+        },
+
+        allSelectedPinned() { return this.doAllSelectedPinsHaveFlags('PINNED'); },
+        allSelectedLocked() { return this.doAllSelectedPinsHaveFlags('LOCKED'); },
+        allSelectedArchived() { return this.doAllSelectedPinsHaveFlags('ARCHIVED'); }
     },
     watch: {
         selected() {
@@ -624,6 +648,18 @@ export default {
                 console.error(e);
                 [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
             }
+            this.deselectAllPins();
+        },
+        async deleteSelectedPins() {
+            try {
+                let opts = { pin_ids: [...this.selectedPins] };
+                await this.$fetchApi('/api/board/pins/bulk_delete', 'DELETE', opts);
+                this.pins = this.pins.filter(p => !this.selectedPins.has(p.pin_id));
+            } catch (e) {
+                console.error(e);
+                [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
+            }
+            this.deleteDialog = false;
             this.deselectAllPins();
         }
     }

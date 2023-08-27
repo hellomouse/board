@@ -7,8 +7,6 @@ github linting workflow
 - pin proper sorting
 - board proper sorting
 
-- bulk Delete
-- make the thing computed or something (function)
 
 - setting flags doesn't update pin array - requires refresh??
     - from pin itself, have something to update
