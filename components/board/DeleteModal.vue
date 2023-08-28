@@ -55,7 +55,7 @@ export default {
             this.deleteModalLoading = true;
             try {
                 await this.$fetchApi('/api/board/boards', 'DELETE', { id: this.board.id });
-                this.$emit('update', { type: 'board_delete' });
+                this.$emit('update', { type: 'board_delete', id: this.board.id });
             } catch (e) {
                 let errorMsg = `Failed to delete board: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);

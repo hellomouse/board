@@ -8,7 +8,6 @@ bug: "could not get board" flickers before loading in
 
 board:
 - left nav scroll
-- when delete don't refresh everything just delete in place
 - same for adding
 
 

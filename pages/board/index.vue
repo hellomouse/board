@@ -264,7 +264,7 @@ export default {
             else if (msg.type === 'close_board_delete') // Close board delete modal
                 this.deleteBoardModal = false;
             else if (msg.type === 'board_delete') { // Board was deleted
-                await this.getBoards();
+                this.boards = this.boards.filter(b => b.id !== msg.id);
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
             }
             else if (msg.type === 'edit') {  // Open edit modal
