@@ -53,7 +53,7 @@ useSeoMeta({
                     <v-select
                         v-model="sortBy" density="compact" solo-filled max-width="200"
                         flat class="select mr-2"
-                        :items="['Name', 'Created', 'Modified']"
+                        :items="['Name', 'Created', 'Edited']"
                     ></v-select>
 
                     <v-btn
@@ -177,7 +177,7 @@ export default {
             let key = {
                 Name: 'name',
                 Created: 'created',
-                Modified: 'edited'
+                Edited: 'edited'
             }[this.sortBy];
 
             return this.boards.sort((a, b) => {
@@ -191,9 +191,11 @@ export default {
     watch: {
         sortBy() {
             useOptionStore(this.$pinia).sort_boards[0] = this.sortBy;
+            this.getBoards();
         },
         sortDown() {
             useOptionStore(this.$pinia).sort_boards[1] = this.sortDown;
+            this.getBoards();
         },
         '$route.query'() {
             this.updatePageTitle();
@@ -230,7 +232,9 @@ export default {
             this.reachedEnd = false;
             let opts = {
                 not_self: this.$route.query.shared_with_me ? true : false,
-                offset, limit
+                offset, limit,
+                sort_by: this.sortBy,
+                sort_down: this.sortDown
             };
             if (this.$route.query.search && this.$route.query.search.length > 3)
                 opts.query = this.$route.query.search;

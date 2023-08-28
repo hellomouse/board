@@ -3,16 +3,23 @@ github linting workflow
 
 -----
 
-bug: "could not get board" flickers before loading in
+favorite pins
+- api to add / remove bulk favorite pins
 
+switching from pin to boards shows no perm quickly
 
-board:
-- left nav scroll
-- same for adding
 
 
 - pin proper sorting
-- board proper sorting
+    - sort options + direction pass to api
+    - sort pinned first always, archived last (unless reversed oc)
+        default: (pinned first, desc) 
+        - order by case when (flags & 4 = 4) then 2 when (flags & 2 = 2) then 0 else 1 end desc, created desc;;
+
+
+html stripping:
+- disallow: style tags
+- img: only src, width, height
 
 
 
@@ -33,17 +40,12 @@ pin create/edit modal:
     - https://vueup.github.io/vue-quill/guide/modules.html
 - for markdown pin show link for markdown guide
 
-
-html stripping:
-- disallow: style tags
-- img: only src, width, height
-
-
 board / pin api - return pfp url as well
 -  cache user information for fast lookup
 - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
+- option to download board
 
 -------
 
@@ -63,10 +65,6 @@ responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
-
-- option to download board
-
-
 boards within boards
 - folders
 
@@ -77,8 +75,6 @@ optimize:
 - https://www.npmjs.com/package/shrink-ray
 - https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
     - local material icons?
-
-favorite pins
 
 pin mass change color
 
