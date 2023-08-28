@@ -158,6 +158,8 @@
                     <tr><td>limit: number?</td><td>Pins returned, max 100, default 20</td></tr>
                     <tr><td>creator: string?</td><td>Creator user ID of the pin</td></tr>
                     <tr><td>query: string?</td><td>Pin content string contains this string</td></tr>
+                    <tr><td>sort_by: 'Created' | 'Edited'</td><td>Sort by created (default) or last modified date</td></tr>
+                    <tr><td>sort_down: bool | true</td><td>Sort down (new -> old) or up? Note pinned are always sorted first and archived sorted last if sort down is true (inverse if false)</td></tr>
                 </tbody>
             </v-table>
 

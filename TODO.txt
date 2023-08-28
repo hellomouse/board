@@ -10,13 +10,6 @@ switching from pin to boards shows no perm quickly
 
 
 
-- pin proper sorting
-    - sort options + direction pass to api
-    - sort pinned first always, archived last (unless reversed oc)
-        default: (pinned first, desc) 
-        - order by case when (flags & 4 = 4) then 2 when (flags & 2 = 2) then 0 else 1 end desc, created desc;;
-
-
 html stripping:
 - disallow: style tags
 - img: only src, width, height

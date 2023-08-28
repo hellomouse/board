@@ -200,7 +200,7 @@ definePageMeta({
                         <v-select
                             v-model="selected" density="compact" solo-filled max-width="200"
                             flat class="select mr-2"
-                            :items="['Created', 'Modified']"
+                            :items="['Created', 'Edited']"
                         ></v-select>
 
                         <v-btn
@@ -440,10 +440,12 @@ export default {
         selected() {
             useOptionStore(this.$pinia).sort_pins[0] = this.selected;
             this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, sort: this.selected } });
+            this.updatePins();
         },
         sortDown() {
             useOptionStore(this.$pinia).sort_pins[1] = this.sortDown;
             this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, sort_down: this.sortDown } });
+            this.updatePins();
         },
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
@@ -474,7 +476,11 @@ export default {
                 this.unwatch = this.$watch('page', this.pageWatch);
             } else {
                 try {
-                    let opts = { id: this.$route.query.pin_id };
+                    let opts = {
+                        id: this.$route.query.pin_id,
+                        sort_by: this.selected,
+                        sort_down: this.sortDown
+                    };
                     let pins = await this.$fetchApi('/api/board/pins/single', 'GET', opts);
                     pins = [pins];
                     for (let pin of pins) {
@@ -499,7 +505,9 @@ export default {
                 let opts = {
                     board_id: this.currentBoard.id,
                     offset: (this.page - 1) * PINS_PER_PAGE,
-                    limit: PINS_PER_PAGE
+                    limit: PINS_PER_PAGE,
+                    sort_by: this.selected,
+                    sort_down: this.sortDown
                 };
 
                 if (this.$route.query.search && this.$route.query.search.length > 3)
