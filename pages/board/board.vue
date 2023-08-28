@@ -458,6 +458,8 @@ export default {
     },
     methods: {
         async onLoad() {
+            if (this.$route.path !== '/board/board') return; // Navigated to another page
+
             if (this.$route.query.sort)
                 this.selected = this.$route.query.sort;
             if (this.$route.query.sort_down)

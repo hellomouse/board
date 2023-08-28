@@ -8,9 +8,7 @@ favorite pins
 - get favorites - favorites board
 
 
-switching from pin to boards shows no perm quickly
-
-
+pin mass change color
 
 html stripping:
 - disallow: style tags
@@ -47,9 +45,7 @@ board / pin api - return pfp url as well
 
 future todo:
 
-
 - pins: version history
-
 
 boards:
     - right click menu -> change color there?
@@ -70,7 +66,6 @@ optimize:
 - https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
     - local material icons?
 
-pin mass change color
 
 light theme
 - light analogs for pin colors
