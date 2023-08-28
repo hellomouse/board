@@ -247,6 +247,36 @@
         </ApiDoc>
 
         <ApiDoc
+            title="Bulk edit pin colors"
+            method="PUT"
+            endpoint="/api/board/pins/bulk_colors"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_ids: array of strings</td><td>IDs of the pins to modify. Limited to length 100, pins the user cannot edit are ignored</td></tr>
+                    <tr><td>color: string</td><td>New color to assign as hex string, colors starting from #AA0000 and counting up are reserved for backgrounds</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Updated pin colors" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
             title="Bulk delete pins"
             method="DELETE"
             endpoint="/api/board/pins/bulk_delete"

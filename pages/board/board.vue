@@ -18,6 +18,25 @@ definePageMeta({
             <h1>{{ selectedPins.size }} Selected</h1>
             <v-spacer />
 
+            <v-tooltip text="Change Background" location="bottom">
+                <template #activator="{ props }">
+                    <v-btn
+                        id="palette-activator"
+                        v-bind="props"
+                        icon="mdi-palette"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-menu activator="#palette-activator" :close-on-content-click="false" location="bottom">
+                <v-sheet class="pa-4" width="240">
+                    <pin-palette
+                        :selected-swatch-index="selectedSwatchIndex"
+                        @color="massColorChange"
+                    />
+                </v-sheet>
+            </v-menu>
+
             <v-tooltip text="Favorite" location="bottom">
                 <template #activator="{ props }">
                     <v-btn
@@ -412,7 +431,8 @@ export default {
             // Pin selection
             selectedPins: new Set(),
             deselectTrigger: false,   // When this updates all pins are deselected
-            deleteDialog: false
+            deleteDialog: false,
+            selectedSwatchIndex: 0
         };
     },
     computed: {
@@ -689,6 +709,26 @@ export default {
                     pin.flags = update.flags;
                     break;
                 }
+            }
+        },
+        // Bulk modify pin color
+        async massColorChange(update) {
+            this.selectedSwatchIndex = update.index;
+
+            try {
+                let opts = { pin_ids: [...this.selectedPins], color: update.color };
+                await this.$fetchApi('/api/board/pins/bulk_colors', 'PUT', opts);
+                
+                for (let pin of this.pins) {
+                    if (this.selectedPins.has(pin.pin_id)) {
+                        pin.metadata.color = update.color;
+                        if (!pin.key) pin.key = 1;
+                        else pin.key++;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
             }
         }
     }
