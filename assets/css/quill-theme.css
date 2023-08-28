@@ -3,6 +3,9 @@
     font-size: 1rem;
     height: 360px;
     overflow-y: auto;
+
+    background-position: center !important;
+    background-size: cover !important;
 }
 
 .ql-toolbar.ql-snow {

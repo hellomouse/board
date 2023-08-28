@@ -18,7 +18,7 @@ TODO
                 <div v-if="pin?.type === 0 || !pin.type">
                     <client-only>
                         <QuillEditor
-                            :style="{ backgroundColor: color }"
+                            :style="{ background: background }"
                             theme="snow" contentType="html" v-model:content="content"
                             :modules="modules"
                             :toolbar="toolbars"
@@ -42,14 +42,10 @@ TODO
 
 
                 <!-- Colors -->
-                <v-btn
-                    v-for="(col, index) in swatches" :key="col"
-                    density="compact" width="40" style="min-width: 40px;"
-                    :color="col" class="mr-1 mb-1"
-                    @click="[color, selectedSwatchIndex] = [col, index]"
-                >
-                    <v-icon v-if="selectedSwatchIndex === index" icon="mdi-check" />
-                </v-btn>
+                <pin-palette
+                    :selectedSwatchIndex="selectedSwatchIndex"
+                    @color="update => { [color, selectedSwatchIndex] = [update.color, update.index]; }"
+                />
             </v-card-text>
             <v-card-actions class="mr-3">
                 <p class="ml-4 d-block last-edited" v-if="pin.edited">Edited {{ pin.edited }}</p>
@@ -70,8 +66,8 @@ import MarkdownShortcuts from 'quill-markdown-shortcuts';
 import MagicUrl from 'quill-magic-url';
 import BlotFormatter from 'quill-blot-formatter';
 
-const swatches =
-    ',#77172e,#692b17,#7c4a03,#264d3b,#0c625d,#256377,#284255,#472e5b,#6c394f,#4b443a'.split(',');
+import { getBackground, getColor, SWATCHES } from '~/helpers/board/pin-colors.js';
+import { useOptionStore } from '~/store/optionStore.js';
 
 export default {
     name: 'PinModal',
@@ -126,12 +122,14 @@ export default {
             color: this.pin?.metadata?.color,
             loading: false,
             toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
-
-            swatches,
             selectedSwatchIndex: 0
         };
     },
     computed: {
+        background() {
+            let color = getColor(this.color, !useOptionStore(this.$pinia).dark_theme);
+            return getBackground(color);
+        },
         showModal: {
             get() { return this.show; },
             set(val) { this.$emit('show', val); }
@@ -140,8 +138,8 @@ export default {
     watch: {
         pin() {
             this.content = this.pin?.content || '';
-            this.color = this.pin?.metadata?.color || swatches[0];
-            this.selectedSwatchIndex = Math.max(0, swatches.indexOf(this.color));
+            this.color = this.pin?.metadata?.color || SWATCHES[0];
+            this.selectedSwatchIndex = Math.max(0, SWATCHES.indexOf(this.color));
         }
     },
     methods: {

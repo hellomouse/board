@@ -4,7 +4,7 @@
         min-width="250"
         max-height="600"
         class="pin-tile"
-        :color="color"
+        :style="{ background: background }"
         :class="pinTileClasses"
 
         @click="clickHandler"
@@ -66,7 +66,7 @@
                         density="comfortable"
                         icon="mdi-dots-vertical"
                         v-bind="props"
-                        :color="color"
+                        :color="color.startsWith('#AA00') ? 'transparent' : color"
                         flat
                     ></v-btn>
                 </template>
@@ -128,6 +128,8 @@
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
+import { getBackground, getColor } from '~/helpers/board/pin-colors.js';
+import { useOptionStore } from '~/store/optionStore.js';
 
 export default {
     name: 'BoardPin',
@@ -162,6 +164,10 @@ export default {
         };
     },
     computed: {
+        background() {
+            let color = getColor(this.color, !useOptionStore(this.$pinia).dark_theme);
+            return getBackground(color);
+        },
         pinTileClasses() {
             let flagsArr = this.flags.toUpperCase().split(' | ');
             let classes = [];
@@ -313,6 +319,9 @@ export default {
     position: relative;
     border: 1px solid transparent;
     transition: border 0.2s;
+    
+    background-position: center !important;
+    background-size: cover !important;
 
     &.pin-tile--selected {
         border: 1px solid white !important;

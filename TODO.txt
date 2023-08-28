@@ -5,6 +5,8 @@ github linting workflow
 
 favorite pins
 - api to add / remove bulk favorite pins
+- get favorites - favorites board
+
 
 switching from pin to boards shows no perm quickly
 
@@ -48,7 +50,6 @@ future todo:
 
 - pins: version history
 
-custom backgrounds on pins?
 
 boards:
     - right click menu -> change color there?

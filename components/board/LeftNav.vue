@@ -107,7 +107,7 @@ export default {
     methods: {
         async getBoards() {
             // Last fetched recently, abort
-            // Last fetch is 60 min
+            // Last fetch is 60s
             if (Date.now() - useBoardStore(this.$pinia).lastFetch < 1000 * 60)
                 return;
 
