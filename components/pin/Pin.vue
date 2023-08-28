@@ -143,6 +143,7 @@ export default {
         created: { type: String, default: '' },
         edited: { type: String, default: '' },
         initialFlags: { type: String, default: '' },
+        initialSelected: { type: Boolean, default: false },
         pinId: { type: String, default: '' },
         metadata: { type: Object, default: () => {} },
         attachmentPaths: { type: Array, default: () => [] },
@@ -160,7 +161,7 @@ export default {
 
             // Click
             numClicks: 0,
-            selected: false
+            selected: this.initialSelected
         };
     },
     computed: {

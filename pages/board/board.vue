@@ -257,6 +257,7 @@ definePageMeta({
                     :created="pin.created"
                     :edited="pin.edited"
                     :initial-flags="pin.flags"
+                    :initial-selected="pin.selected"
                     :color="pin.metadata.color"
                     :metadata="pin.metadata"
                     :perm="currentUserPerm"
@@ -650,6 +651,7 @@ export default {
                 this.selectedPins.delete(update.id);
         },
         deselectAllPins() {
+            this.pins.forEach(p => p.selected = false);
             this.deselectTrigger = !this.deselectTrigger; // Change triggers deselect for all pins
             this.selectedPins.clear();
         },
@@ -722,6 +724,7 @@ export default {
                 for (let pin of this.pins) {
                     if (this.selectedPins.has(pin.pin_id)) {
                         pin.metadata.color = update.color;
+                        pin.selected = true;
                         if (!pin.key) pin.key = 1;
                         else pin.key++;
                     }
