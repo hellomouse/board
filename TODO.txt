@@ -3,11 +3,10 @@ github linting workflow
 
 -----
 
+
 favorite pins
 - api to add / remove bulk favorite pins
 - get favorites - favorites board
-
-
 
 html stripping:
 - disallow: style tags
@@ -65,7 +64,4 @@ optimize:
 - https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
     - local material icons?
 
-
-light theme
-- light analogs for pin colors
-- selection improvement
+light mode - dont flicker in

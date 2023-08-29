@@ -1,3 +1,16 @@
+const LIGHT_MODE_COLOR_MAP = {
+    '#77172e': '#faafa8',
+    '#692b17': '#f39f76',
+    '#7c4a03': '#fff8b8',
+    '#264d3b': '#e2f6d3',
+    '#0c625d': '#b4ddd3',
+    '#256377': '#d4e4ed',
+    '#284255': '#aeccdc',
+    '#472e5b': '#d3bfdb',
+    '#6c394f': '#f6e2dd',
+    '#4b443a': '#e9e3d4'
+};
+
 /**
  * Map a pin color -> true display color
  * @param {string} hexCode Hex color code
@@ -27,6 +40,8 @@ export function getColor(hexCode, isLight, gradOpacity=0.75) {
         return { type: 'img', src: 'study.png', grad: grad };
     if (hexCode === '#AA0008')
         return { type: 'img', src: 'travel.png', grad: grad };
+    if (isLight)
+        hexCode = LIGHT_MODE_COLOR_MAP[hexCode.toLowerCase()] || hexCode;
     return { type: 'color', val: hexCode };
 };
 

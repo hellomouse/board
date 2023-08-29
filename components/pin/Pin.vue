@@ -66,7 +66,7 @@
                         density="comfortable"
                         icon="mdi-dots-vertical"
                         v-bind="props"
-                        :color="color.startsWith('#AA00') ? 'transparent' : color"
+                        :color="'transparent'"
                         flat
                     ></v-btn>
                 </template>
