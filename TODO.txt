@@ -51,5 +51,3 @@ responsive mobile
 
 boards within boards
 - folders
-
-light mode - dont flicker in

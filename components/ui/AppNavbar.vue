@@ -85,9 +85,6 @@ export default {
         isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; },
         isDarkMode() { return useOptionStore(this.$pinia).dark_theme; }
     },
-    mounted() {
-        this.theme.global.name.value = useOptionStore(this.$pinia).dark_theme ? 'dark' : 'light';
-    },
     methods: {
         async logout() {
             let authStore = useAuthStore(this.$pinia);

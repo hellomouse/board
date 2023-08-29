@@ -1,4 +1,9 @@
 <script setup>
+import { useTheme } from 'vuetify';
+import { useOptionStore } from '~/store/optionStore.js';
+
+const optStore = useOptionStore();
+
 // eslint-disable-next-line no-undef
 useHead({
     title: 'Hellomouse Apps',
@@ -14,6 +19,9 @@ useSeoMeta({
     ogImage: '/logos/meta/main.png',
     twitterCard: 'summary_large_image',
 });
+
+const theme = useTheme();
+theme.global.name.value = optStore.dark_theme ? 'dark' : 'light';
 </script>
 
 <template>
