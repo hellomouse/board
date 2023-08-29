@@ -19,7 +19,8 @@ TODO
                     <client-only>
                         <QuillEditor
                             :style="{ background: background }"
-                            theme="snow" contentType="html" v-model:content="content"
+                            theme="snow" contentType="html"
+                            v-model:content="content"
                             :modules="modules"
                             :toolbar="toolbars"
                         />

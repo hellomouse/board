@@ -70,3 +70,19 @@
 .blot-formatter__toolbar-button svg {
     background: black !important;
 }
+
+/* Fix tooltip to center since it likes to clip */
+.ql-snow .ql-tooltip {
+    right: 30px !important;
+    left: 30px !important;
+}
+
+/* New input */
+.ql-snow .ql-tooltip input {
+    color: #333 !important;
+    border-radius: 0;
+}
+
+.ql-snow .ql-tooltip input:focus {
+    outline: 1px solid black;
+}

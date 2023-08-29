@@ -12,10 +12,6 @@ favorite pins
 
 
 
-bug: input box for pin
-- input: code + url box are too light
-
-
 later:
 
 pins:
