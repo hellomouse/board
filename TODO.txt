@@ -7,11 +7,13 @@ github linting workflow
 favorite pins
 - api to add / remove bulk favorite pins
 - get favorites - favorites board
+- what to do with deleted pins??
+    - maybe just clean them out automatically when next checked, no foreign key check
 
-html stripping:
-- disallow: style tags
-- img: only src, width, height
 
+
+bug: input box for pin
+- input: code + url box are too light
 
 
 later:
@@ -39,6 +41,12 @@ board / pin api - return pfp url as well
 - option to download board
 
 -------
+
+pin:
+- checkboxes
+- reviews
+- videos
+- download site
 
 
 future todo:

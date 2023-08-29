@@ -346,6 +346,11 @@ export default {
         opacity: 1;
     }
 
+    // Text alignment:
+    .ql-align-justify { text-align: justify; }
+    .ql-align-right { text-align: right; }
+    .ql-align-center { text-align: center; }
+
     // Limit image size
     img {
         max-width: 100%;
