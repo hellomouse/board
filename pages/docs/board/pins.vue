@@ -303,6 +303,129 @@
                 <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
+
+        <ApiDoc
+            title="Add favorite pins"
+            method="PUT"
+            endpoint="/api/board/pins/favorites"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_ids: array of strings</td><td>IDs of the pins to add. Limited to length 100</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Added favorites" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Remove favorite pins"
+            method="DELETE"
+            endpoint="/api/board/pins/favorites"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_ids: array of strings</td><td>IDs of the pins to remove. Limited to length 100</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Deleted favorites" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Get favorited pins"
+            method="GET"
+            endpoint="/api/board/pins/favorites"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>offset: number?</td><td>Search offset, default 0</td></tr>
+                    <tr><td>limit: number?</td><td>Pins returned, max 100, default 20</td></tr>
+                    <tr><td>sort_by: 'Created' | 'Edited'</td><td>Sort by created (default) or last modified date</td></tr>
+                    <tr><td>sort_down: bool | true</td><td>Sort down (new -> old) or up? Note pinned are always sorted first and archived sorted last if sort down is true (inverse if false)</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{
+    pins: [
+        { see "Get a single pin" for properties },
+        ...
+    ]
+}</code></pre><br>
+                <b>Error:</b> 401 Unauthorized, 403 Forbidden, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Filter pin ids by favorite"
+            method="POST"
+            endpoint="/api/board/pins/favorites/check"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_ids: array of strings</td><td>IDs of the pins to check, at most 100 uuids</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ pins: [ pin uuids that are favorited of the ones provided ] }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
     </div>
 </template>
 

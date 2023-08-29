@@ -51,9 +51,11 @@
                         <v-icon icon="mdi-folder-account" /> Shared With Me
                     </button>
                 </NuxtLink>
-                <button class="pl-2 mb-4 hoverable hover-list-item left-nav__list-item">
-                    <v-icon icon="mdi-star" /> Favorites
-                </button>
+                <NuxtLink to="/board/board?favorites=1">
+                    <button class="pl-2 mb-4 hoverable hover-list-item left-nav__list-item">
+                        <v-icon icon="mdi-star" /> Favorites
+                    </button>
+                </NuxtLink>
                 <button class="pl-2 hoverable hover-list-item left-nav__list-item">
                     <v-icon icon="mdi-cloud" /> Storage
                 </button>

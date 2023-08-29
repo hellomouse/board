@@ -37,11 +37,12 @@ definePageMeta({
                 </v-sheet>
             </v-menu>
 
-            <v-tooltip text="Favorite" location="bottom">
+            <v-tooltip :text="allSelectedPinsAreFavorited ? 'Unfavorite' : 'Favorite'" location="bottom">
                 <template #activator="{ props }">
                     <v-btn
                         v-bind="props"
-                        icon="mdi-star"
+                        :icon="allSelectedPinsAreFavorited ? 'mdi-star-off' : 'mdi-star'"
+                        @click="bulkFavorite()"
                     />
                 </template>
             </v-tooltip>
@@ -111,6 +112,7 @@ definePageMeta({
                     <v-btn
                         color="green" block
                         height="44" v-bind="props"
+                        :disabled="isFavoritesPage"
                     >
                         <v-icon icon="mdi-plus" /> New Pin
                     </v-btn>
@@ -146,7 +148,7 @@ definePageMeta({
             <div v-if="pins.length === 0 && !initialLoad && !errorState" class="state-center empty-state">
                 <img src="/empty-state-board.png" width="200">
                 <h1>This board has no pins</h1>
-                <p>Press the 'New Pins' button on the left to create one</p>
+                <p>{{ isFavoritesPage ? 'Favorite some pins to get started' : 'Press the \'New Pins\' button on the left to create one' }}</p>
             </div>
 
             <div v-if="errorState" class="state-center">
@@ -160,7 +162,7 @@ definePageMeta({
 
             <div v-if="!errorState && !initialLoad && !isSinglePin">
                 <h1>
-                    <v-menu>
+                    <v-menu v-if="!isFavoritesPage">
                         <template #activator="{ props }">
                             <v-btn
                                 density="comfortable"
@@ -210,7 +212,8 @@ definePageMeta({
 
                 <div class="d-flex">
                     <p
-                        class="ml-11 subtitle text-truncate"
+                        class="subtitle text-truncate"
+                        :class="!isFavoritesPage ? 'ml-11' : ''"
                         style="vertical-align: top; margin-right: auto; margin-left: 0"
                     >{{ currentBoard.desc }}</p>
 
@@ -263,10 +266,11 @@ definePageMeta({
                     :perm="currentUserPerm"
                     :always-show-details="alwaysShowCardDetails"
                     :deselect-trigger="deselectTrigger"
+                    :initial-favorited="pin.favorited"
                     class="mb-1"
 
                     @update="onPinUpdate"
-                    @success="[this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link copied!'];"
+                    @success="msg => { [this.showSuccessToast, this.toastSuccessMsg] = [true, msg]; }"
                     @select="updateSelected"
                     @flagsUpdate="updatePinFlags"
                 />
@@ -279,8 +283,9 @@ definePageMeta({
             />
         </v-container>
 
-        <!-- the v-if=true is required to lazy load it in production -->
         <lazy-pin-modal
+            v-if="!isFavoritesPage"
+
             :edit-mode="editPin"
             :show="createPinModal"
             :pin="currentPin"
@@ -327,6 +332,8 @@ definePageMeta({
         </v-dialog>
     
         <BoardModal
+            v-if="!isFavoritesPage"
+
             :edit-mode="true"
             :show="editBoardModal"
             :board="currentBoard"
@@ -336,6 +343,8 @@ definePageMeta({
         />
 
         <BoardDeleteModal
+            v-if="!isFavoritesPage"
+
             :show="deleteBoardModal"
             :board="currentBoard"
 
@@ -345,6 +354,8 @@ definePageMeta({
         />
 
         <BoardShareModal
+            v-if="!isFavoritesPage"
+    
             :show="shareBoardModal"
             :board="currentBoard"
 
@@ -387,6 +398,7 @@ export default {
             initialLoad: true,
             viewerHasPerm: false,
             isSinglePin: false,
+            isFavoritesPage: false,
             unwatch: () => {},
 
             pinCount: 0,
@@ -454,7 +466,15 @@ export default {
 
         allSelectedPinned() { return this.doAllSelectedPinsHaveFlags('PINNED'); },
         allSelectedLocked() { return this.doAllSelectedPinsHaveFlags('LOCKED'); },
-        allSelectedArchived() { return this.doAllSelectedPinsHaveFlags('ARCHIVED'); }
+        allSelectedArchived() { return this.doAllSelectedPinsHaveFlags('ARCHIVED'); },
+
+        allSelectedPinsAreFavorited() {
+            for (let pin of this.pins) {
+                if (this.selectedPins.has(pin.pin_id) && !pin.favorited)
+                    return false;
+            }
+            return true;
+        }
     },
     watch: {
         selected() {
@@ -485,10 +505,11 @@ export default {
             if (this.$route.query.sort_down)
                 this.sortDown = this.$route.query.sort_down === 'true';
 
+            this.isFavoritesPage = this.$route.query.favorites !== undefined;
             this.isSinglePin = this.$route.query.pin_id && this.$route.query.pin_id.length;
             this.pins = [];
             this.initialLoad = true;
-            
+
             if (!this.isSinglePin) {
                 await this.updateBoardInfo();
                 await this.updatePins();
@@ -534,21 +555,62 @@ export default {
 
                 if (this.$route.query.search && this.$route.query.search.length > 3)
                     opts.query = this.$route.query.search;
-
                 if (opts.query)
                     opts = this.$processSearchParams(opts, 'creator');
+                if (this.isFavoritesPage) {
+                    delete opts.query;
+                    delete opts.board_id;
+                }
 
-                let pins = await this.$fetchApi('/api/board/pins', 'GET', opts);
+                let url = this.isFavoritesPage ? '/api/board/pins/favorites' : '/api/board/pins';
+                let pins = await this.$fetchApi(url, 'GET', opts);
+
+                // Check which pins are favorited if not favorites page (favorites page all are favorited)
+                if (!this.isFavoritesPage) {
+                    let that = this;
+                    setTimeout(async () => {
+                        let pins = await that.$fetchApi('/api/board/pins/favorites/check', 'POST', {
+                            pin_ids: that.pins.map(p => p.pin_id)
+                        });
+                        pins = pins.pins;
+                        for (let pin of that.pins) {
+                            if (pins.includes(pin.pin_id)) {
+                                pin.favorited = true;
+                                if (!pin.key) pin.key = 1;
+                                else pin.key++;
+                            }
+                        }
+                    }, 200);
+                }
+
                 for (let pin of pins.pins) {
                     pin.created = this.$formatTimestamp(pin.created);
                     pin.edited = this.$formatTimestamp(pin.edited);
+
+                    if (this.isFavoritesPage)
+                        pin.favorited = true;
                 }
                 this.pins = pins.pins;
+
+                // Favorites page: if current page is full then assume page count is infinite
+                if (this.isFavoritesPage)
+                    this.pageCount = this.pins.length >= PINS_PER_PAGE ? this.page + 1 : 1;
             } catch (e) {
                 [this.toastErrorMsg, this.showErrorToast] = ['Failed to get pins: ' + this.$apiErrorToString(e), true];
             }
         },
         async updateBoardInfo() {
+            if (this.isFavoritesPage) {
+                this.currentBoard = {
+                    name: 'Favorites',
+                    desc: 'Your favorite pins are shown here',
+                    color: '#FDD835'
+                };
+                this.pageTitle = `Hellomouse Board - ${this.currentBoard.name}`;
+                this.pageDescription = this.currentBoard.desc;
+                return;
+            }
+
             try {
                 let board = await this.$fetchApi('/api/board/boards/single', 'GET', { id: this.$route.query.id });
                 this.currentBoard = board;
@@ -587,6 +649,14 @@ export default {
                 this.editPin = true;
                 this.currentPin = update.pin;
                 this.createPinModal = true;
+            }
+            else if (update.type === 'pin-favorite') {
+                for (let pin of this.pins) {
+                    if (pin.pin_id === update.id) {
+                        pin.favorited = update.favorited;
+                        break;
+                    }
+                }
             }
         },
 
@@ -628,12 +698,17 @@ export default {
         // On page change
         pageWatch(page) {
             this.page = page;
-            history.pushState({}, null,
-                this.$route.path + '?' + new URLSearchParams({
-                    id: this.currentBoard.id,
-                    page: this.page
-                }));
+    
+            let params = { page: this.page };
+            if (this.isFavoritesPage) params.favorites = '1';
+            else params.id = this.currentBoard.id;
+
+            history.pushState({}, null, this.$route.path + '?' + new URLSearchParams(params));
             this.updatePins();
+
+            // Favorites board has infinite pages
+            if (this.isFavoritesPage)
+                this.pageCount = this.pins.length ? page : page + 1;
         },
         // Left create pin dropdown
         openCreatePin(type) {
@@ -711,6 +786,26 @@ export default {
                     break;
                 }
             }
+        },
+        // Called for favoriting / unfaving a lot of pins
+        async bulkFavorite() {
+            try {
+                let addFav = !this.allSelectedPinsAreFavorited;
+                let opts = { pin_ids: [...this.selectedPins] };
+                await this.$fetchApi('/api/board/pins/favorites', addFav ? 'PUT' : 'DELETE', opts);
+
+                for (let pin of this.pins) {
+                    if (this.selectedPins.has(pin.pin_id)) {
+                        pin.favorited = addFav;
+                        if (!pin.key) pin.key = 1;
+                        else pin.key++;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                [this.toastErrorMsg, this.showErrorToast] = ['Failed to (un)favorite pins: ' + this.$apiErrorToString(e), true];
+            }
+            this.deselectAllPins();
         },
         // Bulk modify pin color
         async massColorChange(update) {

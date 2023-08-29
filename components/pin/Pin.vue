@@ -85,8 +85,10 @@
                     </button>
                     <button
                         class="px-4 hoverable hover-list-item edit-list-item line"
+                        @click="toggleFavorite()"
                     >
-                        <v-icon icon="mdi-star" />Favorite
+                        <v-icon :icon="favorited ? 'mdi-star-off' : 'mdi-star'" />
+                        {{ favorited ? 'Unfavorite' : 'Favorite' }}
                     </button>
 
                     <button
@@ -150,7 +152,8 @@ export default {
         color: { type: String, default: '' },
         perm: { type: String, default: '' },
         alwaysShowDetails: { type: Boolean, default: false },
-        deselectTrigger: { type: Boolean, default: false }
+        deselectTrigger: { type: Boolean, default: false },
+        initialFavorited: { type: Boolean, default: false }
     },
     data() {
         return {
@@ -158,6 +161,7 @@ export default {
             deleting: false, // In process of deleting?
             deletionTimeout: null,
             flags: this.initialFlags,
+            favorited: this.initialFavorited,
 
             // Click
             numClicks: 0,
@@ -256,6 +260,21 @@ export default {
                 await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, flags: this.flags });
             } catch (e) {
                 let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
+                this.$emit('error', errorMsg);
+            }
+        },
+        async toggleFavorite() {
+            try {
+                await this.$fetchApi('/api/board/pins/favorites', this.favorited ? 'DELETE' : 'PUT', { pin_ids: [this.pinId] });
+                this.favorited = !this.favorited;
+                this.$emit('success', (this.favorited ? 'Added' : 'Removed') + ' favorite');
+                this.$emit('update', {
+                    type: 'pin-favorite',
+                    id: this.pinId,
+                    favorited: this.favorited
+                });
+            } catch (e) {
+                let errorMsg = `Failed to favorite pin: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
             }
         },

@@ -1,8 +1,11 @@
-favorite pins
-- api to add / remove bulk favorite pins
-- get favorites - favorites board
-- what to do with deleted pins??
-    - maybe just clean them out automatically when next checked, no foreign key check
+favorite:
+api todo:
+- clean deleted pins when check
+
+
+left nav: only self boards, not shared
+
+disabled new pin button icon not disabled
 
 
 later:
@@ -27,11 +30,12 @@ board / pin api - return pfp url as well
 - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
-- option to download board
-
 -------
 
 future todo:
+
+- option to download board
+
 
 pin:
 - checkboxes
@@ -40,6 +44,8 @@ pin:
 - download site
 
 - pins: version history
+
+better search (split words, images, dates, etc...)
 
 boards:
     - right click menu -> change color there?
