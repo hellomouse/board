@@ -1,18 +1,8 @@
-
-github linting workflow
-
------
-
-
-optimize:
-- https://pwa.nuxtjs.org/
-
 favorite pins
 - api to add / remove bulk favorite pins
 - get favorites - favorites board
 - what to do with deleted pins??
     - maybe just clean them out automatically when next checked, no foreign key check
-
 
 
 later:
@@ -41,14 +31,13 @@ board / pin api - return pfp url as well
 
 -------
 
+future todo:
+
 pin:
 - checkboxes
 - reviews
 - videos
 - download site
-
-
-future todo:
 
 - pins: version history
 

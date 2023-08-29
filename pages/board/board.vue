@@ -764,7 +764,7 @@ export default {
 }
 
 .grid {
-    columns: 270px 5;
+    columns: 300px auto;
     column-gap: 5px;
     min-height: calc(100% - 200px);
 
