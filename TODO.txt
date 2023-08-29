@@ -8,8 +8,6 @@ favorite pins
 - get favorites - favorites board
 
 
-left nav - if public dont get since it returns public boards
-- or on log in invalidate the cache
 
 html stripping:
 - disallow: style tags

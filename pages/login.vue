@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { useBoardStore } from '~/store/boardStore.js';
 import { useAuthStore } from '~/store/auth.js';
 
 export default {
@@ -91,6 +92,7 @@ export default {
                 return;
             }
 
+            useBoardStore(this.$pinia).lastFetch = 0; // Invalidate left nav board list
             this.loading = false;
             this.$router.push(redirect);
         }

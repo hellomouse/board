@@ -72,6 +72,7 @@
 <script>
 import { useAuthStore } from '~/store/auth.js';
 import { useOptionStore } from '~/store/optionStore.js';
+import { useBoardStore } from '~/store/boardStore.js';
 import { useTheme } from 'vuetify';
 
 export default {
@@ -105,6 +106,7 @@ export default {
                 // if server errors anyways
                 console.error(e);
             }
+            useBoardStore(this.$pinia).lastFetch = 0; // Invalidate left nav board list
             authStore.logout();
             this.$router.push('/login');
         },
