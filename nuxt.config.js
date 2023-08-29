@@ -27,7 +27,7 @@ export default {
     generate: { fallback: true },
 
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-    buildModules: [],
+    buildModules: ['nuxt-compress', 'nuxt-purgecss'],
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
@@ -39,7 +39,8 @@ export default {
         },
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
-        'nuxt-proxy'
+        'nuxt-proxy',
+        'nuxt-delay-hydration',
     ],
 
     proxy: {
@@ -58,4 +59,40 @@ export default {
     build: {
         transpile: ['vuetify']
     },
+
+    delayHydration: {
+        mode: 'init',
+        debug: process.env.NODE_ENV === 'development'
+    },
+
+    purgeCSS: {
+        enabled: true,
+        paths: [
+            'components/**/*.vue',
+            'layouts/**/*.vue',
+            'pages/**/*.vue',
+            'plugins/**/*.js',
+            './node_modules/vuetify/dist/*.js',
+            './node_modules/vuetify/dist/*.css',
+            './node_modules/vuetify/src/**/*.ts',
+            './node_modules/@mdi/fonts/*',
+        ],
+
+        whitelist: ['v-application', 'v-application--wrap', 'layout', 'row', 'col'],
+        whitelistPatterns: [
+            /^v-((?!application).)*$/,
+            /^theme--*/,
+            /.*-transition/,
+            /^justify-*/,
+            /^p*-[0-9]/,
+            /^m*-[0-9]/,
+            /^text--*/,
+            /--text$/,
+            /^row-*/,
+            /^col-*/,
+            /leaflet/,
+            /marker/
+        ],
+        whitelistPatternsChildren: [/^v-((?!application).)*$/, /^theme--*/],
+    }
 }

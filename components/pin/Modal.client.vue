@@ -59,7 +59,10 @@ TODO
 </template>
 
 <script>
-const QuillEditor = process.client ? (await import('@vueup/vue-quill')).QuillEditor : null;
+// eslint-disable-next-line no-undef
+const QuillEditor = defineAsyncComponent(async () =>
+    process.client ? (await import('@vueup/vue-quill')).QuillEditor : null
+);
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '~/assets/css/quill-theme.css';
 

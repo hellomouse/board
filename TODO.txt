@@ -4,6 +4,9 @@ github linting workflow
 -----
 
 
+optimize:
+- https://pwa.nuxtjs.org/
+
 favorite pins
 - api to add / remove bulk favorite pins
 - get favorites - favorites board
@@ -59,13 +62,5 @@ responsive mobile
 
 boards within boards
 - folders
-
-
-optimize:
-- https://github.com/Developmint/nuxt-purgecss
-- https://pwa.nuxtjs.org/
-- https://www.npmjs.com/package/shrink-ray
-- https://stackoverflow.com/questions/65592223/page-loads-very-slowly-with-nuxt-ssr
-    - local material icons?
 
 light mode - dont flicker in

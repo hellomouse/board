@@ -279,18 +279,17 @@ definePageMeta({
             />
         </v-container>
 
-        <client-only>
-            <lazy-PinModal
-                :edit-mode="editPin"
-                :show="createPinModal"
-                :pin="currentPin"
-                :pin-title="pinTitle"
-                :board-id="currentBoard.id || ''"
+        <!-- the v-if=true is required to lazy load it in production -->
+        <lazy-pin-modal
+            :edit-mode="editPin"
+            :show="createPinModal"
+            :pin="currentPin"
+            :pin-title="pinTitle"
+            :board-id="currentBoard.id || ''"
 
-                @update="onPinCreate"
-                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
-            />
-        </client-only>
+            @update="onPinCreate"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+        />
 
         <!-- For current board -->
         <v-dialog

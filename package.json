@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -19,6 +20,8 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-vue": "^9.15.1",
     "nuxt": "^3.6.5",
+    "nuxt-compress": "^5.0.0",
+    "nuxt-delay-hydration": "^1.2.1",
     "prettier": "^3.0.0",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.2"
@@ -29,6 +32,7 @@
     "@vueup/vue-quill": "^1.2.0",
     "js-cookie": "^3.0.5",
     "nuxt-proxy": "^0.4.1",
+    "nuxt-purgecss": "^2.0.0",
     "pinia": "^2.1.6",
     "quill-blot-formatter": "^1.0.5",
     "quill-magic-url": "^4.2.0",

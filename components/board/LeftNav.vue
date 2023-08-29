@@ -147,8 +147,8 @@ export default {
     transition: left 0.2s;
     z-index: 2;
 
-    width: 24px;
-    height: 128px;
+    width: 24px !important;
+    height: 128px !important;
 
     &.closed {
         left: 0;
