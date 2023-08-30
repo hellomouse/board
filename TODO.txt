@@ -2,6 +2,11 @@
 
 pin:
 - checkboxes
+    checklist:
+        - disable dragging entirely
+        - disable deleting entirely
+
+
 - reviews
     - maybe poll as well
 - link:
@@ -22,8 +27,6 @@ pin:
     - imgur / pixiv images
     - opengraph preview
         - https://www.peekalink.io/_nuxt/img/social-network.e1f6aec.png
-
-
 
 
 later:
@@ -53,7 +56,6 @@ board / pin api - return pfp url as well
 future todo:
 
 - option to download board
-
 
 - pins: version history
 

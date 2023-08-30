@@ -104,8 +104,6 @@ definePageMeta({
             </v-card>
         </v-dialog>
 
-
-
         <BoardLeftNav>
             <v-menu>
                 <template #activator="{ props }">
@@ -121,6 +119,9 @@ definePageMeta({
                 <v-sheet elevation="8" rounded="0">
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
                         <v-icon icon="mdi-format-header-pound" />Rich Text Pin
+                    </button>
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(4)">
+                        <v-icon icon="mdi-text-box-check" />Checklist Pin
                     </button>
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
                         <v-icon icon="mdi-view-gallery" />Image Gallery Pin
@@ -628,6 +629,10 @@ export default {
         },
         // Called when a pin is newly created or cancelled
         async onPinCreate(created) {
+            // The pin drag component emits the same event name :/
+            if (created.isTrusted !== undefined)
+                return;
+
             this.createPinModal = false;
             if (created) {
                 this.pinCount++;

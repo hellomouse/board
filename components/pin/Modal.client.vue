@@ -18,9 +18,9 @@ TODO
                 <div v-if="pin?.type === 0 || !pin.type">
                     <client-only>
                         <QuillEditor
-                            :style="{ background: background }"
-                            theme="snow" contentType="html"
                             v-model:content="content"
+                            :style="{ background: background }" theme="snow"
+                            content-type="html"
                             :modules="modules"
                             :toolbar="toolbars"
                         />
@@ -35,21 +35,28 @@ TODO
                     />
                 </div>
 
+                <!-- BEGIN specialization -->
                 <!-- Image gallery -->
                 <div v-if="pin.type === 1">
                     - file attachments
                     - image gallery preview
                 </div>
 
+                <!-- Checklist -->
+                <div v-if="pin.type === 4">
+                    <pin-checklist-pin :style="{ background: background }" />
+                </div>
+                <!-- END -->
+
 
                 <!-- Colors -->
                 <pin-palette
-                    :selectedSwatchIndex="selectedSwatchIndex"
+                    :selected-swatch-index="selectedSwatchIndex"
                     @color="update => { [color, selectedSwatchIndex] = [update.color, update.index]; }"
                 />
             </v-card-text>
             <v-card-actions class="mr-3">
-                <p class="ml-4 d-block last-edited" v-if="pin.edited">Edited {{ pin.edited }}</p>
+                <p v-if="pin.edited" class="ml-4 d-block last-edited">Edited {{ pin.edited }}</p>
                 <v-spacer />
                 <v-btn color="primary" @click="$emit('update', false)">Cancel</v-btn>
                 <v-btn color="primary" variant="elevated" :loading="loading" @click="createPin">{{ editMode ? 'Apply' : 'Create' }}</v-btn>
@@ -78,26 +85,6 @@ export default {
     components: {
         QuillEditor
     },
-    setup: () => {
-        const modules = [
-            {
-                name: 'markdownShortcuts',
-                module: MarkdownShortcuts,
-                options: {}
-            },
-            {
-                name: 'magicUrl',
-                module: MagicUrl,
-                options: {}
-            },
-            {
-                name: 'blotFormatter',
-                module: BlotFormatter,
-                options: {}
-            },
-        ];
-        return { modules }
-    },
     props: {
         editMode: { // Edit existing pin instead of create
             type: Boolean,
@@ -119,6 +106,26 @@ export default {
             type: String,
             required: true
         }
+    },
+    setup: () => {
+        const modules = [
+            {
+                name: 'markdownShortcuts',
+                module: MarkdownShortcuts,
+                options: {}
+            },
+            {
+                name: 'magicUrl',
+                module: MagicUrl,
+                options: {}
+            },
+            {
+                name: 'blotFormatter',
+                module: BlotFormatter,
+                options: {}
+            },
+        ];
+        return { modules }
     },
     data() {
         return {
@@ -156,7 +163,7 @@ export default {
             }
 
             let params = {
-                pin_type: 0, // TODO
+                pin_type: this.pin.type,
                 board_id: this.boardId,
                 flags: '',
                 content: this.content,
