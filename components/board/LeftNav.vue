@@ -121,7 +121,8 @@ export default {
                     not_self: false,
                     limit: 100,
                     sort_by: 'Name',
-                    sort_down: true
+                    sort_down: true,
+                    owner_search: useAuthStore(this.$pinia).user.id
                 });
                 this.boards = boards.boards;
                 this.loadingBoards = false;

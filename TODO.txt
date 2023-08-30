@@ -3,10 +3,6 @@ api todo:
 - clean deleted pins when check
 
 
-left nav: only self boards, not shared
-
-
-
 later:
 
 pins:
@@ -56,3 +52,6 @@ responsive mobile
 
 boards within boards
 - folders
+
+
+docs pages + home page
