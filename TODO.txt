@@ -6,6 +6,10 @@ pin:
         - disable dragging entirely
         - disable deleting entirely
 
+- cheklist pin
+
+    - write content => string and string => content - shared
+
 
 - reviews
     - maybe poll as well

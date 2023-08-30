@@ -144,6 +144,7 @@ export default {
         },
         setNewHistoryState() {
             let copy = this.history[this.historyPointer].map(x => { return {...x}});
+            copy.forEach(x => delete x.selected);
             copy.doNotAddToHistory = true;
             this.checklist = copy;
             this.checklistKey++;
