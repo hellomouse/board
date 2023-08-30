@@ -1,6 +1,4 @@
-favorite:
-api todo:
-- clean deleted pins when check
+
 
 pin:
 - checkboxes
@@ -26,7 +24,6 @@ pin:
         - https://www.peekalink.io/_nuxt/img/social-network.e1f6aec.png
 
 
-add license
 
 
 later:
