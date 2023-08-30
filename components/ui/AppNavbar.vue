@@ -18,9 +18,10 @@
                         class="popout-sheet pa-2"
                     >
                         <ui-app-button
-                            href="/board"
-                            src="/logos/board.svg"
-                            title="Board"
+                            v-for="app in APPS" :key="app.href"
+                            :href="app.href"
+                            :src="app.src"
+                            :title="app.title"
                         />
                     </v-sheet>
                 </div>
@@ -74,12 +75,14 @@ import { useAuthStore } from '~/store/auth.js';
 import { useOptionStore } from '~/store/optionStore.js';
 import { useBoardStore } from '~/store/boardStore.js';
 import { useTheme } from 'vuetify';
+import { APPS } from '~/helpers/apps.js';
 
 export default {
     setup() {
         const theme = useTheme();
         return { theme };
     },
+    data() { return { APPS }; },
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
         isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; },

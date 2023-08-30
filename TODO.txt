@@ -2,6 +2,32 @@ favorite:
 api todo:
 - clean deleted pins when check
 
+pin:
+- checkboxes
+- reviews
+    - maybe poll as well
+- link:
+    - url + note + setting to download webpage
+    - download preview image as low res maybe
+    - download site
+
+    - videos preview (sep component in shared or osmething)
+        - youtube, bilibili, viemo
+        - save youtube metadata maybe
+    - sound preview:
+        - newgrounds, soundcloud
+    - tweets
+        - pfp, user, content, likes, retweets, time
+        - see discord
+        - image / video
+    - reddit
+    - imgur / pixiv images
+    - opengraph preview
+        - https://www.peekalink.io/_nuxt/img/social-network.e1f6aec.png
+
+
+add license
+
 
 later:
 
@@ -32,12 +58,6 @@ future todo:
 - option to download board
 
 
-pin:
-- checkboxes
-- reviews
-- videos
-- download site
-
 - pins: version history
 
 better search (split words, images, dates, etc...)
@@ -53,5 +73,3 @@ responsive mobile
 boards within boards
 - folders
 
-
-docs pages + home page

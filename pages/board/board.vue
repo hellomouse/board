@@ -114,7 +114,7 @@ definePageMeta({
                         height="44" v-bind="props"
                         :disabled="isFavoritesPage"
                     >
-                        <v-icon icon="mdi-plus" :style="{ opacity: isFavoritesPage ? 0.75 : 0 }"/> New Pin
+                        <v-icon icon="mdi-plus" :style="{ opacity: isFavoritesPage ? 0.4 : 1 }"/> New Pin
                     </v-btn>
                 </template>
             
