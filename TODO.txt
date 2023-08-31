@@ -1,7 +1,8 @@
-
+checklist
+- rate limit clicking :/
 
 - reviews
-    - maybe poll as well
+    - other users leave reviews
 - link:
     - url + note + setting to download webpage
     - download preview image as low res maybe
