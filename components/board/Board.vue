@@ -113,12 +113,30 @@ export default {
         currentUserPerm: {
             type: String,
             default: ''
+        },
+        selectTrigger: {
+            type: Boolean,
+            default: false
+        },
+        unselectTrigger: {
+            type: Boolean,
+            default: false
         }
     },
-    data: () => ({
-        numClicks: 0,
-        selected: false
-    }),
+    data() {
+        return {
+            numClicks: 0,
+            selected: false
+        };
+    },
+    watch: {
+        selectTrigger() {
+            this.selected = true;
+        },
+        unselectTrigger() {
+            this.selected = false;
+        }
+    },
     methods: {
         copyShareLink() {
             if (process.client)
@@ -130,9 +148,11 @@ export default {
             if (this.numClicks === 1) {
                 let self = this;
                 setTimeout(() => {
-                    if (self.numClicks === 1) // Single click: select
+                    if (self.numClicks === 1) { // Single click: select
                         self.selected = !self.selected;
-                    else                      // Double click: go to board
+                        this.$emit('select', { id: this.boardId, select: self.selected });
+                    }
+                    else                       // Double click: go to board
                         self.goToBoard();
                     self.numClicks = 0;
                 }, 200);
@@ -154,6 +174,7 @@ export default {
     border-right: 3px solid;
     display: inline-block;
     outline-offset: -1px;
+    user-select: none;
 
     &.selected {
         outline: 1px solid rgb(var(--v-theme-primary)) !important;

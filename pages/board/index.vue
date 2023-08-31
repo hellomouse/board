@@ -32,6 +32,44 @@ useSeoMeta({
             </v-btn>
         </BoardLeftNav>
 
+        <v-toolbar class="bulk-board-edits" color="grey-darken-4" :style="{ top: selectedBoards.size ? '0px' : '-100px' }">
+            <v-btn icon="mdi-close" @click="deselectAllBoards" />
+            <h1>{{ selectedBoards.size }} Selected</h1>
+            <v-spacer />
+
+            <v-tooltip text="Change Background" location="bottom">
+                <template #activator="{ props }">
+                    <v-btn
+                        id="palette-activator"
+                        v-bind="props"
+                        icon="mdi-palette"
+                    />
+                </template>
+            </v-tooltip>
+
+            <v-menu activator="#palette-activator" :close-on-content-click="false" location="bottom">
+                <v-sheet class="pa-4" width="240">
+                    <v-btn
+                        v-for="(col, index) in swatches" :key="col"
+                        density="compact" width="40" style="min-width: 40px;"
+                        :color="col" class="mr-1 mb-1"
+                        @click="massColorChange(col, index)"
+                    >
+                        <v-icon v-if="selectedSwatchIndex === index" icon="mdi-check" />
+                    </v-btn>
+                </v-sheet>
+            </v-menu>
+
+            <v-tooltip text="Share Board" location="bottom">
+                <template #activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        icon="mdi-account-plus"
+                    />
+                </template>
+            </v-tooltip>
+        </v-toolbar>
+
         <v-container class="container-with-left-nav pt-0" :class="containerClass">
             <div v-if="loadingBoards" class="state-loader state-center">
                 <v-progress-linear color="primary" indeterminate class="mb-2" />
@@ -66,7 +104,7 @@ useSeoMeta({
                 </div>
             </div>
             
-            <div @scroll="onScroll" class="scroll-container">
+            <div class="scroll-container" @scroll="onScroll"  @click.self="deselectAllBoards()">
                 <BoardBoard
                     v-for="board in sortedBoards" :key="board.id"
                     :board-id="board.id"
@@ -76,9 +114,13 @@ useSeoMeta({
                     :color="board.color"
                     :current-user-perm="board.perms[user.id]?.perm_level"
 
+                    :select-trigger="selectBoardsTrigger"
+                    :unselect-trigger="unselectBoardsTrigger"
+
                     @update="onBoardUpdate"
                     @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
                     @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                    @select="onBoardSelect"
                 />
             </div>
 
@@ -130,6 +172,7 @@ useSeoMeta({
 import { useAuthStore } from '~/store/auth.js';
 import { useOptionStore } from '~/store/optionStore.js';
 
+import { BOARD_SWATCHES } from '~/helpers/board/board-colors.js';
 import BoardBoard from '~/components/board/Board.vue';
 import BoardModal from '~/components/board/Modal.vue';
 
@@ -140,6 +183,7 @@ export default {
     components: { BoardBoard, BoardModal },
     data() {
         return {
+            swatches: BOARD_SWATCHES,
             boards: [],
             currentBoard: {},
             loadingBoards: true,
@@ -164,7 +208,14 @@ export default {
                 true : useOptionStore(this.$pinia).sort_boards[1],
 
             // Inf scroll
-            reachedEnd: false
+            reachedEnd: false,
+
+            // Selection
+            selectedBoards: new Set(),
+            selectBoardsTrigger: false,
+            unselectBoardsTrigger: false,
+            color: '',
+            selectedSwatchIndex: 0
         };
     },
     computed: {
@@ -198,9 +249,18 @@ export default {
             this.getBoards();
         },
         '$route.query'() {
+            this.selectedBoards = new Set();
             this.updatePageTitle();
             this.getBoards();
         }
+    },
+    mounted() {
+        if (process.client)
+            document.addEventListener('keydown', this.keyupHandler);
+    },
+    destroyed() {
+        if (process.client)
+            document.removeEventListener('keydown', this.keyupHandler);
     },
     // Get boards on page first load
     created() {
@@ -309,7 +369,44 @@ export default {
         onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
             if (scrollTop + clientHeight >= scrollHeight) 
                 this.load();
-        }
+        },
+        // Selection
+        onBoardSelect(update) {
+            if (!update.select)
+                this.selectedBoards.delete(update.id);
+            else
+                this.selectedBoards.add(update.id);
+        },
+        deselectAllBoards() {
+            this.selectedBoards.clear();
+            this.unselectBoardsTrigger = !this.unselectBoardsTrigger;
+        },
+        selectAllBoards() {
+            this.selectedBoards = new Set(this.boards.map(b => b.id));
+            this.selectBoardsTrigger = !this.selectBoardsTrigger;
+        },
+        async massColorChange(col, index) {
+            try {
+                let opts = { board_ids: [...this.selectedBoards], color: col };
+                await this.$fetchApi('/api/board/boards/bulk_colors', 'PUT', opts);
+    
+                [this.color, this.selectedSwatchIndex] = [col, index];
+                for (let board of this.boards) {
+                    if (this.selectedBoards.has(board.id))
+                        board.color = col;
+                }
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to edit board info: ' + this.$apiErrorToString(e);
+            }
+        },
+        keyupHandler(event) {
+            if (event.ctrlKey && event.key === 'a') { // Ctrl-A select all boards
+                event.preventDefault();
+                this.selectAllBoards();
+                return false;
+            }
+        },
     }
 }
 </script>
@@ -321,6 +418,15 @@ export default {
 
 .scroll-container {
     max-height: calc(100vh - 150px);
+    height: calc(100vh - 150px);
     overflow-y: auto;
+}
+
+.bulk-board-edits {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1999;
 }
 </style>

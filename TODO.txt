@@ -1,5 +1,16 @@
 optimization: when sending content allow sending diff?
 
+
+boards:
+    - also does selection - mass Share
+    + drag select?
+    - ctrl-shift select
+
+pins: - ctrl a + click outside
+    - drag select
+
+
+
 - link:
     - download preview image as low res maybe
     - download site
@@ -43,9 +54,6 @@ future todo:
 
 better search (split words, images, dates, etc...)
 
-boards:
-    - right click menu -> change color there?
-    - also does selection - mass Share
 
 responsive mobile
 - fix share modal on phone

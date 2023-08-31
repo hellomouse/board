@@ -226,6 +226,36 @@
                 <b>Error:</b> 401 Unauthorized, 403 Forbidden, 500 Server error<br>
             </p>
         </ApiDoc>
+
+        <ApiDoc
+            title="Bulk edit board colors"
+            method="PUT"
+            endpoint="/api/board/boards/bulk_colors"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>board_ids: array of strings</td><td>IDs of the boards to modify. Limited to length 200, boards the user cannot edit are ignored</td></tr>
+                    <tr><td>color: string</td><td>New color to assign as hex string</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Colors changed" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
     </div>
 </template>
 
