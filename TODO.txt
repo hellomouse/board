@@ -1,9 +1,6 @@
 optimization: when sending content allow sending diff?
-    - make checklist pin interact as well
 
-- reviews
-    - other users leave reviews
-        - all reviews public?
+
 - link:
     - download preview image as low res maybe
     - download site
@@ -30,8 +27,6 @@ pins:
         - markdown is current
         - image gallery - preview images, only file upload + paste images
         - link - select link, preview
-        - review - same as markdown, but add score
-            - no file upload
 
 pin create/edit modal:
     - https://github.com/MuhammedAlkhudiry/quill-find-replace-module

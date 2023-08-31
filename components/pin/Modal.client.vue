@@ -173,7 +173,7 @@ export default {
 
             let type = this.pin.type;
             if (typeof type === 'string') { // Convert type to numeric
-                type = ['Markdown', 'ImageGallery', 'Link', 'Review', 'Checklist']
+                type = ['Markdown', 'ImageGallery', 'Link', 'Checklist']
                     .indexOf(type) || type;
             }
 

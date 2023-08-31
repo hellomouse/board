@@ -120,7 +120,7 @@ definePageMeta({
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(0)">
                         <v-icon icon="mdi-format-header-pound" />Rich Text Pin
                     </button>
-                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(4)">
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(3)">
                         <v-icon icon="mdi-text-box-check" />Checklist Pin
                     </button>
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(1)">
@@ -128,9 +128,6 @@ definePageMeta({
                     </button>
                     <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(2)">
                         <v-icon icon="mdi-link" />Link Pin
-                    </button>
-                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreatePin(3)">
-                        <v-icon icon="mdi-star-box" />Review Pin
                     </button>
                 </v-sheet>
             </v-menu>
