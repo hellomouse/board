@@ -63,7 +63,7 @@
                 :key="pinId + forceUpdateKey"
                 :simple="true" :locked="locked"
                 :checklist="contentToChecklist(content)"
-                @check="v => resendContent(checklistToContent(v))"
+                @check="v => resendContent(pinId, checklistToContent(v))"
             />
         </div>
 
@@ -346,7 +346,7 @@ export default {
                 selected: this.selected
             });
         },
-        async resendContent(content) {
+        async resendContent(pinId, content) {
             // If no edit perm ignore
             if (!this.viewerHasPerm) return;
 
@@ -355,6 +355,11 @@ export default {
                 this.resendContentTimeout = null;
                 try {
                     await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, content });
+                    this.$emit('update', {
+                        type: 'content',
+                        id: this.pinId,
+                        content
+                    });
                 } catch (e) {
                     let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
                     this.$emit('error', errorMsg);

@@ -661,6 +661,14 @@ export default {
                     }
                 }
             }
+            else if (update.type === 'content') {
+                for (let pin of this.pins) {
+                    if (pin.pin_id === update.id) {
+                        pin.content = update.content;
+                        break;
+                    }
+                }
+            }
         },
 
         // Board stuff:
