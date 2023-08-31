@@ -30,6 +30,7 @@ Example usage:
                     v-model="element.checked"
                     class="checklist-checkbox"
                     label=""
+                    :disabled="locked"
                     @click="emitCheck"
                 />
                 <resizeable-textarea
@@ -66,6 +67,10 @@ export default {
             type: Array
         },
         simple: {
+            type: Boolean,
+            default: false
+        },
+        locked: {
             type: Boolean,
             default: false
         }

@@ -54,7 +54,7 @@
             <pin-checklist
                 v-if="type === 'Checklist'"
                 :key="pinId + forceUpdateKey"
-                :simple="true"
+                :simple="true" :locked="locked"
                 :checklist="contentToChecklist(content)"
                 @check="v => resendContent(checklistToContent(v))"
             />
