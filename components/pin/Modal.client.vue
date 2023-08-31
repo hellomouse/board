@@ -43,7 +43,7 @@ TODO
                 </div>
 
                 <!-- Checklist -->
-                <div v-if="pin?.type === 4 || pin?.type === 'Checklist'">
+                <div v-if="pin?.type === 3 || pin?.type === 'Checklist'">
                     <pin-checklist-pin
                         v-model:content="content"
                         :style="{ background: background }"

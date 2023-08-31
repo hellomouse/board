@@ -31,7 +31,7 @@ Example usage:
                     class="checklist-checkbox"
                     label=""
                     :disabled="locked"
-                    @click="emitCheck"
+                    @update:modelValue="emitCheck()"
                 />
                 <resizeable-textarea
                     v-if="!simple"
@@ -117,7 +117,7 @@ export default {
             this.$emit('deleteElement', element);
         },
         emitCheck() {
-            setTimeout(() => this.$emit('check', this.checklist_mut), 5);
+            this.$emit('check', this.checklist_mut);
         },
         formatHrefLink
     }

@@ -14,6 +14,7 @@ Example usage:
                 v-model="checklist"
                 @deleteElement="e => checklist = checklist.filter(i => i !== e)"
                 @pushHistory="updateHistory()"
+                @check="updateHistory()"
             />
         </div>
         <br>
@@ -85,11 +86,11 @@ export default {
     },
     mounted() {
         if (process.client)
-            document.addEventListener('keyup', this.keyupHandler)
+            document.addEventListener('keyup', this.keyupHandler);
     },
     destroyed() {
         if (process.client)
-            document.removeEventListener('keyup', this.keyupHandler)
+            document.removeEventListener('keyup', this.keyupHandler);
     },
     methods: {
         addItem() {
