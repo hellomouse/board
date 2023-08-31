@@ -44,7 +44,8 @@ Example usage:
                 <p
                     v-if="simple"
                     class="checklist-input"
-                >{{ element.value }}</p>
+                    v-html="formatHrefLink(element.value, 'rgb(var(--v-theme-on-surface))')"
+                />
                 <v-btn
                     v-if="!simple"
                     color="transparent"
@@ -58,6 +59,7 @@ Example usage:
 
 <script>
 import draggable from 'vuedraggable';
+import { formatHrefLink } from '~/helpers/format.js';
 
 export default {
     components: { draggable },
@@ -116,7 +118,8 @@ export default {
         },
         emitCheck() {
             setTimeout(() => this.$emit('check', this.checklist_mut), 5);
-        }
+        },
+        formatHrefLink
     }
 }
 </script>
