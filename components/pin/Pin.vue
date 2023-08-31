@@ -56,6 +56,7 @@
                 :key="pinId + forceUpdateKey"
                 :simple="true"
                 :checklist="contentToChecklist(content)"
+                @check="v => resendContent(checklistToContent(v))"
             />
         </div>
 
@@ -141,7 +142,7 @@
 import { useAuthStore } from '~/store/auth.js';
 import { getBackground, getColor } from '~/helpers/board/pin-colors.js';
 import { useOptionStore } from '~/store/optionStore.js';
-import { contentToChecklist } from '~/helpers/board/pin-checklist.js';
+import { contentToChecklist, checklistToContent } from '~/helpers/board/pin-checklist.js';
 
 export default {
     name: 'BoardPin',
@@ -244,6 +245,7 @@ export default {
     },
     methods: {
         contentToChecklist,
+        checklistToContent,
         deletePin() {
             this.deleting = true;
             this.deletionTimeout = setTimeout(async () => {
@@ -332,6 +334,17 @@ export default {
                 id: this.pinId,
                 selected: this.selected
             });
+        },
+        async resendContent(content) {
+            // If no edit perm ignore
+            if (!this.viewerHasPerm) return;
+
+            try {
+                await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, content });
+            } catch (e) {
+                let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
+                this.$emit('error', errorMsg);
+            }
         }
     }
 }

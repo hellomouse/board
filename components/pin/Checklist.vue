@@ -30,6 +30,7 @@ Example usage:
                     v-model="element.checked"
                     class="checklist-checkbox"
                     label=""
+                    @click="emitCheck"
                 />
                 <resizeable-textarea
                     v-if="!simple"
@@ -107,6 +108,9 @@ export default {
         },
         removeElement(element) {
             this.$emit('deleteElement', element);
+        },
+        emitCheck() {
+            setTimeout(() => this.$emit('check', this.checklist_mut), 5);
         }
     }
 }
