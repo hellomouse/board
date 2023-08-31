@@ -1,14 +1,13 @@
+optimization: when sending content allow sending diff?
 
 
 - reviews
     - other users leave reviews
 - link:
-    - url + note + setting to download webpage
     - download preview image as low res maybe
     - download site
 
     - videos preview (sep component in shared or osmething)
-        - youtube, bilibili, viemo
         - save youtube metadata maybe
     - sound preview:
         - newgrounds, soundcloud

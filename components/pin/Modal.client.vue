@@ -49,6 +49,14 @@ TODO
                         :style="{ background: background }"
                     />
                 </div>
+
+                <!-- Url -->
+                <div v-if="pin?.type === 2 || pin?.type === 'Link'">
+                    <pin-link-pin
+                        v-model:content="content"
+                        :style="{ background: background }"
+                    />
+                </div>
                 <!-- END -->
 
                 <!-- Colors -->

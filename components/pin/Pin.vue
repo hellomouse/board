@@ -50,6 +50,13 @@
             <!-- Markdown -->
             <span v-if="type === 'Markdown'" v-html="content"></span>
 
+            <!-- Link pin -->
+            <pin-link
+                v-if="type === 'Link'"
+                :key="pinId + forceUpdateKey"
+                :content="content"
+            />
+
             <!-- Checklist pin -->
             <pin-checklist
                 v-if="type === 'Checklist'"
