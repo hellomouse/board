@@ -250,7 +250,7 @@ definePageMeta({
             </div>
 
             <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]">
-                <Pin
+                <lazy-Pin
                     v-for="pin in pins" :key="pin.key ? pin.pin_id + pin.key : pin.pin_id"
                     :content="pin.content"
                     :pin-id="pin.pin_id"

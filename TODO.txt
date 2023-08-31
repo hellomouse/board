@@ -20,13 +20,6 @@ optimization: when sending content allow sending diff?
 
 later:
 
-pins:
-- have a dropdown in new pin
-    - select what type of modal to use
-        - markdown is current
-        - image gallery - preview images, only file upload + paste images
-        - link - select link, preview
-
 pin create/edit modal:
     - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
     - https://github.com/NoelOConnell/quill-image-uploader
@@ -61,6 +54,6 @@ responsive mobile
 boards within boards
 - folders
 
-faq/info page in pfp
-
 user settings page
+
+track user login ip and time, invalidate sessions

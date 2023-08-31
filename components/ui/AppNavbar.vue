@@ -61,7 +61,7 @@
                             <v-icon icon="mdi-logout" /> Sign Out
                         </button>
                         <div class="py-2 px-4">
-                            <small>FAQ / Info</small>
+                            <NuxtLink style="color: rgb(var(--v-theme-on-surface)); text-decoration: none" to="/faq"><small>FAQ / Privacy</small></NuxtLink>
                         </div>
                     </v-sheet>
                 </div>
