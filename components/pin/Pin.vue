@@ -144,6 +144,8 @@ import { getBackground, getColor } from '~/helpers/board/pin-colors.js';
 import { useOptionStore } from '~/store/optionStore.js';
 import { contentToChecklist, checklistToContent } from '~/helpers/board/pin-checklist.js';
 
+const RESEND_CONTENT_INTERVAL = 500;
+
 export default {
     name: 'BoardPin',
     props: {
@@ -179,7 +181,9 @@ export default {
             selected: this.initialSelected,
 
             // Misc
-            forceUpdateKey: 0
+            forceUpdateKey: 0,
+            resendContentTimeout: null,
+            resendContentLast: 0
         };
     },
     computed: {
@@ -339,11 +343,24 @@ export default {
             // If no edit perm ignore
             if (!this.viewerHasPerm) return;
 
-            try {
-                await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, content });
-            } catch (e) {
-                let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
-                this.$emit('error', errorMsg);
+            let sendContent = async () => {
+                this.resendContentLast = Date.now();
+                this.resendContentTimeout = null;
+                try {
+                    await this.$fetchApi('/api/board/pins', 'PUT', { id: this.pinId, content });
+                } catch (e) {
+                    let errorMsg = `Failed to update pin: ${this.$apiErrorToString(e)}`;
+                    this.$emit('error', errorMsg);
+                }
+            };
+
+            let diff = Date.now() - this.resendContentLast;
+            if (diff > RESEND_CONTENT_INTERVAL)
+                sendContent();
+            else {
+                clearTimeout(this.resendContentTimeout);
+                this.resendContentTimeout = null;
+                this.resendContentTimeout = setTimeout(sendContent, Math.max(1, RESEND_CONTENT_INTERVAL - diff));
             }
         }
     }
