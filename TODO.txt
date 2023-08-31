@@ -1,8 +1,9 @@
 optimization: when sending content allow sending diff?
-
+    - make checklist pin interact as well
 
 - reviews
     - other users leave reviews
+        - all reviews public?
 - link:
     - download preview image as low res maybe
     - download site
@@ -43,6 +44,8 @@ board / pin api - return pfp url as well
 - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
+copy note to board option
+
 -------
 
 future todo:
@@ -64,3 +67,6 @@ responsive mobile
 boards within boards
 - folders
 
+faq/info page in pfp
+
+user settings page

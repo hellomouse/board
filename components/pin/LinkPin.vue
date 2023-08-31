@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-    padding: 10px 0;
+    padding: 10px;
     background-size: cover !important;
     background-position: center !important;
 }
