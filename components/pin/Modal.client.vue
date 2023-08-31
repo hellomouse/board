@@ -15,7 +15,7 @@ TODO
                 or insert files by url?? -->
 
                 <!-- Markdown -->
-                <div v-if="pin?.type === 0 || !pin.type">
+                <div v-if="pin?.type === 0 || !pin.type || pin?.type === 'Markdown'">
                     <client-only>
                         <QuillEditor
                             v-model:content="content"
@@ -37,17 +37,19 @@ TODO
 
                 <!-- BEGIN specialization -->
                 <!-- Image gallery -->
-                <div v-if="pin.type === 1">
+                <div v-if="pin?.type === 1 || pin?.type === 'ImageGallery'">
                     - file attachments
                     - image gallery preview
                 </div>
 
                 <!-- Checklist -->
-                <div v-if="pin.type === 4">
-                    <pin-checklist-pin :style="{ background: background }" />
+                <div v-if="pin?.type === 4 || pin?.type === 'Checklist'">
+                    <pin-checklist-pin
+                        v-model:content="content"
+                        :style="{ background: background }"
+                    />
                 </div>
                 <!-- END -->
-
 
                 <!-- Colors -->
                 <pin-palette
@@ -156,14 +158,19 @@ export default {
     methods: {
         async createPin() {
             // TODO: per type checks
-            console.log(this.content)
             if (!this.content) {
                 this.$emit('error', 'Content cannot be empty');
                 return;
             }
 
+            let type = this.pin.type;
+            if (typeof type === 'string') { // Convert type to numeric
+                type = ['Markdown', 'ImageGallery', 'Link', 'Review', 'Checklist']
+                    .indexOf(type) || type;
+            }
+
             let params = {
-                pin_type: this.pin.type,
+                pin_type: type,
                 board_id: this.boardId,
                 flags: '',
                 content: this.content,

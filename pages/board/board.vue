@@ -254,9 +254,10 @@ definePageMeta({
 
             <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]">
                 <Pin
-                    v-for="pin in pins" :key="pin.key || pin.pin_id"
+                    v-for="pin in pins" :key="pin.key ? pin.pin_id + pin.key : pin.pin_id"
                     :content="pin.content"
                     :pin-id="pin.pin_id"
+                    :type="pin.pin_type"
                     :creator="pin.creator"
                     :created="pin.created"
                     :edited="pin.edited"
@@ -720,7 +721,7 @@ export default {
             this.currentPin = { type };
             this.editPin = false;
             this.createPinModal = true
-            this.pinTitle = ['Markdown', 'Image Gallery', 'Link', 'Review'][type] || '';
+            this.pinTitle = ['Markdown', 'Image Gallery', 'Link', 'Review', 'Checklist'][type] || '';
         },
         // On pin select / deselect
         updateSelected(update) {

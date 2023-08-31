@@ -1,14 +1,5 @@
-
-
-pin:
-- checkboxes
-    checklist:
-        - disable dragging entirely
-        - disable deleting entirely
-
 - cheklist pin
-
-    - write content => string and string => content - shared
+    - click - update
 
 
 - reviews

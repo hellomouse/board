@@ -11,7 +11,7 @@ Example usage:
     <draggable
         :list="checklist_mut"
         item-key="id"
-        :disabled="!canDrag"
+        class="pb-4"
         v-bind="dragOptions"
     >
         <template #item="{ element }">
@@ -21,23 +21,31 @@ Example usage:
                 @click="selectElement(element)"
             >
                 <v-icon
+                    v-if="!simple"
                     class="checklist-drag" icon="mdi-drag"
                     @mouseenter="canDrag = true"
                     @mouseleave="canDrag = false"
                 />
-                <v-checkbox
+                <v-checkbox-btn
                     v-model="element.checked"
                     class="checklist-checkbox"
                     label=""
                 />
                 <resizeable-textarea
+                    v-if="!simple"
                     :value="element.value"
                     type="text"
                     class="checklist-input"
                     placeholder="Edit item"
                     @focusout="v => { element.value = v.target.value; $emit('pushHistory'); }"
                 />
+                <p
+                    v-if="simple"
+                    class="checklist-input"
+                >{{ element.value }}</p>
                 <v-btn
+                    v-if="!simple"
+                    color="transparent"
                     class="checklist-btn" icon="mdi-close" flat
                     @click="removeElement(element)"
                 />
@@ -55,6 +63,10 @@ export default {
         checklist: {
             required: true,
             type: Array
+        },
+        simple: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -68,7 +80,7 @@ export default {
         dragOptions() {
             return {
                 animation: 200,
-                disabled: false,
+                disabled: !this.canDrag || this.simple,
                 ghostClass: 'ghost'
             };
         }
@@ -83,7 +95,7 @@ export default {
             let classes = [];
             if (element.checked)
                 classes.push('checklist-item--completed')
-            if (element.selected)
+            if (element.selected && !this.simple)
                 classes.push('checklist-item--selected');
             return classes;
         },
@@ -101,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$checklist-item-height: 30px;
+$checklist-item-height: 25px;
 
 .checklist-item {
     min-height: $checklist-item-height;
@@ -110,11 +122,10 @@ $checklist-item-height: 30px;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
     transition: border 0.2s;
-    margin-left: -8px;
 
     &.checklist-item--completed {
         opacity: var(--v-disabled-opacity);
-        textarea {
+        textarea, p {
             text-decoration: line-through;
         }
     }
@@ -141,7 +152,6 @@ $checklist-item-height: 30px;
 
     .checklist-checkbox {
         flex: initial !important;
-        margin-top: -12px;
         margin-left: -8px;
         height: $checklist-item-height !important;
     }
@@ -149,15 +159,16 @@ $checklist-item-height: 30px;
     .checklist-input {
         flex: 1 1 0;
         resize: none;
+        box-sizing: border-box;
         min-height: $checklist-item-height !important;
-        padding: 5px 4px;
+        padding: 3px 4px;
         background-color: rgba(var(--v-theme-on-surface), 0);
         color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
         transition: background-color 0.2s;
 
         &:focus {
-            background-color: rgba(var(--v-theme-on-surface), var(--v-focus-opacity));
             outline: none;
+            background-color: rgba(var(--v-theme-on-surface), var(--v-focus-opacity));
         }
     }
     .checklist-btn {

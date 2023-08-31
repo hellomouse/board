@@ -1,7 +1,9 @@
 <!--
 Example usage:
 
-TODO
+<pin-checklist-pin
+    v-model:content="content"
+/>
 -->
 
 <template>
@@ -52,46 +54,28 @@ TODO
 </template>
 
 <script>
+import { contentToChecklist, checklistToContent } from '~/helpers/board/pin-checklist.js';
+
 const MAX_CHECKBOXES = 150;
 const UNDO_HISTORY = 20;
 
 export default {
     props: {
-        initialChecklist: {
+        content: {
             required: true,
-            type: Array
+            type: String
         }
     },
     data() {
-        let list = [ // this.initialChecklist; // TODO default list
-            {
-                checked: false,
-                value: "Item 1",
-                id: Math.random()
-            },
-            {
-                checked: false,
-                value: "Item 2",
-                id: Math.random()
-            },
-            {
-                checked: true,
-                value: "Item 3",
-                id: Math.random()
-            },
-            {
-                checked: false,
-                value: "Item 4",
-                id: Math.random()
-            }
-        ];
+        let list = contentToChecklist(this.content) || [{ selected: false, value: '', id: 1 }];
+        this.$emit('update:content', checklistToContent(list));
         return {
             checklist: list,
             canDrag: false,
             MAX_CHECKBOXES,
             history: [list.map(x => Object.assign({}, x))],
             historyPointer: -1,
-            checklistKey: 0
+            checklistKey: Math.random()
         };
     },
     watch: {
@@ -122,7 +106,8 @@ export default {
             this.checklist.sort((a, b) => {
                 if (a.checked === b.checked) return 0;
                 return a.checked ? 1 : -1;
-            })
+            });
+            this.updateHistory();
         },
         undo() {
             if (this.historyPointer < 0)
@@ -147,7 +132,7 @@ export default {
             copy.forEach(x => delete x.selected);
             copy.doNotAddToHistory = true;
             this.checklist = copy;
-            this.checklistKey++;
+            this.checklistKey = Math.random();
         },
         keyupHandler(event) {
             if (event.ctrlKey && event.key === 'z')
@@ -156,6 +141,8 @@ export default {
                 this.redo();
         },
         updateHistory() {
+            this.$emit('update:content', checklistToContent(this.checklist));
+
             if (this.checklist.doNotAddToHistory) {
                 this.checklist.doNotAddToHistory = false;
                 return;

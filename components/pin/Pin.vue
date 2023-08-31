@@ -30,7 +30,7 @@
             <div class="pin-tile__header__icon-row">
                 <v-tooltip
                     v-for="icon in flag_icons"
-                    :key="icon"
+                    :key="pinId + icon"
                     :text="icon.text"
                     location="top"
                 >
@@ -45,9 +45,18 @@
                 </v-tooltip>
             </div>
         </div>
-            
+
         <div class="px-4 py-1 pin-tile__content" style="max-height: 500px; overflow-y: auto">
-            <span v-html="content"></span>
+            <!-- Markdown -->
+            <span v-if="type === 'Markdown'" v-html="content"></span>
+
+            <!-- Checklist pin -->
+            <pin-checklist
+                v-if="type === 'Checklist'"
+                :key="pinId + forceUpdateKey"
+                :simple="true"
+                :checklist="contentToChecklist(content)"
+            />
         </div>
 
         <div class="pl-4 pin-tile__bottom">
@@ -132,6 +141,7 @@
 import { useAuthStore } from '~/store/auth.js';
 import { getBackground, getColor } from '~/helpers/board/pin-colors.js';
 import { useOptionStore } from '~/store/optionStore.js';
+import { contentToChecklist } from '~/helpers/board/pin-checklist.js';
 
 export default {
     name: 'BoardPin',
@@ -165,7 +175,10 @@ export default {
 
             // Click
             numClicks: 0,
-            selected: this.initialSelected
+            selected: this.initialSelected,
+
+            // Misc
+            forceUpdateKey: 0
         };
     },
     computed: {
@@ -224,9 +237,13 @@ export default {
     watch: {
         deselectTrigger() {
             this.selected = false;
+        },
+        content() {
+            this.forceUpdateKey++;
         }
     },
     methods: {
+        contentToChecklist,
         deletePin() {
             this.deleting = true;
             this.deletionTimeout = setTimeout(async () => {
