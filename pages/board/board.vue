@@ -251,7 +251,7 @@ definePageMeta({
 
             <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]">
                 <lazy-Pin
-                    v-for="pin in pins" :key="pin.key ? pin.pin_id + pin.key : pin.pin_id"
+                    v-for="pin in pins" :key="pin.pin_id"
                     :content="pin.content"
                     :pin-id="pin.pin_id"
                     :type="pin.pin_type"
@@ -493,7 +493,10 @@ export default {
     // Get board info + pins on page load
     async created() {
         await this.onLoad();
-        this.$watch('$route.query', this.onLoad);
+        this.$watch('$route.query', () => {
+            this.deselectAllPins();
+            this.onLoad();
+        });
     },
     methods: {
         async onLoad() {
@@ -573,11 +576,8 @@ export default {
                         });
                         pins = pins.pins;
                         for (let pin of that.pins) {
-                            if (pins.includes(pin.pin_id)) {
+                            if (pins.includes(pin.pin_id))
                                 pin.favorited = true;
-                                if (!pin.key) pin.key = 1;
-                                else pin.key++;
-                            }
                         }
                     }, 200);
                 }
@@ -766,9 +766,6 @@ export default {
                         else if (!addFlags && flags.includes(flag))
                             flags = flags.filter(f => f !== flag);
                         pin.flags = flags.filter(x => x).join(' | ');
-
-                        if (!pin.key) pin.key = 1;
-                        else pin.key++;
                     }
                 }
             } catch (e) {
@@ -806,11 +803,8 @@ export default {
                 await this.$fetchApi('/api/board/pins/favorites', addFav ? 'PUT' : 'DELETE', opts);
 
                 for (let pin of this.pins) {
-                    if (this.selectedPins.has(pin.pin_id)) {
+                    if (this.selectedPins.has(pin.pin_id))
                         pin.favorited = addFav;
-                        if (!pin.key) pin.key = 1;
-                        else pin.key++;
-                    }
                 }
             } catch (e) {
                 console.error(e);
@@ -830,8 +824,6 @@ export default {
                     if (this.selectedPins.has(pin.pin_id)) {
                         pin.metadata.color = update.color;
                         pin.selected = true;
-                        if (!pin.key) pin.key = 1;
-                        else pin.key++;
                     }
                 }
             } catch (e) {

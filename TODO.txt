@@ -6,7 +6,6 @@ boards:
     - ctrl-shift select
 
 pins: - ctrl a + click outside
-    - dont use key hack
 
 
 - link:

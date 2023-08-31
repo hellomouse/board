@@ -53,16 +53,14 @@
             <!-- Link pin -->
             <pin-link
                 v-if="type === 'Link'"
-                :key="pinId + forceUpdateKey"
                 :content="content"
             />
 
             <!-- Checklist pin -->
             <pin-checklist
                 v-if="type === 'Checklist'"
-                :key="pinId + forceUpdateKey"
                 :simple="true" :locked="locked"
-                :checklist="contentToChecklist(content)"
+                :checklist="contentToChecklist(content) || []"
                 @check="v => resendContent(pinId, checklistToContent(v))"
             />
         </div>
@@ -188,7 +186,6 @@ export default {
             selected: this.initialSelected,
 
             // Misc
-            forceUpdateKey: 0,
             resendContentTimeout: null,
             resendContentLast: 0
         };
@@ -250,9 +247,10 @@ export default {
         deselectTrigger() {
             this.selected = false;
         },
-        content() {
-            this.forceUpdateKey++;
-        }
+
+        // Property updates
+        initialFlags() { this.flags = this.initialFlags; },
+        initialFavorited() { this.favorited = this.initialFavorited; }
     },
     methods: {
         contentToChecklist,

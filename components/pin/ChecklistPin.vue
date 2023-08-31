@@ -76,7 +76,7 @@ export default {
             MAX_CHECKBOXES,
             history: [list.map(x => Object.assign({}, x))],
             historyPointer: -1,
-            checklistKey: Math.random()
+            checklistKey: Math.random() // Hack or otherwise editing textarea undo doesn't work
         };
     },
     watch: {

@@ -94,6 +94,9 @@ export default {
         }
     },
     watch: {
+        checklist() {
+            this.checklist_mut = this.checklist;
+        },
         checklist_mut() {
             this.$emit('update:checklist', this.checklist_mut);
         }
