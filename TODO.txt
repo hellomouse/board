@@ -3,12 +3,10 @@ optimization: when sending content allow sending diff?
 
 boards:
     - also does selection - mass Share
-    + drag select?
     - ctrl-shift select
 
 pins: - ctrl a + click outside
-    - drag select
-
+    - dont use key hack
 
 
 - link:
@@ -37,9 +35,7 @@ pin create/edit modal:
     - https://vueup.github.io/vue-quill/guide/modules.html
 - for markdown pin show link for markdown guide
 
-board / pin api - return pfp url as well
--  cache user information for fast lookup
-- or just make /pfp/username.png or something
+pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
 copy note to board option
@@ -59,8 +55,10 @@ responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
-boards within boards
-- folders
+boards folders
+- only top level folders
+- add tags to boards? show tags (folders) at top to search, clicking just filters by them
+- move boards to folders
 
 user settings page
 

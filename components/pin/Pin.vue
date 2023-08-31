@@ -328,7 +328,7 @@ export default {
             if (this.numClicks === 1) {
                 let self = this;
                 setTimeout(() => {
-                    if (self.numClicks >= 3 && !this.locked)
+                    if (self.numClicks >= 3 && !this.locked && this.viewerHasPerm)
                         this.emitEditUpdate();
                     self.numClicks = 0;
                 }, 300);
