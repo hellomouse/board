@@ -158,7 +158,7 @@ definePageMeta({
                 </NuxtLink>
             </div>
 
-            <div v-if="!errorState && !initialLoad && !isSinglePin">
+            <div v-if="!errorState && !initialLoad && !isSinglePin" @click="deselectAllPins()">
                 <h1>
                     <v-menu v-if="!isFavoritesPage">
                         <template #activator="{ props }">
@@ -854,7 +854,6 @@ export default {
                 return false;
             }
         },
-
     }
 }
 </script>

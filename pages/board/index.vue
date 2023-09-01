@@ -85,7 +85,7 @@ useSeoMeta({
             <div class="d-flex flex-direction-row">
                 <h1>{{ title }}</h1>
 
-                <v-spacer />
+                <v-spacer @click="deselectAllBoards()" />
 
                 <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
                     <v-select
