@@ -2,11 +2,15 @@ optimization: when sending content allow sending diff?
 
 
 boards:
-    - also does selection - mass Share
+    - mass Share
     - ctrl-shift select
 
 - link:
     - download preview image as low res maybe
+        - just base64 encode maybe?
+            - api to get the base64 image and info, embed in content
+
+links:
     - download site
 
     - videos preview (sep component in shared or osmething)

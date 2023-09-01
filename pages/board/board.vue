@@ -3,6 +3,12 @@
 definePageMeta({
     layout: false,
 });
+
+// eslint-disable-next-line no-undef
+useSeoMeta({
+    ogImage: '/logos/meta/board.png',
+    twitterCard: 'summary_large_image',
+});
 </script>
 
 <template>
