@@ -170,8 +170,10 @@ export default {
         color: { type: String, default: '' },
         perm: { type: String, default: '' },
         alwaysShowDetails: { type: Boolean, default: false },
+        initialFavorited: { type: Boolean, default: false },
+
         deselectTrigger: { type: Boolean, default: false },
-        initialFavorited: { type: Boolean, default: false }
+        selectTrigger: { type: Boolean, default: false }
     },
     data() {
         return {
@@ -244,9 +246,8 @@ export default {
         archived() { return this.flags.split(' | ').includes('ARCHIVED'); }
     },
     watch: {
-        deselectTrigger() {
-            this.selected = false;
-        },
+        deselectTrigger() { this.selected = false; },
+        selectTrigger() { this.selected = true; },
 
         // Property updates
         initialFlags() { this.flags = this.initialFlags; },

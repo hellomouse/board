@@ -104,7 +104,7 @@ useSeoMeta({
                 </div>
             </div>
             
-            <div class="scroll-container" @scroll="onScroll"  @click.self="deselectAllBoards()">
+            <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoards()">
                 <BoardBoard
                     v-for="board in sortedBoards" :key="board.id"
                     :board-id="board.id"

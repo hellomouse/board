@@ -5,9 +5,6 @@ boards:
     - also does selection - mass Share
     - ctrl-shift select
 
-pins: - ctrl a + click outside
-
-
 - link:
     - download preview image as low res maybe
     - download site

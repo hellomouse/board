@@ -249,7 +249,7 @@ definePageMeta({
                 </div>
             </div>
 
-            <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]">
+            <div :class="[isSinglePin ? 'single-pin-grid' : 'grid', specialGridClass]" @click.self="deselectAllPins()">
                 <lazy-Pin
                     v-for="pin in pins" :key="pin.pin_id"
                     :content="pin.content"
@@ -265,6 +265,7 @@ definePageMeta({
                     :perm="currentUserPerm"
                     :always-show-details="alwaysShowCardDetails"
                     :deselect-trigger="deselectTrigger"
+                    :select-trigger="selectTrigger"
                     :initial-favorited="pin.favorited"
                     class="mb-1"
 
@@ -442,6 +443,7 @@ export default {
             // Pin selection
             selectedPins: new Set(),
             deselectTrigger: false,   // When this updates all pins are deselected
+            selectTrigger: false,     // When this updates all pins are selected
             deleteDialog: false,
             selectedSwatchIndex: 0
         };
@@ -489,6 +491,14 @@ export default {
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
         }
+    },
+    mounted() {
+        if (process.client)
+            document.addEventListener('keydown', this.keyupHandler);
+    },
+    destroyed() {
+        if (process.client)
+            document.removeEventListener('keydown', this.keyupHandler);
     },
     // Get board info + pins on page load
     async created() {
@@ -740,6 +750,11 @@ export default {
             this.deselectTrigger = !this.deselectTrigger; // Change triggers deselect for all pins
             this.selectedPins.clear();
         },
+        selectAllPins() {
+            this.pins.forEach(p => p.selected = true);
+            this.selectTrigger = !this.selectTrigger;
+            this.selectedPins = new Set(this.pins.map(x => x.pin_id));
+        },
         // Bulk modify pins
         doAllSelectedPinsHaveFlags(flag) {
             for (let pin of this.pins) {
@@ -830,7 +845,16 @@ export default {
                 console.error(e);
                 [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
             }
-        }
+        },
+        // Selection keyboard
+        keyupHandler(event) {
+            if (event.ctrlKey && event.key === 'a') { // Ctrl-A select all pins
+                event.preventDefault();
+                this.selectAllPins();
+                return false;
+            }
+        },
+
     }
 }
 </script>
