@@ -2,7 +2,6 @@
     <div>
         <p class="para mb-2">{{ desc }}</p>
         <link-embed class="mb-2" :url="url" />
-        <a class="link" :href="url" target="_blank">{{ url }}</a>
     </div>
 </template>
 

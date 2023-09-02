@@ -1,6 +1,5 @@
 optimization: when sending content allow sending diff?
 
-
 boards:
     - mass Share
     - ctrl-shift select
@@ -8,11 +7,21 @@ boards:
 - link:
     - download preview image as low res maybe
         - just base64 encode maybe?
-            - api to get the base64 image and info, embed in content
+            - api to get the base64 image and info, embed in metadata
+            - rust image thumbnail - maybe like 60x60
+        - disable submit while generating
+            - generate if untouched after a while and before submit
+
+        - or do it async in background since expensive, implement queue
+            - instead returns link the result will be at
+
+        - get preview very slow on google, terminate after elements are found or don't log?
+            - seperate the process for the web app
+            - google fails to fetch preview image
+            - rewrite in node.js
 
 links:
     - download site
-
     - videos preview (sep component in shared or osmething)
         - save youtube metadata maybe
     - sound preview:
@@ -23,8 +32,7 @@ links:
         - image / video
     - reddit
     - imgur / pixiv images
-    - opengraph preview
-        - https://www.peekalink.io/_nuxt/img/social-network.e1f6aec.png
+
 
 
 later:
@@ -33,18 +41,17 @@ pin create/edit modal:
     - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
-- for markdown pin show link for markdown guide
 
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
 copy note to board option
 
+- option to download board
+
 -------
 
 future todo:
-
-- option to download board
 
 - pins: version history
 
@@ -63,3 +70,16 @@ boards folders
 user settings page
 
 track user login ip and time, invalidate sessions
+
+
+
+
+----
+link tree:
+- per user automatic, setup with your name + pfp
+- set desc
+- add / remove links
+
+- logo, favicon, add to list, meta
+
+----
