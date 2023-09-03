@@ -426,6 +426,39 @@
                 <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
+
+        <ApiDoc
+            title="Generate Link Pin Preview"
+            method="POST"
+            endpoint="/api/board/pins/preview"
+            param-type="JSON"
+            :auth="true"
+        >
+            Generates a preview for an existing link pin.
+            Returns 401 if not logged in, and 500 on error. The task will be 
+            queued, and if a preview is successfully generated the pin content
+            will be modified with the new data (otherwise nothing happens)<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_id: Uuid</td><td>ID of the pin to generate preview for, user must have edit permissions</td></tr>
+                    <tr><td>url: string</td><td>URL to generate the preview for</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Task queued" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
     </div>
 </template>
 

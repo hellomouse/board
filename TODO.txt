@@ -6,8 +6,7 @@ boards:
 
 link tags - periodically refresh or hide link preview if not rendered?
 
-
-api doc for download
+404 page specifically for preview files
 
 twit frame is broken
 
