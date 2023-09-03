@@ -8,10 +8,12 @@ link tags - periodically refresh or hide link preview if not rendered?
 
 twit frame is broken
 
-page to watch download queue process
-- api to get in process
-- table of results
+site:
+- site logo
+- api docs
+- api limit data length + name length
 
+pin link preview overflow - pin no x-scroll (see full screen)
 
 ----
 later:

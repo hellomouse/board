@@ -58,8 +58,8 @@
                 :onerror="fallback" />
             <div class="px-2 link-meta-text">
                 <a target="_blank" :href="url">
-                    <h3 class="text-truncate">{{ title }}</h3>
-                    <p class="text-truncate">{{ desc }}</p>
+                    <h3 class="text-truncate">{{ title || 'No title provided' }}</h3>
+                    <p class="text-truncate">{{ desc || 'No description provided' }}</p>
                     <p class="text-truncate text-blue link-meta-url"><small>{{ url }}</small></p>
                 </a>
             </div>
