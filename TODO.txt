@@ -4,35 +4,16 @@ boards:
     - mass Share
     - ctrl-shift select
 
+don't override ctrl+a if in modal
+
 - link:
     - download preview image as low res maybe
         - just base64 encode maybe?
             - api to get the base64 image and info, embed in metadata
             - rust image thumbnail - maybe like 60x60
-        - disable submit while generating
-            - generate if untouched after a while and before submit
 
-        - or do it async in background since expensive, implement queue
-            - instead returns link the result will be at
 
-        - get preview very slow on google, terminate after elements are found or don't log?
-            - seperate the process for the web app
-            - google fails to fetch preview image
-            - rewrite in node.js
-
-links:
-    - download site
-    - videos preview (sep component in shared or osmething)
-        - save youtube metadata maybe
-    - sound preview:
-        - newgrounds, soundcloud
-    - tweets
-        - pfp, user, content, likes, retweets, time
-        - see discord
-        - image / video
-    - reddit
-    - imgur / pixiv images
-
+page to watch download queue process
 
 
 later:

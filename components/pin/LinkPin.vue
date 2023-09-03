@@ -6,6 +6,9 @@ TODO
 Content format:
     1st line: url
     2nd line: note with newlines removed
+    3rd line: url for image
+    4th line: page title
+    5th line: page desc
 -->
 
 <template>

@@ -23,11 +23,13 @@
         <div
             class="d-flex link-meta"
         >
-            <div style="width: 60px; height: 60px; background: red"></div>
+            <img 
+                :src="imgSrc" class="meta-image" alt="link-preview" loading="lazy"
+                onerror="this.style.visibility='hidden'" />
             <div class="px-2 link-meta-text">
                 <a target="_blank" :href="url">
-                    <h3 class="text-truncate">Website Title</h3>
-                    <p class="text-truncate">desc</p>
+                    <h3 class="text-truncate">{{ title }}</h3>
+                    <p class="text-truncate">{{ desc }}</p>
                     <p class="text-truncate text-blue link-meta-url"><small>{{ url }}</small></p>
                 </a>
             </div>
@@ -41,6 +43,18 @@ export default {
         url: {
             required: true,
             type: String
+        },
+        title: {
+            type: String,
+            default: 'No title provided'
+        },
+        desc: {
+            type: String,
+            default: 'No description provided'
+        },
+        imgSrc: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -67,6 +81,14 @@ export default {
     display: block;
     max-width: 100% !important;
     width: 100% !important;
+}
+
+.meta-image {
+    width: 60px;
+    height: 60px;
+    background: #444;
+    display: block;
+    object-fit: cover;
 }
 
 .link-meta {

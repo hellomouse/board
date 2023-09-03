@@ -1,7 +1,13 @@
 <template>
     <div>
         <p class="para mb-2">{{ desc }}</p>
-        <link-embed class="mb-2" :url="url" />
+        <link-embed
+            class="mb-2"
+            :url="url"
+            :title="title"
+            :desc="metaDesc"
+            :img-src="imgUrl"
+        />
     </div>
 </template>
 
@@ -17,7 +23,10 @@ export default {
         const lines = this.content.split('\n');
         return {
             url: lines[0].startsWith('http') ? lines[0] : 'https://' + lines[0],
-            desc: lines[1] || ''
+            desc: lines[1] || '',
+            imgUrl: lines[2],
+            title: lines[3],
+            metaDesc: lines[4]
         };
     },
     watch: {
@@ -25,6 +34,10 @@ export default {
             const lines = this.content.split('\n');
             this.url = lines[0].startsWith('http') ? lines[0] : 'https://' + lines[0];
             this.desc = lines[1] || '';
+ 
+            this.imgUrl = lines[2];
+            this.title = lines[3];
+            this.metaDesc = lines[4];
         }
     }
 }

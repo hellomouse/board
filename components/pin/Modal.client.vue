@@ -190,18 +190,34 @@ export default {
             };
 
             // Editing requires id
+            let pinId = this.editMode ? this.pin.pin_id : null;
             if (this.editMode)
                 params.id = this.pin.pin_id;
 
             this.loading = true;
             try {
-                await this.$fetchApi('/api/board/pins', this.editMode ? 'PUT' : 'POST', params);
+                let result = await this.$fetchApi('/api/board/pins', this.editMode ? 'PUT' : 'POST', params);
+                if (!pinId) pinId = result.id;
             } catch (e) {
                 let errorMsg = `Failed to ${this.editMode ? 'modify' : 'create'} pin: ${this.$apiErrorToString(e)}`;
                 this.$emit('error', errorMsg);
                 this.loading = false;
                 return;
             }
+
+            // Link pin: generate preview
+            if (type === 2) {
+                try {
+                    await this.$fetchApi('/api/board/pins/preview', 'POST', {
+                        url: this.content.split('\n')[0],
+                        pin_id: pinId
+                    });
+                } catch (e) {
+                    let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
+                    this.$emit('error', errorMsg);
+                }
+            }
+
             this.loading = false;
             this.$emit('update', true);
         }
