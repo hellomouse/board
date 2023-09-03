@@ -6,12 +6,13 @@ boards:
 
 don't override ctrl+a if in modal
 
-- link:
-    - download preview image as low res maybe
-        - just base64 encode maybe?
-            - api to get the base64 image and info, embed in metadata
-            - rust image thumbnail - maybe like 60x60
 
+
+link tags - periodically refresh or hide link preview if not rendered?
+
+lazy load iframes + only switch to iframe on click
+
+math formating
 
 page to watch download queue process
 

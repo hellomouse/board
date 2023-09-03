@@ -5,15 +5,18 @@
         <iframe
             v-if="youtubeId"
             class="max-width mb-2"
+            loading="lazy"
             :src="'https://www.youtube.com/embed/' + youtubeId" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen />
         <iframe
             v-else-if="isTweet" border="0" frameborder="0"
+            loading="lazy"
             class="max-width mb-2" height="400"
             :src="'https://twitframe.com/show?url=' + encodeURIComponent(url)" />
         <iframe
             v-else-if="bilibiliId"
+            loading="lazy"
             class="max-width mb-2"
             height="200"
             :src="`//player.bilibili.com/player.html?bvid=${bilibiliId}&page=3&high_quality=1&autoplay=false`"
@@ -25,7 +28,7 @@
         >
             <img 
                 :src="imgSrc" class="meta-image" alt="link-preview" loading="lazy"
-                onerror="this.style.visibility='hidden'" />
+                :onerror="fallback" />
             <div class="px-2 link-meta-text">
                 <a target="_blank" :href="url">
                     <h3 class="text-truncate">{{ title }}</h3>
@@ -55,6 +58,10 @@ export default {
         imgSrc: {
             type: String,
             default: ''
+        },
+        fallbackImgSrc: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -66,7 +73,8 @@ export default {
         return {
             youtubeId: (yt && yt[7].length === 11) ? yt[7] : false,
             isTweet: this.url.includes('twitter.com/'),
-            bilibiliId: bilibiliId || false
+            bilibiliId: bilibiliId || false,
+            fallback: `if (this.src !== '${this.fallbackImgSrc || ''}' && '${this.fallbackImgSrc || ''}' !== '') { this.src = '${this.fallbackImgSrc || ''}'; } else { this.style.visibility = 'hidden'; }`
         };
     }
 }
