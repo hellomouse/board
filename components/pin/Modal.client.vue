@@ -197,7 +197,7 @@ export default {
                 params.id = this.pin.pin_id;
 
             // Download website request for link pins
-            if (type === 2 && this.downloadOptions) {
+            if (type === 2 && this.downloadOptions.url) {
                 try {
                     let id = await this.$fetchApi('/api/site/download', 'POST', this.downloadOptions);
                     id = id.uuid;
@@ -228,14 +228,19 @@ export default {
 
             // Link pin: generate preview
             if (type === 2) {
-                try {
-                    await this.$fetchApi('/api/board/pins/preview', 'POST', {
-                        url: this.content.split('\n')[0],
-                        pin_id: pinId
-                    });
-                } catch (e) {
-                    let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
-                    this.$emit('error', errorMsg);
+                const url1 = (this.pin && this.pin.content) ? this.pin.content.split('\n')[0] : '';
+                const url2 = this.content.split('\n')[0];
+
+                if (url1 !== url2) {
+                    try {
+                        await this.$fetchApi('/api/board/pins/preview', 'POST', {
+                            url: url2,
+                            pin_id: pinId
+                        });
+                    } catch (e) {
+                        let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
+                        this.$emit('error', errorMsg);
+                    }
                 }
             }
 

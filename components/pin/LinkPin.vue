@@ -1,7 +1,11 @@
 <!--
 Example usage:
 
-TODO
+<pin-link-pin
+    v-model:content="content"
+    v-model:downloadOptions="downloadOptions"
+    :style="{ background: background }"
+/>
 
 Content format:
     1st line: url

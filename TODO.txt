@@ -8,10 +8,10 @@ link tags - periodically refresh or hide link preview if not rendered?
 
 twit frame is broken
 
-- if url has not changed then don't requeue preview
-
-
 page to watch download queue process
+- api to get in process
+- table of results
+
 
 ----
 later:
