@@ -54,6 +54,7 @@ TODO
                 <div v-if="pin?.type === 2 || pin?.type === 'Link'">
                     <pin-link-pin
                         v-model:content="content"
+                        v-model:downloadOptions="downloadOptions"
                         :style="{ background: background }"
                     />
                 </div>
@@ -143,7 +144,8 @@ export default {
             color: this.pin?.metadata?.color,
             loading: false,
             toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
-            selectedSwatchIndex: 0
+            selectedSwatchIndex: 0,
+            downloadOptions: {}
         };
     },
     computed: {
@@ -194,6 +196,25 @@ export default {
             if (this.editMode)
                 params.id = this.pin.pin_id;
 
+            // Download website request for link pins
+            if (type === 2 && this.downloadOptions) {
+                try {
+                    let id = await this.$fetchApi('/api/site/download', 'POST', this.downloadOptions);
+                    id = id.uuid;
+
+                    // Inject downloaded content uuid into content
+                    let content = params.content.split('\n');
+                    while (content.length < 6)
+                        content.push('');
+                    content[5] = id + '.' + this.downloadOptions.strategy;
+                    params.content = content.join('\n');
+                } catch (e) {
+                    let errorMsg = `Failed to download site: ${this.$apiErrorToString(e)}`;
+                    this.$emit('error', errorMsg);
+                }
+            }
+
+            // Edit pin content
             this.loading = true;
             try {
                 let result = await this.$fetchApi('/api/board/pins', this.editMode ? 'PUT' : 'POST', params);

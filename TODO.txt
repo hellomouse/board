@@ -4,23 +4,26 @@ boards:
     - mass Share
     - ctrl-shift select
 
-
-
 link tags - periodically refresh or hide link preview if not rendered?
 
 
+api doc for download
 
-math formating
+twit frame is broken
+
+- if url has not changed then don't requeue preview
+
 
 page to watch download queue process
 
-
+----
 later:
 
 pin create/edit modal:
     - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
+    - https://github.com/c-w/mathquill4quill
 
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user

@@ -9,6 +9,12 @@
             :img-src="imgUrlFast"
             :fallback-img-src="imgUrl"
         />
+
+        <v-btn
+            v-if="downloadedContent" flat color="teal-darken-1" block
+            :href="'/files/site_downloads/' + downloadedContent"
+            target="_blank"
+        ><v-icon icon="mdi-archive" class="mr-2" /> View Archived Copy</v-btn>
     </div>
 </template>
 
@@ -29,6 +35,7 @@ export default {
             imgUrl: lines[2],
             title: lines[3],
             metaDesc: lines[4],
+            downloadedContent: lines[5],
             imgUrlFast: `/files/thumb/${this.urlHash(url)}.webp`
         };
     },
@@ -41,6 +48,7 @@ export default {
             this.imgUrl = lines[2];
             this.title = lines[3];
             this.metaDesc = lines[4];
+            this.downloadedContent = lines[5];
             this.imgUrlFast = `/files/thumb/${this.urlHash(this.url)}.webp`;
         }
     },
