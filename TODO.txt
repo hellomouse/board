@@ -6,13 +6,13 @@ boards:
 
 link tags - periodically refresh or hide link preview if not rendered?
 
-twit frame is broken
+twit frame is broken sometimes?
 
 site:
-- site logo
-- api limit data length + name length
+- site logo - maybe a downloader or somethin
+- link it somewhere ig
 
-pin link preview overflow - pin no x-scroll (see full screen)
+login page cancel redirect if route hcanges
 
 ----
 later:

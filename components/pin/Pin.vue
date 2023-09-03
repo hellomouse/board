@@ -394,6 +394,7 @@ export default {
     display: table;
 
     overflow: auto;
+    overflow-x: hidden;
     position: relative;
     border: 1px solid transparent;
     transition: border 0.2s;

@@ -135,6 +135,7 @@ export default {
 
     .video-img {
         cursor: pointer;
+        object-fit: cover;
     }
 }
 
@@ -154,9 +155,10 @@ export default {
 
 .link-meta {
     background-color: rgba(var(--v-theme-on-surface), 0.04);
+    overflow: hidden;
 
     .link-meta-text {
-        max-width: 240px;
+        max-width: 200px;
         width: 100%;
         padding-top: 4px;
         height: 60px;
