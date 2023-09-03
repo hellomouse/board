@@ -10,7 +10,6 @@ twit frame is broken
 
 site:
 - site logo
-- api docs
 - api limit data length + name length
 
 pin link preview overflow - pin no x-scroll (see full screen)
