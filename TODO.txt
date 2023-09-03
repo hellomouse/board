@@ -4,8 +4,6 @@ boards:
     - mass Share
     - ctrl-shift select
 
-don't override ctrl+a if in modal
-
 
 
 link tags - periodically refresh or hide link preview if not rendered?

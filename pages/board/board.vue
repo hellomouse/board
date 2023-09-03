@@ -500,11 +500,11 @@ export default {
     },
     mounted() {
         if (process.client)
-            document.addEventListener('keydown', this.keyupHandler);
+            document.addEventListener('keydown', this.keydownHandler);
     },
     destroyed() {
         if (process.client)
-            document.removeEventListener('keydown', this.keyupHandler);
+            document.removeEventListener('keydown', this.keydownHandler);
     },
     // Get board info + pins on page load
     async created() {
@@ -853,12 +853,17 @@ export default {
             }
         },
         // Selection keyboard
-        keyupHandler(event) {
-            if (event.ctrlKey && event.key === 'a') { // Ctrl-A select all pins
+        keydownHandler(event) {
+            // Ctrl-A select all pins when no modal is open
+            if (event.ctrlKey && event.key === 'a' && !this.deleteDialog &&
+                    !this.editBoardModal && !this.shareBoardModal &&
+                    !this.deleteBoardModal && !this.boardPropertiesModal &&
+                    !this.createPinModal) {
                 event.preventDefault();
                 this.selectAllPins();
                 return false;
             }
+            return true;
         },
     }
 }

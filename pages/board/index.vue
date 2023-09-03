@@ -256,11 +256,11 @@ export default {
     },
     mounted() {
         if (process.client)
-            document.addEventListener('keydown', this.keyupHandler);
+            document.addEventListener('keydown', this.keydownHandler);
     },
     destroyed() {
         if (process.client)
-            document.removeEventListener('keydown', this.keyupHandler);
+            document.removeEventListener('keydown', this.keydownHandler);
     },
     // Get boards on page first load
     created() {
@@ -400,8 +400,10 @@ export default {
                 this.toastErrorMsg = 'Failed to edit board info: ' + this.$apiErrorToString(e);
             }
         },
-        keyupHandler(event) {
-            if (event.ctrlKey && event.key === 'a') { // Ctrl-A select all boards
+        keydownHandler(event) {
+            // Ctrl-A select all boards
+            if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
+                    !this.shareBoardModal && !this.deleteBoardModal) {
                 event.preventDefault();
                 this.selectAllBoards();
                 return false;
