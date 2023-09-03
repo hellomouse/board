@@ -8,7 +8,7 @@ boards:
 
 link tags - periodically refresh or hide link preview if not rendered?
 
-lazy load iframes + only switch to iframe on click
+
 
 math formating
 

@@ -2,30 +2,57 @@
 
 <template>
     <div class="container">
+        <!-- Fake video iframes that load on click -->
+        <div class="video-img-wrapper">
+            <img
+                v-if="youtubeId && !iframeInteract"
+                class="max-width mb-2 video-img"
+                loading="lazy"
+                height="200"
+                :src="fallbackImgSrc"
+                onerror="this.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='"
+                @click="iframeInteract = true"
+            />
+        </div>
+        <div class="video-img-wrapper">
+            <img
+                v-if="bilibiliId && !iframeInteract"
+                class="max-width mb-2 video-img"
+                loading="lazy"
+                height="200"
+                :src="fallbackImgSrc"
+                onerror="this.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='"
+                @click="iframeInteract = true"
+            />
+        </div>
+
+        <!-- Video iframes that only load after click -->
         <iframe
-            v-if="youtubeId"
+            v-if="youtubeId && iframeInteract"
             class="max-width mb-2"
             loading="lazy"
-            :src="'https://www.youtube.com/embed/' + youtubeId" frameborder="0"
+            height="200"
+            :src="'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1'" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen />
+        <iframe
+            v-else-if="bilibiliId && iframeInteract"
+            loading="lazy"
+            class="max-width mb-2"
+            height="200"
+            :src="`//player.bilibili.com/player.html?bvid=${bilibiliId}&page=3&high_quality=1&autoplay=true`"
+            scrolling="no" border="0" frameborder="no"
+            framespacing="0" allowfullscreen="true"
+        />
+
+        <!-- Other -->
         <iframe
             v-else-if="isTweet" border="0" frameborder="0"
             loading="lazy"
             class="max-width mb-2" height="400"
             :src="'https://twitframe.com/show?url=' + encodeURIComponent(url)" />
-        <iframe
-            v-else-if="bilibiliId"
-            loading="lazy"
-            class="max-width mb-2"
-            height="200"
-            :src="`//player.bilibili.com/player.html?bvid=${bilibiliId}&page=3&high_quality=1&autoplay=false`"
-            scrolling="no" border="0" frameborder="no"
-            framespacing="0" allowfullscreen="true"
-        />
-        <div
-            class="d-flex link-meta"
-        >
+    
+        <div class="d-flex link-meta">
             <img 
                 :src="imgSrc" class="meta-image" alt="link-preview" loading="lazy"
                 :onerror="fallback" />
@@ -74,7 +101,9 @@ export default {
             youtubeId: (yt && yt[7].length === 11) ? yt[7] : false,
             isTweet: this.url.includes('twitter.com/'),
             bilibiliId: bilibiliId || false,
-            fallback: `if (this.src !== '${this.fallbackImgSrc || ''}' && '${this.fallbackImgSrc || ''}' !== '') { this.src = '${this.fallbackImgSrc || ''}'; } else { this.style.visibility = 'hidden'; }`
+
+            iframeInteract: false,
+            fallback: `if (this.src !== '${this.fallbackImgSrc || ''}' && '${this.fallbackImgSrc || ''}' !== '') { this.src = '${this.fallbackImgSrc || ''}'; } else { this.style.display = 'none'; }`
         };
     }
 }
@@ -83,6 +112,30 @@ export default {
 <style lang="scss" scoped>
 .container {
     max-width: 100%;
+}
+
+.video-img-wrapper {
+    position: relative;
+
+    &:after {
+        content: '';
+        background: url('/video-play.png'), linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .video-img {
+        cursor: pointer;
+    }
 }
 
 .max-width {
@@ -106,6 +159,7 @@ export default {
         max-width: 240px;
         width: 100%;
         padding-top: 4px;
+        height: 60px;
 
         .link-meta-url {
             font-size: 0.75rem;
