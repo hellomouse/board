@@ -6,8 +6,6 @@ boards:
 
 link tags - periodically refresh or hide link preview if not rendered?
 
-404 page specifically for preview files
-
 twit frame is broken
 
 - if url has not changed then don't requeue preview

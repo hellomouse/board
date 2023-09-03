@@ -8,6 +8,10 @@
                 {{ error.statusCode + ': ' + otherError }}
             </h1>
 
+            <p v-if="$route.path.startsWith('/files/site_downloads')" class="mb-8">
+                If you came here looking for a file, it may be still processing, or already deleted.
+            </p>
+
             <p class="text--secondary mt-3">
                 If you think you found a bug, please add it to our
                 <a href="https://github.com/hellomouse/board/issues">issue tracker</a> on github.
@@ -28,7 +32,7 @@ export default {
     },
     data() {
         return {
-            pageNotFound: '404 Not Found',
+            pageNotFound: 'Page Not Found',
             otherError: 'An error occurred',
         }
     },
