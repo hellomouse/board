@@ -7,7 +7,7 @@ const optStore = useOptionStore();
 // eslint-disable-next-line no-undef
 useHead({
     title: 'Hellomouse Site',
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/main.svg' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/logos/site.png' }],
 });
 
 const DESC = 'Website downloader microservice';
@@ -18,7 +18,7 @@ useSeoMeta({
     ogTitle: 'Hellomouse Site Status',
     description: DESC,
     ogDescription: DESC,
-    ogImage: '/logos/meta/main.png',
+    ogImage: '/logos/meta/site.png',
     twitterCard: 'summary_large_image',
 });
 
@@ -32,7 +32,7 @@ theme.global.name.value = optStore.dark_theme ? 'dark' : 'light';
             <template #logo>
                 <UiAppLogo 
                     href="/"
-                    src="/logos/main.svg"
+                    src="/logos/site.png"
                     title="Site"
                     class="mr-10"
                 />
