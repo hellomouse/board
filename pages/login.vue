@@ -47,6 +47,18 @@ export default {
         loading: false,
         error_msg: ''
     }),
+    async mounted() {
+        if (useAuthStore(this.$pinia).isLoggedIn) {
+            await new Promise(r => setTimeout(r, 2000));
+
+            if (this.$route.path !== '/login')
+                return;
+            let redirect = '/';
+            if (this.$route.query && this.$route.query.r && this.$route.query.r.startsWith('/'))
+                redirect = this.$route.query.r;
+            this.$router.push({ path: redirect });
+        }
+    },
     methods: {
         async postLogin() {
             let redirect = '/';
@@ -98,13 +110,6 @@ export default {
         }
     }
 };
-</script>
-
-<script setup>
-// eslint-disable-next-line no-undef
-definePageMeta({
-    middleware: 'notauth',
-});
 </script>
 
 <style lang="scss" scoped>

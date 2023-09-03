@@ -8,7 +8,6 @@ link tags - periodically refresh or hide link preview if not rendered?
 
 twit frame is broken sometimes?
 
-login page cancel redirect if route hcanges
 
 ----
 later:
