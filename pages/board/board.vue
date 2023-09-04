@@ -273,7 +273,7 @@ useSeoMeta({
                     :deselect-trigger="deselectTrigger"
                     :select-trigger="selectTrigger"
                     :initial-favorited="pin.favorited"
-                    class="mb-1"
+                    style="margin-bottom: 10px"
 
                     @update="onPinUpdate"
                     @success="msg => { [this.showSuccessToast, this.toastSuccessMsg] = [true, msg]; }"
@@ -901,7 +901,7 @@ export default {
 
 .grid {
     columns: 300px auto;
-    column-gap: 5px;
+    column-gap: 10px;
     min-height: calc(100% - 200px);
 
     // Special cases when number of pins can't fill columns
