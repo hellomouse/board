@@ -114,28 +114,15 @@ export default {
             type: String,
             default: ''
         },
-        selectTrigger: {
-            type: Boolean,
-            default: false
-        },
-        unselectTrigger: {
+        selected: {
             type: Boolean,
             default: false
         }
     },
     data() {
         return {
-            numClicks: 0,
-            selected: false
+            numClicks: 0
         };
-    },
-    watch: {
-        selectTrigger() {
-            this.selected = true;
-        },
-        unselectTrigger() {
-            this.selected = false;
-        }
     },
     methods: {
         copyShareLink() {
@@ -149,8 +136,8 @@ export default {
                 let self = this;
                 setTimeout(() => {
                     if (self.numClicks === 1) { // Single click: select
-                        self.selected = !self.selected;
-                        this.$emit('select', { id: this.boardId, select: self.selected });
+                        this.$emit('update:selected', !self.selected)
+                        this.$emit('select', { id: this.boardId, select: !self.selected });
                     }
                     else                       // Double click: go to board
                         self.goToBoard();

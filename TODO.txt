@@ -2,12 +2,14 @@ optimization: when sending content allow sending diff?
 
 boards:
     - mass Share
-    - ctrl-shift select
 
 link tags - periodically refresh or hide link preview if not rendered?
 
+boards folders
+- only top level folders
+- add tags to boards? show tags (folders) at top to search, clicking just filters by them
+- drag boards to folders
 
-twit frame is broken sometimes?
 
 ----
 later:
@@ -37,11 +39,6 @@ better search (split words, images, dates, etc...)
 responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
-
-boards folders
-- only top level folders
-- add tags to boards? show tags (folders) at top to search, clicking just filters by them
-- move boards to folders
 
 user settings page
 

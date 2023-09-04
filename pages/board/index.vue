@@ -107,15 +107,13 @@ useSeoMeta({
             <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoards()">
                 <BoardBoard
                     v-for="board in sortedBoards" :key="board.id"
+                    v-model:selected="board.selected"
                     :board-id="board.id"
                     :name="board.name"
                     :desc="board.desc"
                     :creator-id="board.creator"
                     :color="board.color"
                     :current-user-perm="board.perms[user.id]?.perm_level"
-
-                    :select-trigger="selectBoardsTrigger"
-                    :unselect-trigger="unselectBoardsTrigger"
 
                     @update="onBoardUpdate"
                     @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
@@ -212,10 +210,11 @@ export default {
 
             // Selection
             selectedBoards: new Set(),
-            selectBoardsTrigger: false,
-            unselectBoardsTrigger: false,
             color: '',
-            selectedSwatchIndex: 0
+            selectedSwatchIndex: 0,
+            startSelection: -1, // For shift select
+            previousI: -1, // For shift select
+            shiftKey: false
         };
     },
     computed: {
@@ -254,17 +253,23 @@ export default {
             this.getBoards();
         },
         '$route'() {
-            if (this.$route.path !== '/board' && process.client)
+            if (this.$route.path !== '/board' && process.client) {
                 document.removeEventListener('keydown', this.keydownHandler);
+                document.removeEventListener('keyup', this.keyupHandler);
+            }
         }
     },
     mounted() {
-        if (process.client)
+        if (process.client) {
             document.addEventListener('keydown', this.keydownHandler);
+            document.addEventListener('keyup', this.keyupHandler);
+        }
     },
     destroyed() {
-        if (process.client)
+        if (process.client) {
             document.removeEventListener('keydown', this.keydownHandler);
+            document.removeEventListener('keyup', this.keyupHandler);
+        }
     },
     // Get boards on page first load
     created() {
@@ -284,6 +289,7 @@ export default {
             let boards = [];
             try {
                 boards = await this.loadBoards(this.boards.length, BOARDS_PER_CHUNK);
+                this.startSelection = -1;
                 this.boards = this.boards.concat(boards);
             } catch (e) {
                 this.showErrorToast = true;
@@ -312,6 +318,7 @@ export default {
             return boards.boards;
         },
         async getBoards() {
+            this.startSelection = -1;
             this.boards = [];
             this.loadingBoards = true;
             try {
@@ -332,6 +339,7 @@ export default {
             else if (msg.type === 'close_board_delete') // Close board delete modal
                 this.deleteBoardModal = false;
             else if (msg.type === 'board_delete') { // Board was deleted
+                this.startSelection = -1;
                 this.boards = this.boards.filter(b => b.id !== msg.id);
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
             }
@@ -376,18 +384,46 @@ export default {
         },
         // Selection
         onBoardSelect(update) {
-            if (!update.select)
+            let i = this.boards.map(b => b.id).indexOf(update.id);
+            if (this.startSelection > -1 && !this.boards[this.startSelection].selected)
+                this.startSelection = -1;
+
+            /**
+             * Fill range of indices in board with selected value
+             * @param {*} that this
+             * @param {number} start Start index
+             * @param {number} end End index
+             * @param {boolean} value Value of selected
+             */
+            function fillSelectionRange(that, start, end, value) {
+                if (start > end) [end, start] = [start, end];
+                for (let i = start; i <= end; i++) {
+                    that.selectedBoards.add(that.boards[i].id);
+                    that.boards[i].selected = value;
+                }
+            }
+
+            if (this.shiftKey && this.startSelection > -1) { // Group selection
+                fillSelectionRange(this, this.startSelection, this.previousI, false);
+                fillSelectionRange(this, this.startSelection, i, true);
+            }
+            else if (!update.select)
                 this.selectedBoards.delete(update.id);
-            else
+            if (update.select) {
                 this.selectedBoards.add(update.id);
+                if (!this.shiftKey || this.startSelection < 0)
+                    this.startSelection = i;
+            }
+            this.previousI = i;
         },
         deselectAllBoards() {
             this.selectedBoards.clear();
-            this.unselectBoardsTrigger = !this.unselectBoardsTrigger;
+            this.boards.forEach(b => b.selected = false);
+            this.startSelection = -1;
         },
         selectAllBoards() {
             this.selectedBoards = new Set(this.boards.map(b => b.id));
-            this.selectBoardsTrigger = !this.selectBoardsTrigger;
+            this.boards.forEach(b => b.selected = true);
         },
         async massColorChange(col, index) {
             try {
@@ -405,6 +441,8 @@ export default {
             }
         },
         keydownHandler(event) {
+            this.shiftKey = event.shiftKey;
+
             // Ctrl-A select all boards
             if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
                     !this.shareBoardModal && !this.deleteBoardModal) {
@@ -414,6 +452,10 @@ export default {
             }
             return true;
         },
+        keyupHandler(event) {
+            this.shiftKey = event.shiftKey;
+            return true;
+        }
     }
 }
 </script>

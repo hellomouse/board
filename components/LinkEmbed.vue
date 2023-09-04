@@ -3,9 +3,8 @@
 <template>
     <div class="container">
         <!-- Fake video iframes that load on click -->
-        <div class="video-img-wrapper">
+        <div v-if="youtubeId && !iframeInteract" class="video-img-wrapper">
             <img
-                v-if="youtubeId && !iframeInteract"
                 class="max-width mb-2 video-img"
                 loading="lazy"
                 height="200"
@@ -14,9 +13,8 @@
                 @click="iframeInteract = true"
             />
         </div>
-        <div class="video-img-wrapper">
+        <div v-if="bilibiliId && !iframeInteract" class="video-img-wrapper">
             <img
-                v-if="bilibiliId && !iframeInteract"
                 class="max-width mb-2 video-img"
                 loading="lazy"
                 height="200"
@@ -46,6 +44,7 @@
         />
 
         <!-- Other -->
+        
         <iframe
             v-else-if="isTweet" border="0" frameborder="0"
             loading="lazy"
