@@ -1,6 +1,6 @@
 <div align="center">
 <h1>Hellomouse Apps</h1>
-<b>🚧  This is currently under construction, features may change at any time 🚧<b>
+<b>🚧  This is currently under construction, features may change at any time 🚧</b>
 </div>
 <br>
 
