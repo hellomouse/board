@@ -3,6 +3,11 @@ optimization: when sending content allow sending diff?
 boards:
     - mass Share
 
+save different formats show like PDF, HTML
+- append or something, see linkwarden.app
+- screenshot strategy
+- icon (file, pdf, image), text (PDF, etc..) + download button
+
 link tags - periodically refresh or hide link preview if not rendered?
 
 boards folders
