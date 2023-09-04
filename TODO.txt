@@ -4,10 +4,11 @@ boards:
     - mass Share
     - ctrl-shift select
 
+write the readme
+
 link tags - periodically refresh or hide link preview if not rendered?
 
 twit frame is broken sometimes?
-
 
 ----
 later:

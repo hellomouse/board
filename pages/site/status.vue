@@ -41,6 +41,10 @@ definePageMeta({
                     </tr>
                 </tbody>
             </v-table>
+
+            <div v-if="jobs.length === 0" class="text-center mt-10">
+                <h1>You have no queued jobs :D</h1>
+            </div>
         </div>
     </NuxtLayout>
 </template>
