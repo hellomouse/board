@@ -88,9 +88,9 @@ export default {
     watch: {
         show() {
             this.description = this.board?.desc || 'Default description';
-            this.color = this.board?.color || swatches[0];
+            this.color = this.board?.color || this.swatches[0];
             this.name = this.board?.name;
-            this.selectedSwatchIndex = Math.max(0, swatches.indexOf(this.color.toUpperCase()));
+            this.selectedSwatchIndex = Math.max(0, this.swatches.indexOf(this.color.toUpperCase()));
         }
     },
     methods: {
