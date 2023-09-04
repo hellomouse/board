@@ -6,7 +6,6 @@ boards:
 
 link tags - periodically refresh or hide link preview if not rendered?
 
-still can't ctrl-A in edit board modal on main page and other
 
 twit frame is broken sometimes?
 

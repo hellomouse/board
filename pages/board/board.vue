@@ -496,6 +496,10 @@ export default {
         },
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
+        },
+        '$route'() {
+            if (this.$route.path !== '/board/board' && process.client)
+                document.removeEventListener('keydown', this.keydownHandler);
         }
     },
     mounted() {

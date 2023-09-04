@@ -55,9 +55,12 @@ export default {
     }),
     watch: {
         async board(newVal, _oldVal) {
+            if (!Object.keys(newVal).length || !newVal.perms)
+                return;
+
             let board = newVal;
             this.shareBoardId = board.id;
-            this.sharePublicPerm = board?.perms['public']?.perm_level;
+            this.sharePublicPerm = (board && board.perms) ? board.perms['public']?.perm_level : '';
             this.shareBoardCreator = board.creator;
             this.shareBoardName = board.name;
 

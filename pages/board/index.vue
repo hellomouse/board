@@ -252,6 +252,10 @@ export default {
             this.selectedBoards = new Set();
             this.updatePageTitle();
             this.getBoards();
+        },
+        '$route'() {
+            if (this.$route.path !== '/board' && process.client)
+                document.removeEventListener('keydown', this.keydownHandler);
         }
     },
     mounted() {
@@ -408,6 +412,7 @@ export default {
                 this.selectAllBoards();
                 return false;
             }
+            return true;
         },
     }
 }
