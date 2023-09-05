@@ -11,10 +11,14 @@
         />
 
         <v-btn
-            v-if="downloadedContent" flat color="teal-darken-1" block
-            :href="'/files/site_downloads/' + downloadedContent"
+            v-for="b in downloadContentArray" :key="b.strategy"
+            flat color="teal-darken-1"
+            :href="'/files/site_downloads/' + b.url"
             target="_blank"
-        ><v-icon icon="mdi-archive" class="mr-2" /> View Archived Copy</v-btn>
+            class="mb-1 mr-1" height="30"
+            :prepend-icon="b.icon"
+            append-icon="mdi-download"
+        >{{ b.name }}</v-btn>
     </div>
 </template>
 
@@ -38,6 +42,34 @@ export default {
             downloadedContent: lines[5],
             imgUrlFast: `/files/thumb/${this.urlHash(url)}.webp`
         };
+    },
+    computed: {
+        downloadContentArray() {
+            if (!this.downloadedContent) return [];
+            return this.downloadedContent.split('|').filter(x => x)
+                .map(x => {
+                    let split = x.split(',');
+                    let strategy = split.length === 2 ? split[0] : 'archived';
+                    return {
+                        url: split.at(-1),
+                        strategy: strategy,
+                        icon: {
+                            html: 'mdi-application-outline',
+                            pdf: 'mdi-file-pdf-box',
+                            screenshot: 'mdi-image',
+                            media: 'mdi-auto-download',
+                            archived: 'mdi-archive'
+                        }[strategy],
+                        name: {
+                            html: 'HTML',
+                            pdf: 'PDF',
+                            screenshot: 'Screenshot',
+                            media: 'Content',
+                            archived: 'Archive'
+                        }[strategy]
+                    }
+                });
+        }
     },
     watch: {
         content() {

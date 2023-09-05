@@ -33,7 +33,7 @@ Content format:
         />
 
         <p v-if="hasDownloadedContent" class="text-yellow mt-2">
-            This pin already has downloaded content, downloading again make the old content inaccessible (you can still view it from Storage)
+            This pin already has downloaded content in this format, downloading again make the old content inaccessible (you can still view it from Storage)
         </p>
 
         <v-checkbox
@@ -133,12 +133,20 @@ export default {
         return {
             url: lines[0] || '',
             desc: lines[1] || '',
-            hasDownloadedContent: lines[5] ? true : false,
             downloadWebsite: false,
             rules: [v => v && (v.length <= 200 || 'Max 200 characters')],
             downloadStrategy: 3,
             infoModal: false
         };
+    },
+    computed: {
+        strategyKey() {
+            return ['html', 'pdf', 'screenshot', 'media'][this.downloadStrategy];
+        },
+        hasDownloadedContent() {
+            const lines = this.content.split('\n');
+            return lines[5].includes(this.strategyKey + ',');
+        }
     },
     watch: {
         url() { this.emitContentUpdate(); },
@@ -154,7 +162,7 @@ export default {
         emitDownloadUpdate() {
             this.$emit('update:downloadOptions', this.downloadWebsite ? {
                 url: this.url,
-                strategy: ['html', 'pdf', 'screenshot', 'media'][this.downloadStrategy]
+                strategy: this.strategyKey
             } : {});
         }
     }

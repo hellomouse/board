@@ -196,6 +196,13 @@ export default {
             if (this.editMode)
                 params.id = this.pin.pin_id;
 
+            // Compare if url changed
+            let [url1, url2] = ['', ''];
+            if (type === 2) {
+                url1 = (this.pin && this.pin.content) ? this.pin.content.split('\n')[0] : '';
+                url2 = this.content.split('\n')[0];
+            }
+
             // Download website request for link pins
             if (type === 2 && this.downloadOptions.url) {
                 try {
@@ -213,7 +220,12 @@ export default {
                         html: 'html',
                         media: 'html'
                     };
-                    content[5] = id + '.' + (extMap[this.downloadOptions.strategy] || 'html');
+
+                    // Format: strategy,url|strategy,url|...
+                    if (url1 !== url2) content[5] = '';
+                    content[5] = content[5].split('|').filter(x => !x.startsWith(this.downloadOptions.strategy)).filter(x => x);
+                    content[5].push(this.downloadOptions.strategy + ',' + id + '.' + (extMap[this.downloadOptions.strategy] || 'html'));
+                    content[5] = content[5].join('|');
                     params.content = content.join('\n');
                 } catch (e) {
                     let errorMsg = `Failed to download site: ${this.$apiErrorToString(e)}`;
@@ -235,9 +247,6 @@ export default {
 
             // Link pin: generate preview
             if (type === 2) {
-                const url1 = (this.pin && this.pin.content) ? this.pin.content.split('\n')[0] : '';
-                const url2 = this.content.split('\n')[0];
-
                 if (url1 !== url2) {
                     try {
                         await this.$fetchApi('/api/board/pins/preview', 'POST', {

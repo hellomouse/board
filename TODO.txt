@@ -3,10 +3,7 @@ optimization: when sending content allow sending diff?
 boards:
     - mass Share
 
-save different formats show like PDF, HTML
-- append or something, see linkwarden.app
-- icon (file, pdf, image), text (PDF, etc..) + download button
-
+- content shouldn't duplicate html if not supproted
 
 link tags - periodically refresh or hide link preview if not rendered?
 
