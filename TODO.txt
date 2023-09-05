@@ -7,7 +7,6 @@ save different formats show like PDF, HTML
 - append or something, see linkwarden.app
 - icon (file, pdf, image), text (PDF, etc..) + download button
 
-scrollbar on pin thinner
 
 link tags - periodically refresh or hide link preview if not rendered?
 

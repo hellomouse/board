@@ -494,6 +494,12 @@ export default {
     }
 
     &__content {
+        // Thin scrollbars
+        scrollbar-width: thin;
+        &::-webkit-scrollbar {
+            width: 2px !important;
+        }
+
         opacity: 0.9;
     }
 
