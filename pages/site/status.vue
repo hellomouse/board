@@ -29,7 +29,7 @@ definePageMeta({
                         <td>{{ job.name }}</td>
                         <td>{{ $formatTimestamp(job.created) }}</td>
                         <td>{{ job.finished !== job.created ? $formatTimestamp(job.finished) : '---' }}</td>
-                        <td><a :href="job.data.split('|').at(-1)">{{ job.data.split('|').at(-1) }}</a></td>
+                        <td class="url-td text-truncate"><a :href="job.data.split('|').at(-1)">{{ job.data.split('|').at(-1) }}</a></td>
                         <td class="text-center">{{ job.priority }}</td>
                         <td>
                             <v-chip
@@ -42,8 +42,8 @@ definePageMeta({
                 </tbody>
             </v-table>
 
-            <div v-if="jobs.length === 0" class="text-center mt-10">
-                <h1>You have no queued jobs :D</h1>
+            <div class="text-center mt-10">
+                <h1>{{ stateMsg }}</h1>
             </div>
         </div>
     </NuxtLayout>
@@ -54,7 +54,8 @@ export default {
     data() {
         return {
             jobs: [],
-            jobInterval: null
+            jobInterval: null,
+            stateMsg: 'Loading...'
         };
     },
     mounted() {
@@ -86,8 +87,10 @@ export default {
                     limit: 100
                 });
                 this.jobs = result.jobs;
+                this.stateMsg = this.jobs.length === 0 ? 'You have no queued jobs :D' : '';
             } catch(e) {
                 console.error(e);
+                this.stateMsg = 'Error loading jobs :(';
             }
         }
     }
@@ -95,5 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/variables.scss";
+.url-td {
+    max-width: 500px;
+}
 </style>
