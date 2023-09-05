@@ -206,7 +206,14 @@ export default {
                     let content = params.content.split('\n');
                     while (content.length < 6)
                         content.push('');
-                    content[5] = id + '.' + this.downloadOptions.strategy;
+
+                    const extMap = {
+                        pdf: 'pdf',
+                        screenshot: 'webp',
+                        html: 'html',
+                        media: 'html'
+                    };
+                    content[5] = id + '.' + (extMap[this.downloadOptions.strategy] || 'html');
                     params.content = content.join('\n');
                 } catch (e) {
                     let errorMsg = `Failed to download site: ${this.$apiErrorToString(e)}`;

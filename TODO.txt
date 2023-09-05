@@ -5,8 +5,9 @@ boards:
 
 save different formats show like PDF, HTML
 - append or something, see linkwarden.app
-- screenshot strategy
 - icon (file, pdf, image), text (PDF, etc..) + download button
+
+scrollbar on pin thinner
 
 link tags - periodically refresh or hide link preview if not rendered?
 
@@ -14,7 +15,6 @@ boards folders
 - only top level folders
 - add tags to boards? show tags (folders) at top to search, clicking just filters by them
 - drag boards to folders
-
 
 ----
 later:

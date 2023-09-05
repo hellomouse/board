@@ -52,7 +52,8 @@ Content format:
             >
                 <v-btn>HTML</v-btn>
                 <v-btn>PDF</v-btn>
-                <v-btn>Media</v-btn>
+                <v-btn>WEBP</v-btn>
+                <v-btn>Smart</v-btn>
             </v-btn-toggle><br>
 
             <small style="cursor: pointer" @click="infoModal = true">What do these options mean?</small>
@@ -85,7 +86,13 @@ Content format:
                     </p>
 
                     <br>
-                    <h2>Media</h2>
+                    <h2>WEBP</h2>
+                    <p>
+                        Takes a screenshot of the website.
+                    </p>
+
+                    <br>
+                    <h2>Smart</h2>
                     <p>
                         This uses a hard-coded set of rules to download content from certain websites (otherwise defaults to HTML). Supported websites are:
 
@@ -129,7 +136,7 @@ export default {
             hasDownloadedContent: lines[5] ? true : false,
             downloadWebsite: false,
             rules: [v => v && (v.length <= 200 || 'Max 200 characters')],
-            downloadStrategy: 0,
+            downloadStrategy: 3,
             infoModal: false
         };
     },
@@ -147,7 +154,7 @@ export default {
         emitDownloadUpdate() {
             this.$emit('update:downloadOptions', this.downloadWebsite ? {
                 url: this.url,
-                strategy: ['html', 'pdf', 'media'][this.downloadStrategy]
+                strategy: ['html', 'pdf', 'screenshot', 'media'][this.downloadStrategy]
             } : {});
         }
     }

@@ -9,7 +9,7 @@
             param-type="JSON"
             :auth="true"
         >
-            Queue a website download. The output will be stored at <code>/files/site_downloads/[task id].[html|pdf]</code><br>
+            Queue a website download. The output will be stored at <code>/files/site_downloads/[task id].[html|pdf|webp]</code><br>
 
             <v-table density="compact" class="api-parameter-table my-4">
                 <thead>
@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>strategy: pdf|html|media</td><td>Download strategy. PDF is download as PDF, HTML as HTML file, and media is same as HTML except for certain sites, which will have special hard-coded rules.</td></tr>
+                    <tr><td>strategy: pdf|html|media|screenshot</td><td>Download strategy. PDF is download as PDF, HTML as HTML file, screenshot for WEBP screnshot, and media is same as HTML except for certain sites, which will have special hard-coded rules.</td></tr>
                     <tr><td>url: string</td><td>URL to generate the preview for</td></tr>
                 </tbody>
             </v-table>
