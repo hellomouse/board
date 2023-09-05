@@ -145,7 +145,7 @@ export default {
         },
         hasDownloadedContent() {
             const lines = this.content.split('\n');
-            return lines[5].includes(this.strategyKey + ',');
+            return (lines[5] || '').includes(this.strategyKey + ',');
         }
     },
     watch: {
