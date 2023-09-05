@@ -54,7 +54,7 @@ export default {
                         url: split.at(-1),
                         strategy: strategy,
                         icon: {
-                            html: 'mdi-application-outline',
+                            html: 'mdi-file-document',
                             pdf: 'mdi-file-pdf-box',
                             screenshot: 'mdi-image',
                             media: 'mdi-auto-download',

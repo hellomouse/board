@@ -3,7 +3,7 @@ optimization: when sending content allow sending diff?
 boards:
     - mass Share
 
-- content shouldn't duplicate html if not supproted
+select multiple formats for download at once :D
 
 link tags - periodically refresh or hide link preview if not rendered?
 
