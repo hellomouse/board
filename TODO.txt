@@ -1,8 +1,5 @@
 optimization: when sending content allow sending diff?
 
-
-going from board -> pin triggers board update first
-
 link tags - periodically refresh or hide link preview if not rendered?
 - sse endpoint for this
 - return pin updates with data?

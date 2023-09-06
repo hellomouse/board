@@ -266,9 +266,11 @@ export default {
             this.getBoards();
         },
         '$route.query'() {
-            this.selectedBoards = new Set();
-            this.updatePageTitle();
-            this.getBoards();
+            if (this.$route.path === '/board') {
+                this.selectedBoards = new Set();
+                this.updatePageTitle();
+                this.getBoards();
+            }
         },
         '$route'() {
             if (this.$route.path !== '/board' && process.client) {
