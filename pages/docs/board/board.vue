@@ -256,6 +256,81 @@
                 <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
+
+        <ApiDoc
+            title="Bulk get board perms"
+            method="POST"
+            endpoint="/api/board/boards/perms/bulk"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>board_ids: array of strings</td><td>IDs of the boards to modify. Limited to length 200, boards the user cannot edit are ignored</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{
+    perms: {
+        username (string): {
+            name: display name (string),
+            perm: { perm_level: string }
+        }
+    } 
+}</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Bulk modify board perms"
+            method="PUT"
+            endpoint="/api/board/boards/perms/bulk"
+            param-type="JSON"
+            :auth="true"
+        >
+            Modify permissions across all provided boards at once. Invalid rules will be ignored; invalid rules are:
+            <ul class="ml-10">
+                <li>If the user has edit permission, they cannot edit / remove permissions of other users with edit or owner permission</li>
+                <li>The creator of the board will always be owner</li>
+                <li>Users with edit permission cannot create / modify permissions to owner</li>
+                <li>The user id must exist</li>
+            </ul>
+            <br>
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>board_ids: array of strings</td><td>IDs of the boards to modify. Limited to length 200, boards the user cannot edit are ignored</td></tr>
+                    <tr><td>perms_to_add: { username: { perm_level: perm (string) } }</td><td>New or modified user permissions as an object of user ID : perm object. New users will be inserted and existing permissions updated; ignores invalid rules</td></tr>
+                    <tr><td>users_to_delete: array of strings</td><td>IDs of the users to remove from all boards; ignores invalid rules</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ updated: number of boards updated }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
     </div>
 </template>
 

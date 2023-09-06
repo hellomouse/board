@@ -1,9 +1,7 @@
 optimization: when sending content allow sending diff?
 
-boards:
-    - mass Share
 
-select multiple formats for download at once :D
+going from board -> pin triggers board update first
 
 link tags - periodically refresh or hide link preview if not rendered?
 - sse endpoint for this
@@ -11,12 +9,13 @@ link tags - periodically refresh or hide link preview if not rendered?
     - only show pins user can access
     - send event data: when pin update, somehow get from ipc
 
-filter by pin type
-
 boards folders
 - only top level folders
 - add tags to boards? show tags (folders) at top to search, clicking just filters by them
 - drag boards to folders
+- uhhh selecting folders??
+
+copy note to board option
 
 ----
 later:
@@ -30,7 +29,6 @@ pin create/edit modal:
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
-copy note to board option
 
 - option to download board
 
@@ -42,17 +40,11 @@ future todo:
 
 better search (split words, images, dates, etc...)
 
-
 responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
-user settings page
-
-track user login ip and time, invalidate sessions
-
-
-
+persist sessions across server restart
 
 ----
 link tree:
@@ -63,3 +55,11 @@ link tree:
 - logo, favicon, add to list, meta
 
 ----
+
+general
+
+user settings page
+
+track user login ip and time, invalidate sessions
+
+

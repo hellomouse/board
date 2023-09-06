@@ -65,6 +65,7 @@ useSeoMeta({
                     <v-btn
                         v-bind="props"
                         icon="mdi-account-plus"
+                        @click="openMassShareBoardModal()"
                     />
                 </template>
             </v-tooltip>
@@ -149,6 +150,16 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
+            <BoardMassShareModal
+                :show="massShareBoardModal"
+                :boards="[...selectedBoards]"
+                :has-edit-permission-on-all-selected-boards="hasEditPermissionOnAllSelectedBoards"
+
+                @update="e => { if (e.type === 'close') massShareBoardModal = false; }"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
             <v-snackbar
                 v-model="showErrorToast" color="error" rounded="0" theme="dark"
                 transition="scroll-y-reverse-transition"
@@ -170,6 +181,7 @@ useSeoMeta({
 import { useAuthStore } from '~/store/auth.js';
 import { useOptionStore } from '~/store/optionStore.js';
 
+import { EDIT, OWNER } from '~/helpers/board/perms.js';
 import { BOARD_SWATCHES } from '~/helpers/board/board-colors.js';
 import BoardBoard from '~/components/board/Board.vue';
 import BoardModal from '~/components/board/Modal.vue';
@@ -191,6 +203,7 @@ export default {
             editBoard: false,
             createBoardModal: false,
             shareBoardModal: false,
+            massShareBoardModal: false,
             deleteBoardModal: false,
 
             // Toasts
@@ -236,6 +249,11 @@ export default {
         },
         containerClass() {
             return useOptionStore(this.$pinia).expand_left_nav ? '' : 'sidenav-hidden';
+        },
+        hasEditPermissionOnAllSelectedBoards() {
+            let user = useAuthStore(this.$pinia).user.id;
+            return this.boards.filter(b => this.selectedBoards.has(b.id))
+                .every(b => b.perms[user] && [EDIT, OWNER].includes(b.perms[user].perm_level));
         }
     },
     watch: {
@@ -349,13 +367,16 @@ export default {
                 this.currentBoard = msg.board;
             }
             else if (msg.type === 'share') { // Open share board modal
-                try {
-                    this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: msg.id });
-                    this.shareBoardModal = true;
-                } catch(e) {
-                    this.showErrorToast = true;
-                    this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
-                }
+                await this.openShareModal(msg.id);
+            }
+        },
+        async openShareModal(id) {
+            try {
+                this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
+                this.shareBoardModal = true;
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
             }
         },
         // Open the create board button
@@ -425,6 +446,12 @@ export default {
             this.selectedBoards = new Set(this.boards.map(b => b.id));
             this.boards.forEach(b => b.selected = true);
         },
+        async openMassShareBoardModal() {
+            let selected = [...this.selectedBoards];
+            if (!selected.length) return;
+            else if (selected.length === 1) await this.openShareModal(selected[0]);
+            else this.massShareBoardModal = true;
+        },
         async massColorChange(col, index) {
             try {
                 let opts = { board_ids: [...this.selectedBoards], color: col };
@@ -445,7 +472,7 @@ export default {
 
             // Ctrl-A select all boards
             if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
-                    !this.shareBoardModal && !this.deleteBoardModal) {
+                    !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal) {
                 event.preventDefault();
                 this.selectAllBoards();
                 return false;

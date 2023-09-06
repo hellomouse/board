@@ -86,7 +86,7 @@ Example usage:
                             </div>
                         </template>
                     </v-autocomplete>
-
+                    
                     <v-btn
                         class="ml-2" color="primary"
                         style="height: 42px"
@@ -107,7 +107,7 @@ Example usage:
 
                         <v-select
                             v-model="publicLevel"
-                            :disabled="![OWNER, EDIT].includes(currentUserPerm)" class="user__perm"
+                            :disabled="!forceEdit && ![OWNER, EDIT].includes(currentUserPerm)" class="user__perm"
                             :items="permLevelsFiltered.filter(x => x !== OWNER).concat([NO_ACCESS])"
                         ></v-select>
                     </div>
@@ -142,6 +142,7 @@ Example usage:
 
                 <!-- Bottom portion -->
                 <v-btn
+                    v-if="permaShareLink.length"
                     class="mt-4" variant="text"
                     @click="copyShareLink"
                 >
@@ -170,10 +171,8 @@ Example usage:
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
+import { NO_ACCESS, OWNER, EDIT } from '~/helpers/board/perms.js';
 
-const NO_ACCESS = 'No Access';
-const OWNER = 'Owner';
-const EDIT = 'Edit';
 const INPUT_RATE_LIMIT_MS = 300; // In ms
 
 export default {
@@ -221,6 +220,11 @@ export default {
             type: String,
             default: NO_ACCESS
         },
+        // Don't disable if user doesn't have permission
+        forceEdit: {
+            type: Boolean,
+            default: false
+        }
     },
     data: () => ({
         NO_ACCESS, EDIT, OWNER,
@@ -250,7 +254,7 @@ export default {
             return useAuthStore(this.$pinia).user;
         },
         permLevelsFiltered() {
-            if (this.currentUserPerm !== OWNER)
+            if (this.currentUserPerm !== OWNER && !this.forceEdit)
                 return this.permLevels.filter(x => x !== OWNER);
             return this.permLevels;
         }
@@ -361,7 +365,11 @@ export default {
             // - If current user is EDIT and the user is not the current user
             if (this.currentUserPerm === EDIT && [OWNER, EDIT].includes(user.level) && user.id !== this.currentUser.id)
                 return true;
-            return user.id === this.creator || ![OWNER, EDIT].includes(this.currentUserPerm);
+            if (user.id === this.creator)
+                return true;
+            if (this.forceEdit)
+                return false;
+            return ![OWNER, EDIT].includes(this.currentUserPerm);
         },
         // Used to navigate autocomplete
         autocompleteArrow(event) {
