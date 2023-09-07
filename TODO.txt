@@ -14,6 +14,18 @@ boards folders
 
 copy note to board option
 
+- pins: version history
+    - api get history: accept 2 ids at a time
+    - restore version history
+        - also requires board_id to edit pin
+        - or just edit to have same content as revision lol
+
+
+
+isolate files in iframe or something
+
+puppeteer ublock origin
+
 ----
 later:
 
@@ -33,15 +45,11 @@ pfp - or just make /pfp/username.png or something
 
 future todo:
 
-- pins: version history
-
 better search (split words, images, dates, etc...)
 
 responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
-
-persist sessions across server restart
 
 ----
 link tree:
@@ -59,4 +67,4 @@ user settings page
 
 track user login ip and time, invalidate sessions
 
-
+persist sessions across server restart

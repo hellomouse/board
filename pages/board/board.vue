@@ -260,6 +260,7 @@ useSeoMeta({
                     v-for="pin in pins" :key="pin.pin_id"
                     :content="pin.content"
                     :pin-id="pin.pin_id"
+                    :board-id="pin.board_id"
                     :type="pin.pin_type"
                     :creator="pin.creator"
                     :created="pin.created"
@@ -370,6 +371,17 @@ useSeoMeta({
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
 
+        <PinHistoryModal
+            v-if="pinHistoryModal"
+
+            :pin="pinHistoryModalPin"
+            :show="pinHistoryModal"
+
+            @update="e => { if (e.type === 'close') pinHistoryModal = false; }"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+        />
+
         <!-- Toasts for errors / success -->
         <v-snackbar
             v-model="showErrorToast" color="error" rounded="0" theme="dark"
@@ -420,13 +432,12 @@ export default {
             shareBoardModal: false,
             deleteBoardModal: false,
             boardPropertiesModal: false,
+            pinHistoryModal: false,
+            editPin: false,
+            createPinModal: false,
 
             // Data
             pins: [],
-
-            // Modal show
-            editPin: false,
-            createPinModal: false,
 
             // Toasts
             showErrorToast: false,
@@ -451,7 +462,10 @@ export default {
             deselectTrigger: false,   // When this updates all pins are deselected
             selectTrigger: false,     // When this updates all pins are selected
             deleteDialog: false,
-            selectedSwatchIndex: 0
+            selectedSwatchIndex: 0,
+
+            // History modal
+            pinHistoryModalPin: {},
         };
     },
     computed: {
@@ -689,6 +703,10 @@ export default {
                     }
                 }
             }
+            else if (update.type === 'pin-history') {
+                this.pinHistoryModalPin = update.pin;
+                this.pinHistoryModal = true;
+            }
         },
 
         // Board stuff:
@@ -862,7 +880,7 @@ export default {
             if (event.ctrlKey && event.key === 'a' && !this.deleteDialog &&
                     !this.editBoardModal && !this.shareBoardModal &&
                     !this.deleteBoardModal && !this.boardPropertiesModal &&
-                    !this.createPinModal) {
+                    !this.createPinModal && !this.pinHistoryModal) {
                 event.preventDefault();
                 this.selectAllPins();
                 return false;

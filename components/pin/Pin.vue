@@ -99,7 +99,15 @@
                         <v-icon icon="mdi-pencil" />Edit
                     </button>
                     <button
-                        class="px-4 hoverable hover-list-item edit-list-item line"
+                        v-if="viewerHasPerm"
+                        class="px-4 hoverable hover-list-item edit-list-item"
+                        :disabled="locked"
+                        @click="emitHistoryUpdate()"
+                    >
+                        <v-icon icon="mdi-clock" />History
+                    </button>
+                    <button
+                        class="px-4 hoverable hover-list-item edit-list-item edit-list-item--line"
                         @click="toggleFavorite()"
                     >
                         <v-icon :icon="favorited ? 'mdi-star-off' : 'mdi-star'" />
@@ -165,6 +173,7 @@ export default {
         initialFlags: { type: String, default: '' },
         initialSelected: { type: Boolean, default: false },
         pinId: { type: String, default: '' },
+        boardId: { type: String, default: '' },
         metadata: { type: Object, default: () => {} },
         attachmentPaths: { type: Array, default: () => [] },
         color: { type: String, default: '' },
@@ -319,6 +328,20 @@ export default {
                     content: this.content,
                     attachment_paths: this.attachmentPaths,
                     metadata: this.metadata
+                }
+            });
+        },
+        emitHistoryUpdate() {
+            this.$emit('update', {
+                type: 'pin-history',
+                pin: {
+                    pin_id: this.pinId,
+                    board_id: this.boardId,
+                    type: this.type,
+                    content: this.content,
+                    attachment_paths: this.attachmentPaths,
+                    metadata: this.metadata,
+                    flags: this.flags
                 }
             });
         },

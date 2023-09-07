@@ -183,7 +183,7 @@ export default {
             let params = {
                 pin_type: type,
                 board_id: this.boardId,
-                flags: '',
+                flags: this.pin.flags || '',
                 content: this.content,
                 attachment_paths: [],
                 metadata: {
@@ -196,11 +196,20 @@ export default {
             if (this.editMode)
                 params.id = this.pin.pin_id;
 
-            // Compare if url changed
+            // For comparing if url changed
             let [url1, url2] = ['', ''];
             if (type === 2) {
                 url1 = (this.pin && this.pin.content) ? this.pin.content.split('\n')[0] : '';
                 url2 = this.content.split('\n')[0];
+
+                // Inject URL metadata from original to new
+                let content = params.content.split('\n');
+                while (content.length < 6)
+                    content.push('');
+                for (let i = 2; i < 6; i++)
+                    content[i] = content[i] || (this.pin && this.pin.content ? this.pin.content.split('\n')[i] : '');
+                params.content = content.join('\n');
+                console.log(this.content, this.pin.content)
             }
 
             // Download website request for link pins
@@ -208,11 +217,6 @@ export default {
                 try {
                     let id = await this.$fetchApi('/api/site/download', 'POST', this.downloadOptions);
                     id = id.uuid;
-
-                    // Inject downloaded content uuid into content
-                    let content = params.content.split('\n');
-                    while (content.length < 6)
-                        content.push('');
 
                     const extMap = {
                         pdf: 'pdf',
@@ -222,6 +226,7 @@ export default {
                     };
 
                     // Format: strategy,url|strategy,url|...
+                    let content = params.content.split('\n');
                     if (url1 !== url2) content[5] = '';
                     content[5] = content[5].split('|').filter(x => !x.startsWith(this.downloadOptions.strategy)).filter(x => x);
                     content[5].push(this.downloadOptions.strategy + ',' + id + '.' + (extMap[this.downloadOptions.strategy] || 'html'));
