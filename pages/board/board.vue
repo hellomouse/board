@@ -377,7 +377,7 @@ useSeoMeta({
             :pin="pinHistoryModalPin"
             :show="pinHistoryModal"
 
-            @update="e => { if (e.type === 'close') pinHistoryModal = false; }"
+            @update="onPinHistoryUpdate"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
@@ -872,6 +872,23 @@ export default {
             } catch (e) {
                 console.error(e);
                 [this.toastErrorMsg, this.showErrorToast] = ['Failed to modify pins: ' + this.$apiErrorToString(e), true];
+            }
+        },
+        // Pin history
+        onPinHistoryUpdate(e) {
+            if (e.type === 'close')
+                this.pinHistoryModal = false;
+            else if (e.type === 'pin-content') {
+                for (let pin of this.pins) {
+                    if (pin.pin_id === e.id) {
+                        let history = e.history;
+                        pin.content = history.content;
+                        pin.metadata = history.metadata;
+                        pin.attachment_paths = history.attachment_paths;
+                        pin.flags = history.flags;
+                        break;
+                    }
+                }
             }
         },
         // Selection keyboard

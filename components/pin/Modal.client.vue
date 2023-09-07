@@ -209,7 +209,6 @@ export default {
                 for (let i = 2; i < 6; i++)
                     content[i] = content[i] || (this.pin && this.pin.content ? this.pin.content.split('\n')[i] : '');
                 params.content = content.join('\n');
-                console.log(this.content, this.pin.content)
             }
 
             // Download website request for link pins

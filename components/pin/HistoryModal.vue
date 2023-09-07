@@ -32,10 +32,27 @@
                 </div>
             
                 <div class="d-flex mt-2">
-                    <v-btn
-                        flat color="primary" variant="text"
-                        :text="`Revert to this revision (R${revisionTitle[0]})`"
-                    />
+                    <v-dialog v-model="confirmationModal" width="auto">
+                        <template #activator="{ props }">
+                            <v-btn
+                                flat color="primary" variant="text"
+                                :text="`Revert to this revision (R${revisionTitle[0]})`"
+                                @click="confirmationModal = true"
+                            />
+                        </template>
+
+                        <v-card rounded="0">
+                            <v-card-text>
+                                Are you sure you want to revert to revision R{{ revisionTitle[0] || 'X' }}?
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer />
+                                <v-btn color="primary" @click="confirmationModal = false">Cancel</v-btn>
+                                <v-btn color="primary" @click="restoreCurrentRevision">Revert</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
                     <v-spacer />
                     <v-btn variant="text" color="primary" @click="$emit('update', { type: 'close' })">OK</v-btn>
                 </div>
@@ -61,10 +78,12 @@ export default {
     data() {
         return {
             showModal: this.show,
+            confirmationModal: false,
             oldHtml: '',
             newHtml: '',
             history: [],
             revisionTitle: ['', ''],
+            currentRevision: 0,
             historyCache: {} // id -> obj
         };
     },
@@ -129,6 +148,38 @@ export default {
 
             this.newHtml = this.getHTML(newHistory);
             this.oldHtml = this.getHTML(oldHistory);
+        },
+        // Edit pin content to be current revision
+        async restoreCurrentRevision() {
+            let history = this.historyCache[this.history[this.currentRevision].id];
+            if (!history) {
+                this.$emit('error', 'Failed to locate revision, try again later'); 
+                this.confirmationModal = false;
+                return;
+            }
+
+            // Attempt edit
+            try {
+                let params = {
+                    board_id: this.pin.board_id,
+                    id: this.pin.pin_id,
+                    flags: history.flags,
+                    content: history.content,
+                    attachment_paths: history.attachment_paths,
+                    metadata: history.metadata
+                };
+                await this.$fetchApi('/api/board/pins', 'PUT', params);
+                this.$emit('success', 'Revision restored');
+                this.$emit('update', {
+                    type: 'pin-content',
+                    id: this.pin.pin_id,
+                    history
+                });
+            } catch (e) {
+                let errorMsg = `Failed to modify pin: ${this.$apiErrorToString(e)}`;
+                this.$emit('error', errorMsg);
+            }
+            this.confirmationModal = false;
         },
         // Load history preview
         async loadHistoryPreview() {
