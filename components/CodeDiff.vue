@@ -4,9 +4,11 @@ Example:
 -->
 
 <template>
-    <div class="d-flex">
-        <div class="code code-diff-block pa-2" v-html="diffString.leftHtml" />
-        <div class="code code-diff-block pa-2" v-html="diffString.rightHtml" />
+    <div class="overflow-y-auto">
+        <div class="d-flex">
+            <div class="code code-diff-block pa-2" v-html="diffString.leftHtml" />
+            <div class="code code-diff-block pa-2" v-html="diffString.rightHtml" />
+        </div>
     </div>
 </template>
 

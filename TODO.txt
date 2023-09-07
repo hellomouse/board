@@ -14,12 +14,13 @@ boards folders
 
 copy note to board option
 
+
+
 - pins: version history
     - api get history: accept 2 ids at a time
     - restore version history
         - also requires board_id to edit pin
         - or just edit to have same content as revision lol
-
 
 
 isolate files in iframe or something

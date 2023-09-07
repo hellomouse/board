@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="d-flex">
-                    <code-diff style="width: 100%" :old-string="oldHtml" :new-string="newHtml" />
+                    <code-diff style="width: 100%; height: 300px" :old-string="oldHtml" :new-string="newHtml" />
 
                     <v-list class="history-list pa-0">
                         <v-list-item
