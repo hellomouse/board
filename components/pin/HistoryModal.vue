@@ -8,33 +8,43 @@
             <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">Pin History</h1>
 
-                <div class="d-flex">
-                    <div class="d-flex" style="width: 100%">
-                        <div style="width: 50%" class="history-title pl-1">+R{{ revisionTitle[0] || '?' }} / Additions</div>
-                        <div style="width: 50%" class="history-title">-R{{ revisionTitle[1] || '?' }} / Removals</div>
+                <div v-if="history.length > 0">
+                    <div class="d-flex">
+                        <div class="d-flex" style="width: 100%">
+                            <div style="width: 50%" class="history-title pl-1">+R{{ revisionTitle[0] || '?' }} / Additions</div>
+                            <div style="width: 50%" class="history-title">-R{{ revisionTitle[1] || '?' }} / Removals</div>
+                        </div>
+                        <div style="width: 300px" class="history-title">Revisions</div>
                     </div>
-                    <div style="width: 300px" class="history-title">Revisions</div>
+
+                    <div class="d-flex">
+                        <code-diff style="width: 100%; height: 300px" :old-string="oldHtml" :new-string="newHtml" />
+
+                        <v-list class="history-list pa-0">
+                            <v-list-item
+                                v-for="(item, index) in history"
+                                :key="item.time"
+                                class="history-list__item"
+                                :title="'@' + item.editor"
+                                :subtitle="`R${item.id} &nbsp; ` + $formatTimestamp(item.time)"
+                                @click="switchHistory(index)"
+                            ></v-list-item>
+                        </v-list>
+                    </div>
+                </div>
+    
+                <!-- Empty state -->
+                <div v-if="history.length === 0" class="empty-state-container">
+                    <img src="/error-state.png" alt="Empty state" />
+                    <h2>There is no history for this pin yet</h2>
                 </div>
 
-                <div class="d-flex">
-                    <code-diff style="width: 100%; height: 300px" :old-string="oldHtml" :new-string="newHtml" />
 
-                    <v-list class="history-list pa-0">
-                        <v-list-item
-                            v-for="(item, index) in history"
-                            :key="item.time"
-                            class="history-list__item"
-                            :title="'@' + item.editor"
-                            :subtitle="`R${item.id} &nbsp; ` + $formatTimestamp(item.time)"
-                            @click="switchHistory(index)"
-                        ></v-list-item>
-                    </v-list>
-                </div>
-            
                 <div class="d-flex mt-2">
                     <v-dialog v-model="confirmationModal" width="auto">
                         <template #activator="{ props }">
                             <v-btn
+                                v-if="history.length > 0"
                                 flat color="primary" variant="text"
                                 :text="`Revert to this revision (R${revisionTitle[0]})`"
                                 @click="confirmationModal = true"
@@ -108,7 +118,7 @@ export default {
         },
         // Convert pin content to HTML for passing
         getHTML(history) {
-            if (!history) return '';
+            if (!history) return 'There is no history for this revision';
             return '<b>Content:</b>\n' 
                 + this.formatContent(history.content, this.pin.type)
                 + '\n\n<b>Attachments</b>\n'
@@ -213,5 +223,16 @@ export default {
     color: rgb(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
     background: rgb(var(--v-theme-background), 0.4);
     border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.empty-state-container {
+    height: 300px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 50px;
+    opacity: var(--v-disabled-opacity);
+
+    img { width: 140px; }
 }
 </style>

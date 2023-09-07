@@ -63,6 +63,7 @@ export default {
 .code {
     display: block;
     width: 50%;
+    min-height: 300px;
     background: rgba(var(--v-theme-background), 0.75);
 }
 .code:not(:first-child) {

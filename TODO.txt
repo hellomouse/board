@@ -1,5 +1,3 @@
-optimization: when sending content allow sending diff?
-
 link tags - periodically refresh or hide link preview if not rendered?
 - sse endpoint for this
 - return pin updates with data?
@@ -7,10 +5,17 @@ link tags - periodically refresh or hide link preview if not rendered?
     - send event data: when pin update, somehow get from ipc
 
 boards folders
+- maybe call them tag filters
+- tag boards
 - only top level folders
-- add tags to boards? show tags (folders) at top to search, clicking just filters by them
 - drag boards to folders
 - uhhh selecting folders??
+
+
+
+history - don't add if nothing's changed
+- in edit, diff current and old
+
 
 copy note to board option
 
@@ -39,6 +44,8 @@ pfp - or just make /pfp/username.png or something
 future todo:
 
 better search (split words, images, dates, etc...)
+
+optimization: when sending content allow sending diff?
 
 responsive mobile
 - fix share modal on phone
