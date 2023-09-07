@@ -88,6 +88,7 @@ import MarkdownShortcuts from 'quill-markdown-shortcuts';
 import MagicUrl from 'quill-magic-url';
 import BlotFormatter from 'quill-blot-formatter';
 
+import { pinTypeNameToNumber } from '~/helpers/board/pin.js';
 import { getBackground, getColor, SWATCHES } from '~/helpers/board/pin-colors.js';
 import { useOptionStore } from '~/store/optionStore.js';
 
@@ -174,11 +175,8 @@ export default {
             }
 
             let type = this.pin.type;
-            if (typeof type === 'string') { // Convert type to numeric
-                let tmp = ['Markdown', 'ImageGallery', 'Link', 'Checklist']
-                    .indexOf(type);
-                type = tmp < 0 ? type : tmp;
-            }
+            if (typeof type === 'string') // Convert type to numeric
+                type = pinTypeNameToNumber(type)
 
             let params = {
                 pin_type: type,

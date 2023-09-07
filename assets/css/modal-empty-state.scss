@@ -1,0 +1,12 @@
+.empty-state-container {
+    height: 300px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 50px;
+    opacity: var(--v-disabled-opacity);
+
+    img {
+        width: 140px;
+    }
+}

@@ -207,7 +207,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/variables.scss";
+@import "~/assets/css/modal-empty-state.scss";
 
 .history-list {
     width: 300px;
@@ -223,16 +223,5 @@ export default {
     color: rgb(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
     background: rgb(var(--v-theme-background), 0.4);
     border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-.empty-state-container {
-    height: 300px;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-    padding-top: 50px;
-    opacity: var(--v-disabled-opacity);
-
-    img { width: 140px; }
 }
 </style>

@@ -91,7 +91,7 @@
                         <v-icon icon="mdi-link" />Permalink
                     </button>
                     <button
-                        v-if="viewerHasPerm"
+                        v-if="userHasPermToEdit"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         :disabled="locked"
                         @click="emitEditUpdate()"
@@ -99,7 +99,13 @@
                         <v-icon icon="mdi-pencil" />Edit
                     </button>
                     <button
-                        v-if="viewerHasPerm"
+                        class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="emitCopyToBoardUpdate()"
+                    >
+                        <v-icon icon="mdi-content-copy" />Copy to Board
+                    </button>
+                    <button
+                        v-if="userHasPermToEdit"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         :disabled="locked"
                         @click="emitHistoryUpdate()"
@@ -115,7 +121,7 @@
                     </button>
 
                     <button
-                        v-if="viewerHasPerm"
+                        v-if="userHasPermToEdit"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('PINNED')"
                     >
@@ -123,7 +129,7 @@
                         {{ pinned ? 'Unpin' : 'Pin' }}
                     </button>
                     <button
-                        v-if="viewerHasPerm"
+                        v-if="userHasPermToEdit"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('LOCKED')"
                     >
@@ -131,7 +137,7 @@
                         {{ locked ? 'Unlock' : 'Lock' }}
                     </button>
                     <button
-                        v-if="viewerHasPerm"
+                        v-if="userHasPermToEdit"
                         class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('ARCHIVED')"
                     >
@@ -139,7 +145,7 @@
                         {{ archived ? 'Unarchive' : 'Archive' }}
                     </button>
                     <button
-                        v-if="viewerHasPerm"
+                        v-if="userHasPermToEdit"
                         class="px-4 text-red [ hoverable hover-list-item ] edit-list-item edit-list-item--line"
                         @click="deletePin()"
                     >
@@ -242,7 +248,7 @@ export default {
             }
             return flags;
         },
-        viewerHasPerm() {
+        userHasPermToEdit() {
             if (!['Owner', 'Edit', 'SelfEdit'].includes(this.perm))
                 return false;
             if (this.perm === 'SelfEdit')
@@ -334,23 +340,31 @@ export default {
         emitHistoryUpdate() {
             this.$emit('update', {
                 type: 'pin-history',
-                pin: {
-                    pin_id: this.pinId,
-                    board_id: this.boardId,
-                    type: this.type,
-                    content: this.content,
-                    attachment_paths: this.attachmentPaths,
-                    metadata: this.metadata,
-                    flags: this.flags
-                }
+                pin: this.getPinForHistoryAndCopy()
             });
+        },
+        emitCopyToBoardUpdate() {
+            this.$emit('update', {
+                type: 'pin-copy-to-board',
+                pin: this.getPinForHistoryAndCopy()
+            });
+        },
+        getPinForHistoryAndCopy() {
+            return {
+                pin_id: this.pinId,
+                type: this.type,
+                content: this.content,
+                attachment_paths: this.attachmentPaths,
+                metadata: this.metadata,
+                flags: this.flags
+            };
         },
         clickHandler() {
             this.numClicks++;
             if (this.numClicks === 1) {
                 let self = this;
                 setTimeout(() => {
-                    if (self.numClicks >= 3 && !this.locked && this.viewerHasPerm)
+                    if (self.numClicks >= 3 && !this.locked && this.userHasPermToEdit)
                         this.emitEditUpdate();
                     self.numClicks = 0;
                 }, 300);
@@ -370,7 +384,7 @@ export default {
         },
         async resendContent(pinId, content) {
             // If no edit perm ignore
-            if (!this.viewerHasPerm) return;
+            if (!this.userHasPermToEdit) return;
 
             let sendContent = async () => {
                 this.resendContentLast = Date.now();

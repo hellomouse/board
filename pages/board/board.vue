@@ -382,6 +382,17 @@ useSeoMeta({
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
 
+        <PinCopyToBoardModal
+            v-if="pinCopyToBoardModal"
+
+            :show="pinCopyToBoardModal"
+            :pin="pinCopyToBoardPin"
+
+            @update="e => { if (e.type === 'close') pinCopyToBoardModal = false; }"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+        />
+
         <!-- Toasts for errors / success -->
         <v-snackbar
             v-model="showErrorToast" color="error" rounded="0" theme="dark"
@@ -435,6 +446,7 @@ export default {
             pinHistoryModal: false,
             editPin: false,
             createPinModal: false,
+            pinCopyToBoardModal: false,
 
             // Data
             pins: [],
@@ -464,8 +476,9 @@ export default {
             deleteDialog: false,
             selectedSwatchIndex: 0,
 
-            // History modal
+            // History and copy modal
             pinHistoryModalPin: {},
+            pinCopyToBoardPin: {}
         };
     },
     computed: {
@@ -707,6 +720,10 @@ export default {
                 this.pinHistoryModalPin = update.pin;
                 this.pinHistoryModal = true;
             }
+            else if (update.type === 'pin-copy-to-board') {
+                this.pinCopyToBoardPin = update.pin;
+                this.pinCopyToBoardModal = true;
+            }
         },
 
         // Board stuff:
@@ -897,7 +914,7 @@ export default {
             if (event.ctrlKey && event.key === 'a' && !this.deleteDialog &&
                     !this.editBoardModal && !this.shareBoardModal &&
                     !this.deleteBoardModal && !this.boardPropertiesModal &&
-                    !this.createPinModal && !this.pinHistoryModal) {
+                    !this.createPinModal && !this.pinHistoryModal && !this.pinCopyToBoardModal) {
                 event.preventDefault();
                 this.selectAllPins();
                 return false;

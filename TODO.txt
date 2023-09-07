@@ -12,12 +12,13 @@ boards folders
 - uhhh selecting folders??
 
 
-
 history - don't add if nothing's changed
 - in edit, diff current and old
 
 
-copy note to board option
+
+all the perm checks for can view - check if public can view as well
+- remove edit for public? since all public pins can't be edited anyways
 
 
 isolate files in iframe or something
