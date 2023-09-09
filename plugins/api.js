@@ -6,13 +6,13 @@ export default defineNuxtPlugin(nuxtApp => {
         return ctrl.signal
     }
 
-    nuxtApp.provide('fetchApi', async (url, method, body) => {
+    nuxtApp.provide('fetchApi', async (url, method, body, timeout = 10000) => {
         let requestOptions = {
             method: method,
             mode: 'cors',
             connection: 'close',
             credentials: 'include',
-            signal: AbortSignal.timeout(10000)
+            signal: AbortSignal.timeout(timeout)
         };
         if (method !== 'GET') {
             requestOptions.body = JSON.stringify(body);

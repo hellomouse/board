@@ -85,7 +85,7 @@ export default {
                 await this.$fetchApi('/api/login', 'POST', {
                     username: this.username,
                     password: this.password
-                });
+                }, 30000);
             } catch(e) {
                 this.error_msg = (e + '').includes('401') ?
                     'Incorrect username or password' :
