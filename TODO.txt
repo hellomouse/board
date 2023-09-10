@@ -35,8 +35,6 @@ board / tag bulk download
 
 loading states for other modals
 
-modal - make title smaller
-
 make the color palette pickers better
 
 all the perm checks for can view - check if public can view as well

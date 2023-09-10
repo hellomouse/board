@@ -73,6 +73,11 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     }
 }
 
+// Reduce size of heading in modals
+.v-card-text > h1 {
+    font-size: 1.5rem;
+}
+
 // Hide extra padding below from empty details
 .v-input__details {
     box-sizing: border-box !important;
