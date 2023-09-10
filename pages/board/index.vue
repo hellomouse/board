@@ -141,7 +141,7 @@ useSeoMeta({
             
             <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoardsAndTags()">
                 <div
-                    v-if="boards.length > 0 && tags.length > 0 && !currentActiveTag.name && !$route.query.shared_with_me"
+                    v-if="boards.length > 0 && tags.length > 0 && !currentActiveTag.name && !$route.query.shared_with_me && $route.path === '/board'"
                     @click.self="deselectAllBoardsAndTags()"
                 >
                     <v-label>Tag Groups</v-label>

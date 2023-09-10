@@ -46,7 +46,6 @@ puppeteer ublock origin
 
 why does boards page change height
 
-switching from shared with me -> a board from left nav first shows homepage for some reason
 
 server side check length is non-zero
 
