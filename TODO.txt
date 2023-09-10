@@ -14,26 +14,30 @@ boards folders
         - require bulk endpoint
 
 - drag boards to folders
-    - if selection drag all selected
-    - drag board to "my boards" title to move to main
+    - edit tag or something
+        - bulk endpoint for diffing
 
 - selecting folders?
     - bulk color?
-    - how to reconcile different than selected boards
-        - use same toolbar, but show only specific tools for each if 
-          one of them is empty
-- show tags on boards as well
+        - endpoint allow specifying tags as well?
 
+rewrite db side -> use 2nd table instead of string
+
+- show tags on boards as well
 - when creating board in folder auto add to folder
     - modify create board api to specify ids of tag groups to add to
 - dont get board_ids for all folders until clicked or edit
 - check for tag count limit when creating
 
 
+
+board / tag bulk download
+
 loading states for other modals
 
 modal - make title smaller
 
+make the color palette pickers better
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
@@ -43,6 +47,8 @@ isolate files in iframe or something
 puppeteer ublock origin
 
 why does boards page change height
+
+switching from shared with me -> a board from left nav first shows homepage for some reason
 
 server side check length is non-zero
 

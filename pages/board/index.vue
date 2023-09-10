@@ -22,7 +22,7 @@ useSeoMeta({
 <template>
     <!-- A page to show all the boards the user has -->
     <NuxtLayout name="board">
-        <BoardLeftNav @click-my-boards="currentActiveTag = {}">
+        <BoardLeftNav @click-my-boards="switchTag({})">
             <v-menu>
                 <template #activator="{ props }">
                     <v-btn
@@ -49,9 +49,12 @@ useSeoMeta({
             </v-menu>
         </BoardLeftNav>
 
-        <v-toolbar class="bulk-board-edits" color="grey-darken-4" :style="{ top: selectedBoards.size ? '0px' : '-100px' }">
+        <v-toolbar 
+            class="bulk-board-edits" color="grey-darken-4"
+            :style="{ top: (selectedBoards.size + selectedTags.size) ? '0px' : '-100px' }"
+        >
             <v-btn icon="mdi-close" @click="deselectAllBoardsAndTags" />
-            <h1>{{ selectedBoards.size }} Selected</h1>
+            <h1>{{ selectedBoards.size + selectedTags.size }} Selected</h1>
             <v-spacer />
 
             <v-tooltip text="Change Background" location="bottom">
@@ -77,9 +80,10 @@ useSeoMeta({
                 </v-sheet>
             </v-menu>
 
-            <v-tooltip text="Share Board" location="bottom">
+            <v-tooltip :disabled="!canBulkOpBoards" text="Share Board" location="bottom">
                 <template #activator="{ props }">
                     <v-btn
+                        :disabled="!canBulkOpBoards"
                         v-bind="props"
                         icon="mdi-account-plus"
                         @click="openMassShareBoardModal()"
@@ -102,7 +106,12 @@ useSeoMeta({
             
             <div class="d-flex flex-direction-row">
                 <h1>
-                    <span style="cursor: pointer" @click="currentActiveTag = {}">
+                    <span
+                        style="cursor: pointer" @click="switchTag({})"
+                        @drop="onBoardDrop($event, -1)"
+                        @dragover.prevent
+                        @dragenter.prevent
+                    >
                         {{ title }}
                     </span>
                     <span v-if="currentActiveTag.name">
@@ -142,10 +151,15 @@ useSeoMeta({
                             v-model:selected="tag.selected"
                             :name="tag.name" :color="tag.color" :tag="{...tag}"
 
+                            @drop="onBoardDrop($event, tag.id)"
+                            @dragover.prevent
+                            @dragenter.prevent
+
+                            @select="onTagSelect"
                             @add-remove-boards="e => { currentBoardTag = e; boardTagEditBoardsModal = true; }"
                             @edit="e => { currentBoardTag = e; boardTagModal = true; }"
                             @delete="val => { [deleteTagModal, tagToDelete] = [true, val]; }"
-                            @filter="tag => { currentActiveTag = tag; boardIdFilter = tag.board_ids; }"
+                            @filter="switchTag(tag)"
                         />
                     </div>
                 </div>
@@ -160,6 +174,9 @@ useSeoMeta({
                     :creator-id="board.creator"
                     :color="board.color"
                     :current-user-perm="board.perms[user.id]?.perm_level"
+
+                    :draggable="true"
+                    @dragstart="onBoardStartDrag($event, board.id)"
 
                     @update="onBoardUpdate"
                     @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
@@ -271,7 +288,7 @@ export default {
     components: { BoardBoard, BoardModal },
     data() {
         return {
-            swatches: BOARD_SWATCHES,
+            swatches: ['#FFFFFF'].concat(BOARD_SWATCHES),
             boards: [],
             tags: [],
             currentBoard: {},
@@ -308,6 +325,7 @@ export default {
 
             // Selection
             selectedBoards: new Set(),
+            selectedTags: new Set(),
             color: '',
             selectedSwatchIndex: 0,
             startSelection: -1, // For shift select
@@ -354,7 +372,9 @@ export default {
                     ids.add(id);
             }
             return [...ids];
-        }
+        },
+        canBulkOpBoards() { return this.selectedBoards.size > 0; },
+        canBulkOpTags() { return this.selectedTags.size > 0; }
     },
     watch: {
         sortBy() {
@@ -367,6 +387,7 @@ export default {
         },
         '$route.query'() {
             if (this.$route.path === '/board') {
+                this.selectedTags = new Set();
                 this.selectedBoards = new Set();
                 this.updatePageTitle();
                 this.getBoardsAndTags();
@@ -535,6 +556,12 @@ export default {
                 this.getBoardsAndTags();
             }
         },
+        // Switch folder
+        switchTag(tag) {
+            this.deselectAllBoardsAndTags();
+            this.currentActiveTag = tag;
+            this.boardIdFilter = tag.board_ids;
+        },
         // Toggle sort dir
         toggleSortDirection() {
             this.sortDown = !this.sortDown;
@@ -544,7 +571,24 @@ export default {
             if (scrollTop + clientHeight >= scrollHeight) 
                 this.load();
         },
+        getTagById(id) {
+            for (let tag of this.tags) {
+                if (tag.id === id)
+                    return tag;
+            }
+            return {};
+        },
         // Selection
+        onTagSelect(update) {
+            let tag = this.getTagById(update.id);
+            if (!tag.name) return;
+
+            tag.selected = update.select;
+            if (!update.select)
+                this.selectedTags.delete(update.id);
+            else if (update.select)
+                this.selectedTags.add(update.id);
+        },
         onBoardSelect(update) {
             let i = this.boards.map(b => b.id).indexOf(update.id);
             if (this.startSelection > -1 && !this.boards[this.startSelection].selected)
@@ -580,13 +624,22 @@ export default {
         },
         deselectAllBoardsAndTags() {
             this.selectedBoards.clear();
+            this.selectedTags.clear();
             this.boards.forEach(b => b.selected = false);
             this.tags.forEach(b => b.selected = false);
             this.startSelection = -1;
         },
-        selectAllBoards() {
-            this.selectedBoards = new Set(this.boards.map(b => b.id));
-            this.boards.forEach(b => b.selected = true);
+        selectAllBoardsAndTags() {
+            this.selectedBoards = new Set(this.sortedBoards.map(b => b.id));
+            this.sortedBoards.forEach(b => b.selected = true);
+
+            if (this.currentActiveTag.name) {
+                this.selectedTags = new Set();
+                this.tags.forEach(b => b.selected = false);
+            } else {
+                this.selectedTags = new Set(this.tags.map(b => b.id));
+                this.tags.forEach(b => b.selected = true);
+            }
         },
         async openMassShareBoardModal() {
             let selected = [...this.selectedBoards];
@@ -617,7 +670,7 @@ export default {
                     !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal &&
                     !this.boardTagModal && !this.boardTagEditBoardsModal && !this.deleteTagModal) {
                 event.preventDefault();
-                this.selectAllBoards();
+                this.selectAllBoardsAndTags();
                 return false;
             }
             return true;
@@ -625,7 +678,48 @@ export default {
         keyupHandler(event) {
             this.shiftKey = event.shiftKey;
             return true;
-        }
+        },
+        // Dragging boards to tags
+        onBoardStartDrag(evt, id) {
+            evt.dataTransfer.dropEffect = 'move';
+            evt.dataTransfer.effectAllowed = 'move';
+            evt.dataTransfer.setData('id', id);
+        },
+        async onBoardDrop(evt, targetId) {
+            let boardIds = [evt.dataTransfer.getData('id')];
+            if (this.selectedBoards.has(boardIds[0]))
+                boardIds = [...this.selectedBoards];
+
+            // Target ID < 0 means move to main menu, but must be in a tag group
+            // in order to do this
+            if (targetId < 0 && !this.currentActiveTag.name)
+                return;
+
+            let tagId = targetId < 0 ? this.currentActiveTag.id : targetId;
+            let operation = targetId < 0 ? 'delete' : 'add';
+            let opts = {
+                board_ids: boardIds,
+                id: tagId
+            };
+
+            try {
+                // Perform API update
+                // await this.$fetchApi('/api/board/tags', 'PUT', opts);
+
+                // Client side update
+                [this.toastSuccessMsg, this.showSuccessToast] = ['Moved boards!', true];
+
+                let tag = this.getTagById(tagId);
+                if (!tag.name) return;
+                if (operation === 'add')
+                    tag.board_ids = [...new Set(tag.board_ids.concat(boardIds))];
+                else if (operation === 'delete')
+                    tag.board_ids = tag.board_ids.filter(i => !boardIds.includes(i));
+            } catch (e) {
+                let errorMsg = `Failed to edit tag: ${this.$apiErrorToString(e)}`;
+                [this.toastErrorMsg, this.showErrorToast] = [errorMsg, true];
+            }
+        },
     }
 }
 </script>

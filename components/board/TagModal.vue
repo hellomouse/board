@@ -78,6 +78,7 @@ export default {
             this.showModal = newVal;
             if (newVal) {
                 this.color = (this.tag && this.tag.color !== '#FFFFFF') ? this.tag.color : '';
+                this.selectedSwatchIndex = Math.max(this.swatches.indexOf(this.color), 0);
                 this.name = this.tag ? this.tag.name : '';
             }
         }
