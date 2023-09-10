@@ -5,25 +5,50 @@ link tags - periodically refresh or hide link preview if not rendered?
     - send event data: when pin update, somehow get from ipc
 
 boards folders
-- maybe call them tag filters
 - tag boards
-- only top level folders
+    - board has dropdown -> edit tags -> add / remove
+    - bulk add to tags - select board, add / remove to tag
+        - have 1 modal:
+            - board_ids to affect
+            - tag groups to add / remove to
+        - require bulk endpoint
+
 - drag boards to folders
-- uhhh selecting folders??
+    - if selection drag all selected
+    - drag board to "my boards" title to move to main
+
+- selecting folders?
+    - bulk color?
+    - how to reconcile different than selected boards
+        - use same toolbar, but show only specific tools for each if 
+          one of them is empty
+- show tags on boards as well
+
+- when creating board in folder auto add to folder
+    - modify create board api to specify ids of tag groups to add to
+- dont get board_ids for all folders until clicked or edit
+- check for tag count limit when creating
 
 
-history - don't add if nothing's changed
-- in edit, diff current and old
+loading states for other modals
 
+modal - make title smaller
 
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
 
-
 isolate files in iframe or something
 
 puppeteer ublock origin
+
+why does boards page change height
+
+server side check length is non-zero
+
+dompurify output of downloaded sites
+
+share modal / edit board modal - loading state, open immedately while loading
 
 ----
 later:

@@ -43,6 +43,10 @@ body .v-data-table > .v-data-table__wrapper tbody tr:first-child:hover td {
     text-align: left;
     display: block;
 
+    &:disabled {
+        color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
+    }
+
     .v-icon {
         margin-right: 12px;
     }

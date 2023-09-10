@@ -22,18 +22,35 @@ useSeoMeta({
 <template>
     <!-- A page to show all the boards the user has -->
     <NuxtLayout name="board">
-        <BoardLeftNav>
-            <v-btn
-                color="red" block
-                height="44"
-                @click="openCreateBoard"
-            >
-                <v-icon icon="mdi-plus" /> New Board
-            </v-btn>
+        <BoardLeftNav @click-my-boards="currentActiveTag = {}">
+            <v-menu>
+                <template #activator="{ props }">
+                    <v-btn
+                        color="red" block
+                        height="44"
+                        v-bind="props"
+                    >
+                        <v-icon icon="mdi-plus" /> New Board
+                    </v-btn>
+                </template>
+            
+                <v-sheet elevation="8" rounded="0">
+                    <button
+                        class="px-4 py-2 hoverable hover-list-item"
+                        :disabled="currentActiveTag.name"
+                        @click="currentBoardTag = {}; boardTagModal = true"
+                    >
+                        <v-icon icon="mdi-tag" />Filter Tag
+                    </button>
+                    <button class="px-4 py-2 hoverable hover-list-item" @click="openCreateBoard">
+                        <v-icon icon="mdi-view-dashboard" />Board
+                    </button>
+                </v-sheet>
+            </v-menu>
         </BoardLeftNav>
 
         <v-toolbar class="bulk-board-edits" color="grey-darken-4" :style="{ top: selectedBoards.size ? '0px' : '-100px' }">
-            <v-btn icon="mdi-close" @click="deselectAllBoards" />
+            <v-btn icon="mdi-close" @click="deselectAllBoardsAndTags" />
             <h1>{{ selectedBoards.size }} Selected</h1>
             <v-spacer />
 
@@ -77,16 +94,24 @@ useSeoMeta({
                 Loading Boards...
             </div>
 
-            <div v-if="boards.length === 0 && !loadingBoards" class="state-center empty-state">
+            <div v-if="sortedBoards.length === 0 && !loadingBoards" class="state-center empty-state">
                 <img src="/empty-state-board.png" width="200">
                 <h1>You have no boards</h1>
                 <p>Press the 'New Board' button on the left to create one</p>
             </div>
             
             <div class="d-flex flex-direction-row">
-                <h1>{{ title }}</h1>
+                <h1>
+                    <span style="cursor: pointer" @click="currentActiveTag = {}">
+                        {{ title }}
+                    </span>
+                    <span v-if="currentActiveTag.name">
+                        <v-icon icon="mdi-chevron-right" />
+                        {{ currentActiveTag.name }}
+                    </span>
+                </h1>
 
-                <v-spacer @click="deselectAllBoards()" />
+                <v-spacer @click="deselectAllBoardsAndTags()" />
 
                 <div class="[ small-container ] mb-2 d-flex flex-direction-row justify-end">
                     <v-select
@@ -105,7 +130,27 @@ useSeoMeta({
                 </div>
             </div>
             
-            <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoards()">
+            <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoardsAndTags()">
+                <div
+                    v-if="boards.length > 0 && tags.length > 0 && !currentActiveTag.name && !$route.query.shared_with_me"
+                    @click.self="deselectAllBoardsAndTags()"
+                >
+                    <v-label>Tag Groups</v-label>
+                    <div class="mb-2" @click.self="deselectAllBoardsAndTags()">
+                        <BoardTagFilter
+                            v-for="tag in tags" :key="tag.id"
+                            v-model:selected="tag.selected"
+                            :name="tag.name" :color="tag.color" :tag="{...tag}"
+
+                            @add-remove-boards="e => { currentBoardTag = e; boardTagEditBoardsModal = true; }"
+                            @edit="e => { currentBoardTag = e; boardTagModal = true; }"
+                            @delete="val => { [deleteTagModal, tagToDelete] = [true, val]; }"
+                            @filter="tag => { currentActiveTag = tag; boardIdFilter = tag.board_ids; }"
+                        />
+                    </div>
+                </div>
+
+                <v-label v-if="sortedBoards.length > 0">Boards</v-label><br>
                 <BoardBoard
                     v-for="board in sortedBoards" :key="board.id"
                     v-model:selected="board.selected"
@@ -160,6 +205,39 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
+            <BoardTagModal
+                :show="boardTagModal"
+                :tag="currentBoardTag"
+
+                @update="onTagUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
+            <boardTagBoardModal
+                :show="boardTagEditBoardsModal"
+                :tag="currentBoardTag"
+
+                @update="onTagUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
+            <v-dialog v-model="deleteTagModal" width="400">
+                <v-card rounded="0">
+                    <v-card-text>
+                        <h1>Delete Tag Group</h1>
+                        Are you sure you want to delete this tag group (<code>{{ tagToDelete.name }}</code>)?
+                        <b>Boards inside this group will not be deleted.</b>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer />
+                        <v-btn color="primary" @click="deleteTagModal = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="deleteTag(tagToDelete); deleteTagModal = false">Delete</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
             <v-snackbar
                 v-model="showErrorToast" color="error" rounded="0" theme="dark"
                 transition="scroll-y-reverse-transition"
@@ -195,9 +273,13 @@ export default {
         return {
             swatches: BOARD_SWATCHES,
             boards: [],
+            tags: [],
             currentBoard: {},
+            currentBoardTag: {},
+            currentActiveTag: {},
             loadingBoards: true,
             title: 'My boards',
+            tagToDelete: '',
 
             // Modal show
             editBoard: false,
@@ -205,6 +287,9 @@ export default {
             shareBoardModal: false,
             massShareBoardModal: false,
             deleteBoardModal: false,
+            boardTagModal: false,
+            boardTagEditBoardsModal: false,
+            deleteTagModal: false,
 
             // Toasts
             showErrorToast: false,
@@ -227,7 +312,10 @@ export default {
             selectedSwatchIndex: 0,
             startSelection: -1, // For shift select
             previousI: -1, // For shift select
-            shiftKey: false
+            shiftKey: false,
+
+            // Filtering
+            boardIdFilter: []
         };
     },
     computed: {
@@ -243,7 +331,11 @@ export default {
                 Edited: 'edited'
             }[this.sortBy];
 
-            return this.boards.sort((a, b) => {
+            let boards = this.currentActiveTag.name ?
+                this.boards.filter(b => this.boardIdFilter.includes(b.id)) :
+                this.boards.filter(b => !this.boardIdsInATagGroup.includes(b.id));
+
+            return boards.sort((a, b) => {
                 return a[key].toLowerCase() > b[key].toLowerCase() ? multiplier : -multiplier;
             });
         },
@@ -254,22 +346,30 @@ export default {
             let user = useAuthStore(this.$pinia).user.id;
             return this.boards.filter(b => this.selectedBoards.has(b.id))
                 .every(b => b.perms[user] && [EDIT, OWNER].includes(b.perms[user].perm_level));
+        },
+        boardIdsInATagGroup() {
+            let ids = new Set();
+            for (let tag of this.tags) {
+                for (let id of tag.board_ids)
+                    ids.add(id);
+            }
+            return [...ids];
         }
     },
     watch: {
         sortBy() {
             useOptionStore(this.$pinia).sort_boards[0] = this.sortBy;
-            this.getBoards();
+            this.getBoardsAndTags();
         },
         sortDown() {
             useOptionStore(this.$pinia).sort_boards[1] = this.sortDown;
-            this.getBoards();
+            this.getBoardsAndTags();
         },
         '$route.query'() {
             if (this.$route.path === '/board') {
                 this.selectedBoards = new Set();
                 this.updatePageTitle();
-                this.getBoards();
+                this.getBoardsAndTags();
             }
         },
         '$route'() {
@@ -294,7 +394,7 @@ export default {
     // Get boards on page first load
     created() {
         this.updatePageTitle();
-        this.getBoards();
+        this.getBoardsAndTags();
     },
     methods: {
         updatePageTitle() {
@@ -337,10 +437,23 @@ export default {
             let boards = await this.$fetchApi('/api/board/boards', 'GET', opts);
             return boards.boards;
         },
-        async getBoards() {
+        async getTags() {
+            try {
+                let tags = await this.$fetchApi('/api/board/tags', 'GET', {});
+                this.tags = tags.tags;
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get tags: ' + this.$apiErrorToString(e);
+            }
+        },
+        async getBoardsAndTags() {
             this.startSelection = -1;
             this.boards = [];
+            this.tags = [];
             this.loadingBoards = true;
+
+            await this.getTags();
+
             try {
                 this.boards = await this.loadBoards(0, BOARDS_PER_CHUNK);
             } catch (e) {
@@ -372,6 +485,32 @@ export default {
                 await this.openShareModal(msg.id);
             }
         },
+        // When tag edit modal is done
+        async onTagUpdate(update) {
+            if (update) {
+                if (update.id) {
+                    // We edited a tag
+                    for (let i = 0; i < this.tags.length; i++) {
+                        if (this.tags[i].id === update.id) {
+                            this.tags[i] = update;
+                            break;
+                        }
+                    }
+                    this.tags = this.tags.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
+                } else {
+                    // We created a tag, need to refetch
+                    // to get its ID and other data
+                    await this.getTags();
+                }
+            }
+            this.boardTagModal = false;
+            this.boardTagEditBoardsModal = false;
+        },
+        // Delete a tag
+        async deleteTag(tag) {
+            await this.$fetchApi('/api/board/tags', 'DELETE', { ids: [tag.id] });
+            this.tags = this.tags.filter(t => t.id !== tag.id);
+        },
         async openShareModal(id) {
             try {
                 this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
@@ -393,7 +532,7 @@ export default {
             if (created) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
                     this.editBoard ? 'Board edited!' : 'Board created!'];
-                this.getBoards();
+                this.getBoardsAndTags();
             }
         },
         // Toggle sort dir
@@ -439,9 +578,10 @@ export default {
             }
             this.previousI = i;
         },
-        deselectAllBoards() {
+        deselectAllBoardsAndTags() {
             this.selectedBoards.clear();
             this.boards.forEach(b => b.selected = false);
+            this.tags.forEach(b => b.selected = false);
             this.startSelection = -1;
         },
         selectAllBoards() {
@@ -474,7 +614,8 @@ export default {
 
             // Ctrl-A select all boards
             if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
-                    !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal) {
+                    !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal &&
+                    !this.boardTagModal && !this.boardTagEditBoardsModal && !this.deleteTagModal) {
                 event.preventDefault();
                 this.selectAllBoards();
                 return false;

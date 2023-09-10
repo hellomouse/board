@@ -8,6 +8,7 @@
         <ul class="ml-8">
             <li><a href="/docs/board/board">Board API</a></li>
             <li><a href="/docs/board/pins">Pins API</a></li>
+            <li><a href="/docs/board/tags">Tags API</a></li>
         </ul>
     </v-container>
 </template>

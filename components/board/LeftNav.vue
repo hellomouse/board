@@ -10,7 +10,7 @@
 
             <div class="mt-3">
                 <NuxtLink to="/board">
-                    <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex">
+                    <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex" @click="$emit('click-my-boards', true)">
                         <button class="left-nav__list-item">
                             <v-icon icon="mdi-view-dashboard" /> My Boards
                         </button>
