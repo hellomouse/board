@@ -14,7 +14,6 @@ boards folders
         - require bulk endpoint
 
 bugs:
-- dragging tag should also modify current tag info
 - write edit tag -> diff instead of directly editing board ids
 
 - show tags on boards as well

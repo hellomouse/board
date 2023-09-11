@@ -726,10 +726,13 @@ export default {
 
                 let tag = this.getTagById(tagId);
                 if (!tag.name) return;
+
                 if (operation === 'add')
                     tag.board_ids = [...new Set(tag.board_ids.concat(boardIds))];
-                else if (operation === 'delete')
+                else if (operation === 'delete') {
                     tag.board_ids = tag.board_ids.filter(i => !boardIds.includes(i));
+                    this.boardIdFilter = tag.board_ids;
+                }
             } catch (e) {
                 let errorMsg = `Failed to edit tag: ${this.$apiErrorToString(e)}`;
                 [this.toastErrorMsg, this.showErrorToast] = [errorMsg, true];
