@@ -13,11 +13,9 @@ boards folders
             - tag groups to add / remove to
         - require bulk endpoint
 
-write edit tag -> diff instead of directly editing board ids
-
-- selecting folders?
-    - bulk color?
-        - endpoint allow specifying tags as well?
+bugs:
+- dragging tag should also modify current tag info
+- write edit tag -> diff instead of directly editing board ids
 
 - show tags on boards as well
 - when creating board in folder auto add to folder

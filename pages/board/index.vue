@@ -650,17 +650,30 @@ export default {
         },
         async massColorChange(col, index) {
             try {
-                let opts = { board_ids: [...this.selectedBoards], color: col };
-                await this.$fetchApi('/api/board/boards/bulk_colors', 'PUT', opts);
-    
-                [this.color, this.selectedSwatchIndex] = [col, index];
-                for (let board of this.boards) {
-                    if (this.selectedBoards.has(board.id))
-                        board.color = col;
+                // Edit board colors
+                if (this.selectedBoards.size) {
+                    let opts = { board_ids: [...this.selectedBoards], color: col };
+                    await this.$fetchApi('/api/board/boards/bulk_colors', 'PUT', opts);
+
+                    for (let board of this.boards) {
+                        if (this.selectedBoards.has(board.id))
+                            board.color = col;
+                    }
                 }
+                // Edit tag colors
+                if (this.selectedTags.size) {
+                    let opts = { tag_ids: [...this.selectedTags], color: col };
+                    await this.$fetchApi('/api/board/tags/bulk_colors', 'PUT', opts);
+
+                    for (let tag of this.tags) {
+                        if (this.selectedTags.has(tag.id))
+                            tag.color = col;
+                    }
+                }
+                [this.color, this.selectedSwatchIndex] = [col, index];
             } catch (e) {
                 this.showErrorToast = true;
-                this.toastErrorMsg = 'Failed to edit board info: ' + this.$apiErrorToString(e);
+                this.toastErrorMsg = 'Failed to edit colors: ' + this.$apiErrorToString(e);
             }
         },
         keydownHandler(event) {

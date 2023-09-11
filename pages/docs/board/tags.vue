@@ -69,6 +69,69 @@
         </ApiDoc>
 
         <ApiDoc
+            title="Add / Remove Boards from Tags"
+            method="PUT"
+            endpoint="/api/board/tags"
+            param-type="JSON"
+            :auth="true"
+        >
+            Add and delete multiple boards from a tag. Only tags the user created will be modified.
+
+            Returns 401 if not logged in, and 500 on error. Still succeeds if any of the tags do not exist.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>id: number</td><td>ID of the tags to modify</td></tr>
+                    <tr><td>board_ids_to_delete: uuid[]</td><td>IDs of the boards to delete from this tag, can be empty</td></tr>
+                    <tr><td>board_ids_to_add: uuid[]</td><td>IDs of the boards to add to this tag, can be empty</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Tag updated" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Bulk edit tag colors"
+            method="PUT"
+            endpoint="/api/board/tags/bulk_colors"
+            param-type="JSON"
+            :auth="true"
+        >
+            Returns 401 if not logged in, and 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>tag_ids: number[]</td><td>IDs of the tags to modify. Limited to length 200, tags the user did not create are ignored</td></tr>
+                    <tr><td>color: string</td><td>New color to assign as hex string</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ msg: "Colors changed" }</code></pre><br>
+
+                <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
             title="Delete Tags"
             method="DELETE"
             endpoint="/api/board/tags"
