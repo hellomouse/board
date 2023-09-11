@@ -80,7 +80,7 @@ useSeoMeta({
                 </v-sheet>
             </v-menu>
 
-            <v-tooltip :disabled="!canBulkOpBoards" text="Share Board" location="bottom">
+            <v-tooltip :disabled="!canBulkOpBoards" text="Share Boards" location="bottom">
                 <template #activator="{ props }">
                     <v-btn
                         :disabled="!canBulkOpBoards"
@@ -531,6 +531,7 @@ export default {
         async deleteTag(tag) {
             await this.$fetchApi('/api/board/tags', 'DELETE', { ids: [tag.id] });
             this.tags = this.tags.filter(t => t.id !== tag.id);
+            [this.toastSuccessMsg, this.showSuccessToast] = ['Tag Deleted!', true];
         },
         async openShareModal(id) {
             try {
@@ -698,13 +699,14 @@ export default {
             let tagId = targetId < 0 ? this.currentActiveTag.id : targetId;
             let operation = targetId < 0 ? 'delete' : 'add';
             let opts = {
-                board_ids: boardIds,
+                board_ids_to_add: operation === 'add' ? boardIds : [],
+                board_ids_to_delete: operation === 'delete' ? boardIds : [],
                 id: tagId
             };
 
             try {
                 // Perform API update
-                // await this.$fetchApi('/api/board/tags', 'PUT', opts);
+                await this.$fetchApi('/api/board/tags/boards', 'PUT', opts);
 
                 // Client side update
                 [this.toastSuccessMsg, this.showSuccessToast] = ['Moved boards!', true];

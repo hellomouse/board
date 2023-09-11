@@ -13,15 +13,11 @@ boards folders
             - tag groups to add / remove to
         - require bulk endpoint
 
-- drag boards to folders
-    - edit tag or something
-        - bulk endpoint for diffing
+write edit tag -> diff instead of directly editing board ids
 
 - selecting folders?
     - bulk color?
         - endpoint allow specifying tags as well?
-
-rewrite db side -> use 2nd table instead of string
 
 - show tags on boards as well
 - when creating board in folder auto add to folder
@@ -43,9 +39,6 @@ all the perm checks for can view - check if public can view as well
 isolate files in iframe or something
 
 puppeteer ublock origin
-
-why does boards page change height
-
 
 server side check length is non-zero
 
