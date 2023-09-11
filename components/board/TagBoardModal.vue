@@ -60,16 +60,18 @@ export default {
     },
     methods: {
         async submit() {
+            let addedBoards = this.board_ids.filter(b => !this.tag.board_ids.includes(b));
+            let deletedBoards = this.tag.board_ids.filter(b => !this.board_ids.includes(b));
+
             let opts = {
-                name: this.tag.name,
-                color: this.tag.color || '#FFFFFF',
-                board_ids: this.board_ids,
+                board_ids_to_delete: deletedBoards,
+                board_ids_to_add: addedBoards,
                 id: this.tag.id
             };
 
             this.loading = true;
             try {
-                await this.$fetchApi('/api/board/tags', 'PUT', opts);
+                await this.$fetchApi('/api/board/tags/boards', 'PUT', opts);
                 this.$emit('success', 'Tag edit successful!');
             } catch (e) {
                 let errorMsg = `Failed to edit tag: ${this.$apiErrorToString(e)}`;

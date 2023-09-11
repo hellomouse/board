@@ -510,12 +510,17 @@ export default {
         async onTagUpdate(update) {
             if (update) {
                 if (update.id) {
-                    // We edited a tag
-                    for (let i = 0; i < this.tags.length; i++) {
-                        if (this.tags[i].id === update.id) {
-                            this.tags[i] = update;
-                            break;
-                        }
+                    let tag = this.getTagById(update.id);
+                    // We bulk modified tags
+                    if (update.board_ids_to_delete || update.board_ids_to_add) {
+                        tag.board_ids = tag.board_ids.filter(b => !update.board_ids_to_delete.includes(b));
+                        tag.board_ids = tag.board_ids.concat(update.board_ids_to_add);
+                    }
+                    // We edited a single tag
+                    else {
+                        tag.name = update.name || tag.name;
+                        tag.color = update.color || tag.color;
+                        tag.board_ids = update.board_ids || tag.board_ids;
                     }
                     this.tags = this.tags.sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1);
                 } else {

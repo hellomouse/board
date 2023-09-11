@@ -71,7 +71,7 @@
         <ApiDoc
             title="Add / Remove Boards from Tags"
             method="PUT"
-            endpoint="/api/board/tags"
+            endpoint="/api/board/tags/boards"
             param-type="JSON"
             :auth="true"
         >

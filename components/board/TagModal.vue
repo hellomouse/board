@@ -87,8 +87,7 @@ export default {
         async submit() {
             let opts =  {
                 name: this.name,
-                color: this.color || '#FFFFFF',
-                board_ids: []
+                color: this.color || '#FFFFFF'
             };
             if (this.isEdit)
                 opts.id = this.tag.id;

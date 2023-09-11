@@ -13,9 +13,6 @@ boards folders
             - tag groups to add / remove to
         - require bulk endpoint
 
-bugs:
-- write edit tag -> diff instead of directly editing board ids
-
 - show tags on boards as well
 - when creating board in folder auto add to folder
     - modify create board api to specify ids of tag groups to add to
