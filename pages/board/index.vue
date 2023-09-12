@@ -299,16 +299,14 @@ import { useOptionStore } from '~/store/optionStore.js';
 import { EDIT, OWNER } from '~/helpers/board/perms.js';
 import { BOARD_SWATCHES } from '~/helpers/board/board-colors.js';
 import BoardBoard from '~/components/board/Board.vue';
-import BoardModal from '~/components/board/Modal.vue';
 
 const BOARDS_PER_CHUNK = 40;
 
 export default {
-    name: 'BoardIndexPage',
-    components: { BoardBoard, BoardModal },
+    components: { BoardBoard },
     data() {
         return {
-            swatches: ['#FFFFFF'].concat(BOARD_SWATCHES),
+            swatches: Object.freeze(BOARD_SWATCHES),
             boards: [],
             tags: [],
             currentBoard: {},

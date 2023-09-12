@@ -344,6 +344,7 @@ useSeoMeta({
             :edit-mode="true"
             :show="modals.editBoardModal"
             :board="currentBoard"
+            :active-tag-id="-1"
 
             @update="onBoardEdit"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"

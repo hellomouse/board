@@ -79,7 +79,7 @@ export default {
             color: this.board?.color,
             loading: false,
 
-            swatches: BOARD_SWATCHES,
+            swatches: Object.freeze(BOARD_SWATCHES),
             selectedSwatchIndex: 0
         };
     },

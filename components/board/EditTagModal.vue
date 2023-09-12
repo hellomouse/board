@@ -63,7 +63,7 @@ export default {
             loading: false,
 
             // Colors + data
-            swatches: [''].concat(BOARD_SWATCHES),
+            swatches: Object.freeze(BOARD_SWATCHES),
             selectedSwatchIndex: 0,
             color: this.tag ? this.tag.color : '',
             name: this.tag ? this.tag.name : ''
