@@ -6,8 +6,11 @@ link tags - periodically refresh or hide link preview if not rendered?
 
 
 refactor code
+server:
+- proper refs
+- rename all parameter names consistent
+- server side check length is non-zero
 
-rename tags to folders at some point??
 
 loading states for other modals
 
@@ -16,18 +19,15 @@ make the color palette pickers better
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
 
-isolate files in iframe or something
 
-puppeteer ublock origin
-
-server side check length is non-zero
-
-dompurify output of downloaded sites
 
 share modal / edit board modal - loading state, open immedately while loading
 
 
-reloading boards + tags - don't flicker nothing 
+downloader:
+    isolate files in iframe or something
+    puppeteer ublock origin
+    dompurify output of downloaded sites
 
 ----
 later:

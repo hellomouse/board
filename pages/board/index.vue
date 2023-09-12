@@ -244,7 +244,7 @@ useSeoMeta({
             <BoardAddToTagModal
                 :show="addBoardToTagModal"
                 :tags="tags"
-                :board-id="currentBoard.id"
+                :board-id="currentBoard.id || ''"
   
                 @update="onBoardTagMoveUpdate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -494,8 +494,6 @@ export default {
         },
         async getBoardsAndTags() {
             this.startSelection = -1;
-            this.boards = [];
-            this.tags = [];
             this.loadingBoards = true;
 
             await this.getTags();
