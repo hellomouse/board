@@ -183,7 +183,7 @@ useSeoMeta({
                             </button>
                             <button
                                 class="px-4 [ hoverable hover-list-item ] [ edit-list-item ]"
-                                @click="boardPropertiesModal = true"
+                                @click="modals.boardPropertiesModal = true"
                             >
                                 <v-icon icon="mdi-information-outline" />Properties
                             </button>
@@ -294,7 +294,7 @@ useSeoMeta({
             v-if="!isFavoritesPage"
 
             :edit-mode="editPin"
-            :show="createPinModal"
+            :show="modals.createPinModal"
             :pin="currentPin"
             :pin-title="pinTitle"
             :board-id="currentBoard.id || ''"
@@ -305,7 +305,7 @@ useSeoMeta({
 
         <!-- For current board -->
         <v-dialog
-            v-model="boardPropertiesModal"
+            v-model="modals.boardPropertiesModal"
             width="auto"
         >
             <v-card width="500">
@@ -333,26 +333,26 @@ useSeoMeta({
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
-                    <v-btn color="primary" block @click="boardPropertiesModal = false">Close</v-btn>
+                    <v-btn color="primary" block @click="modals.boardPropertiesModal = false">Close</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
     
-        <BoardModal
+        <lazy-board-modal
             v-if="!isFavoritesPage"
 
             :edit-mode="true"
-            :show="editBoardModal"
+            :show="modals.editBoardModal"
             :board="currentBoard"
 
             @update="onBoardEdit"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
         />
 
-        <BoardDeleteModal
+        <lazy-board-delete-modal
             v-if="!isFavoritesPage"
 
-            :show="deleteBoardModal"
+            :show="modals.deleteBoardModal"
             :board="currentBoard"
 
             @update="onBoardDeleteUpdate"
@@ -360,35 +360,31 @@ useSeoMeta({
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
 
-        <BoardShareModal
+        <lazy-board-share-modal
             v-if="!isFavoritesPage"
     
-            :show="shareBoardModal"
+            :show="modals.shareBoardModal"
             :board="currentBoard"
 
-            @update="e => { if (e.type === 'close') shareBoardModal = false; }"
+            @update="e => { if (e.type === 'close') modals.shareBoardModal = false; }"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
 
-        <PinHistoryModal
-            v-if="pinHistoryModal"
-
+        <lazy-pin-history-modal
             :pin="pinHistoryModalPin"
-            :show="pinHistoryModal"
+            :show="modals.pinHistoryModal"
 
             @update="onPinHistoryUpdate"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
 
-        <PinCopyToBoardModal
-            v-if="pinCopyToBoardModal"
-
-            :show="pinCopyToBoardModal"
+        <lazy-pin-copy-to-board-modal
+            :show="modals.pinCopyToBoardModal"
             :pin="pinCopyToBoardPin"
 
-            @update="e => { if (e.type === 'close') pinCopyToBoardModal = false; }"
+            @update="e => { if (e.type === 'close') modals.pinCopyToBoardModal = false; }"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
@@ -439,14 +435,18 @@ export default {
             currentPin: {},
 
             // Modal show
-            editBoardModal: false,
-            shareBoardModal: false,
-            deleteBoardModal: false,
-            boardPropertiesModal: false,
-            pinHistoryModal: false,
+            modals: {
+                editBoardModal: false,
+                shareBoardModal: false,
+                deleteBoardModal: false,
+                boardPropertiesModal: false,
+                pinHistoryModal: false,
+                createPinModal: false,
+                pinCopyToBoardModal: false
+            },
+
+            // Whether in edit mode
             editPin: false,
-            createPinModal: false,
-            pinCopyToBoardModal: false,
 
             // Data
             pins: [],
@@ -524,7 +524,7 @@ export default {
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
         },
-        '$route'() {
+        '$route.path'() {
             if (this.$route.path !== '/board/board' && process.client)
                 document.removeEventListener('keydown', this.keydownHandler);
         }
@@ -541,6 +541,7 @@ export default {
     async created() {
         await this.onLoad();
         this.$watch('$route.query', () => {
+            if (this.$route.path !== '/board/board') return;
             this.deselectAllPins();
             this.onLoad();
         });
@@ -678,7 +679,7 @@ export default {
             if (created.isTrusted !== undefined)
                 return;
 
-            this.createPinModal = false;
+            this.modals.createPinModal = false;
             if (created) {
                 this.pinCount++;
                 this.pageCount = Math.ceil(this.pinCount / PINS_PER_PAGE);
@@ -698,7 +699,7 @@ export default {
             else if (update.type === 'pin-edit') { // Edit current pin
                 this.editPin = true;
                 this.currentPin = update.pin;
-                this.createPinModal = true;
+                this.modals.createPinModal = true;
             }
             else if (update.type === 'pin-favorite') {
                 for (let pin of this.pins) {
@@ -718,29 +719,29 @@ export default {
             }
             else if (update.type === 'pin-history') {
                 this.pinHistoryModalPin = update.pin;
-                this.pinHistoryModal = true;
+                this.modals.pinHistoryModal = true;
             }
             else if (update.type === 'pin-copy-to-board') {
                 this.pinCopyToBoardPin = update.pin;
-                this.pinCopyToBoardModal = true;
+                this.modals.pinCopyToBoardModal = true;
             }
         },
 
         // Board stuff:
         // Handle menu selection for each board
         openBoardDeleteModal() {
-            this.deleteBoardModal = true;
+            this.modals.deleteBoardModal = true;
         },
         openBoardEditModal() {
-            this.editBoardModal = true;
+            this.modals.editBoardModal = true;
         },
         async openBoardShareModal() {
             await this.updateBoardInfo(); // Sync information before opening
-            this.shareBoardModal = true;
+            this.modals.shareBoardModal = true;
         },
         async onBoardDeleteUpdate(msg) {
             if (msg.type === 'close_board_delete') // Close board delete modal
-                this.deleteBoardModal = false;
+                this.modals.deleteBoardModal = false;
             else if (msg.type === 'board_delete') { // Board was deleted
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
                 setTimeout(() => {
@@ -750,7 +751,7 @@ export default {
         },
         // Called when a board is newly created or cancelled
         async onBoardEdit(edited) {
-            this.editBoardModal = false;
+            this.modals.editBoardModal = false;
             if (edited) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board edited!'];
                 this.updateBoardInfo();
@@ -780,7 +781,7 @@ export default {
         openCreatePin(type) {
             this.currentPin = { type };
             this.editPin = false;
-            this.createPinModal = true
+            this.modals.createPinModal = true
             this.pinTitle = ['Rich Text', 'Image Gallery', 'Link', 'Review', 'Checklist'][type] || '';
         },
         // On pin select / deselect
@@ -894,7 +895,7 @@ export default {
         // Pin history
         onPinHistoryUpdate(e) {
             if (e.type === 'close')
-                this.pinHistoryModal = false;
+                this.modals.pinHistoryModal = false;
             else if (e.type === 'pin-content') {
                 for (let pin of this.pins) {
                     if (pin.pin_id === e.id) {
@@ -911,10 +912,7 @@ export default {
         // Selection keyboard
         keydownHandler(event) {
             // Ctrl-A select all pins when no modal is open
-            if (event.ctrlKey && event.key === 'a' && !this.deleteDialog &&
-                    !this.editBoardModal && !this.shareBoardModal &&
-                    !this.deleteBoardModal && !this.boardPropertiesModal &&
-                    !this.createPinModal && !this.pinHistoryModal && !this.pinCopyToBoardModal) {
+            if (event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => x)) {
                 event.preventDefault();
                 this.selectAllPins();
                 return false;

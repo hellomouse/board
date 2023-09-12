@@ -38,7 +38,7 @@ useSeoMeta({
                     <button
                         class="px-4 py-2 hoverable hover-list-item"
                         :disabled="currentActiveTag.name"
-                        @click="currentBoardTag = {}; openBoardTagModal();"
+                        @click="currentBoardTag = {}; openboardEditTagModal();"
                     >
                         <v-icon icon="mdi-tag" />Filter Tag
                     </button>
@@ -92,7 +92,10 @@ useSeoMeta({
             </v-tooltip>
         </v-toolbar>
 
-        <v-container class="container-with-left-nav pt-0" :class="containerClass">
+        <v-container
+            v-if="$route.path === '/board'"
+            class="container-with-left-nav pt-0" :class="containerClass"
+        >
             <div v-if="loadingBoards" class="state-loader state-center">
                 <v-progress-linear color="primary" indeterminate class="mb-2" />
                 Loading Boards...
@@ -138,7 +141,10 @@ useSeoMeta({
                     </v-btn>
                 </div>
             </div>
-            
+
+
+            <!-- Boards and tags -->
+            <!-- ----------------- -->
             <div class="scroll-container" @scroll="onScroll" @click.self="deselectAllBoardsAndTags()">
                 <div
                     v-if="boards.length > 0 && tags.length > 0 && !currentActiveTag.name && !$route.query.shared_with_me && $route.path === '/board'"
@@ -146,7 +152,7 @@ useSeoMeta({
                 >
                     <v-label>Tag Groups</v-label>
                     <div class="mb-2" @click.self="deselectAllBoardsAndTags()">
-                        <BoardTagFilter
+                        <board-tag-filter
                             v-for="tag in tags" :key="tag.id"
                             v-model:selected="tag.selected"
                             :name="tag.name" :color="tag.color" :tag="{...tag}"
@@ -156,16 +162,16 @@ useSeoMeta({
                             @dragenter.prevent
 
                             @select="onTagSelect"
-                            @add-remove-boards="e => { currentBoardTag = e; boardTagEditBoardsModal = true; }"
-                            @edit="e => { currentBoardTag = e; boardTagModal = true; }"
-                            @delete="val => { [deleteTagModal, tagToDelete] = [true, val]; }"
+                            @add-remove-boards="e => { currentBoardTag = e; modals.boardEditTagBoardsModal = true; }"
+                            @edit="e => { currentBoardTag = e; modals.boardEditTagModal = true; }"
+                            @delete="val => { [modals.deleteTagModal, tagToDelete] = [true, val]; }"
                             @filter="switchTag(tag)"
                         />
                     </div>
                 </div>
 
                 <v-label v-if="sortedBoards.length > 0">Boards</v-label><br>
-                <BoardBoard
+                <board-board
                     v-for="board in sortedBoards" :key="board.id"
                     v-model:selected="board.selected"
                     :board-id="board.id"
@@ -185,9 +191,12 @@ useSeoMeta({
                 />
             </div>
 
-            <BoardModal
-                :edit-mode="editBoard"
-                :show="createBoardModal"
+
+            <!-- Modals -->
+            <!-- ----------------- -->
+            <lazy-board-modal
+                :edit-mode="modals.editBoardModal"
+                :show="modals.createBoardModal"
                 :board="currentBoard"
                 :active-tag-id="currentActiveTag.name ? currentActiveTag.id : -1"
 
@@ -195,8 +204,8 @@ useSeoMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             />
 
-            <BoardDeleteModal
-                :show="deleteBoardModal"
+            <lazy-board-delete-modal
+                :show="modals.deleteBoardModal"
                 :board="currentBoard"
 
                 @update="onBoardUpdate"
@@ -204,27 +213,27 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <BoardShareModal
-                :show="shareBoardModal"
+            <lazy-board-share-modal
+                :show="modals.shareBoardModal"
                 :board="currentBoard"
 
-                @update="e => { if (e.type === 'close') shareBoardModal = false; }"
+                @update="e => { if (e.type === 'close') modals.shareBoardModal = false; }"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <BoardMassShareModal
-                :show="massShareBoardModal"
+            <lazy-board-mass-share-modal
+                :show="modals.massShareBoardModal"
                 :boards="[...selectedBoards]"
                 :has-edit-permission-on-all-selected-boards="hasEditPermissionOnAllSelectedBoards"
 
-                @update="e => { if (e.type === 'close') massShareBoardModal = false; }"
+                @update="e => { if (e.type === 'close') modals.massShareBoardModal = false; }"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <BoardTagModal
-                :show="boardTagModal"
+            <lazy-board-edit-tag-modal
+                :show="modals.boardEditTagModal"
                 :tag="currentBoardTag"
 
                 @update="onTagUpdate"
@@ -232,8 +241,8 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <BoardTagBoardModal
-                :show="boardTagEditBoardsModal"
+            <lazy-board-edit-tag-boards-modal
+                :show="modals.boardEditTagBoardsModal"
                 :tag="currentBoardTag"
 
                 @update="onTagUpdate"
@@ -241,8 +250,8 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <BoardAddToTagModal
-                :show="addBoardToTagModal"
+            <lazy-board-move-to-tag-modal
+                :show="modals.moveBoardToTagModal"
                 :tags="tags"
                 :board-id="currentBoard.id || ''"
   
@@ -251,7 +260,7 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <v-dialog v-model="deleteTagModal" width="400">
+            <v-dialog v-model="modals.deleteTagModal" width="400">
                 <v-card rounded="0">
                     <v-card-text>
                         <h1>Delete Tag Group</h1>
@@ -260,8 +269,8 @@ useSeoMeta({
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer />
-                        <v-btn color="primary" @click="deleteTagModal = false">Cancel</v-btn>
-                        <v-btn color="primary" @click="deleteTag(tagToDelete); deleteTagModal = false">Delete</v-btn>
+                        <v-btn color="primary" @click="modals.deleteTagModal = false">Cancel</v-btn>
+                        <v-btn color="primary" @click="deleteTag(tagToDelete); modals.deleteTagModal = false">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -307,18 +316,20 @@ export default {
             currentActiveTag: {},
             loadingBoards: true,
             title: 'My boards',
-            tagToDelete: '',
+            tagToDelete: {},
 
             // Modal show
-            editBoard: false,
-            createBoardModal: false,
-            shareBoardModal: false,
-            massShareBoardModal: false,
-            deleteBoardModal: false,
-            boardTagModal: false,
-            boardTagEditBoardsModal: false,
-            deleteTagModal: false,
-            addBoardToTagModal: false,
+            modals: {
+                editBoardModal: false,
+                createBoardModal: false,
+                shareBoardModal: false,
+                massShareBoardModal: false,
+                deleteBoardModal: false,
+                boardEditTagModal: false,
+                boardEditTagBoardsModal: false,
+                deleteTagModal: false,
+                moveBoardToTagModal: false,
+            },
 
             // Toasts
             showErrorToast: false,
@@ -338,7 +349,7 @@ export default {
             // Selection
             selectedBoards: new Set(),
             selectedTags: new Set(),
-            color: '',
+            selectedColor: '',
             selectedSwatchIndex: 0,
             startSelection: -1, // For shift select
             previousI: -1, // For shift select
@@ -405,7 +416,7 @@ export default {
                 this.getBoardsAndTags();
             }
         },
-        '$route'() {
+        '$route.path'() {
             if (this.$route.path !== '/board' && process.client) {
                 document.removeEventListener('keydown', this.keydownHandler);
                 document.removeEventListener('keyup', this.keyupHandler);
@@ -509,27 +520,27 @@ export default {
         // Handle menu selection for each board
         async onBoardUpdate(msg) {
             if (msg.type === 'open_board_delete') { // Open board delete modal
-                this.deleteBoardModal = true;
+                this.modals.deleteBoardModal = true;
                 this.currentBoard.id = msg.id;
                 this.currentBoard.name = msg.name;
             }
             else if (msg.type === 'close_board_delete') // Close board delete modal
-                this.deleteBoardModal = false;
+                this.modals.deleteBoardModal = false;
             else if (msg.type === 'board_delete') { // Board was deleted
                 this.startSelection = -1;
                 this.boards = this.boards.filter(b => b.id !== msg.id);
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Board deleted!'];
             }
             else if (msg.type === 'edit') {  // Open edit modal
-                this.editBoard = true;
-                this.createBoardModal = true;
+                this.modals.editBoardModal = true;
+                this.modals.createBoardModal = true;
                 this.currentBoard = msg.board;
             }
             else if (msg.type === 'share') { // Open share board modal
                 await this.openShareModal(msg.id);
             }
             else if (msg.type === 'edit-tags') { // Open edit tag modal
-                this.addBoardToTagModal = true;
+                this.modals.moveBoardToTagModal = true;
                 this.currentBoard.id = msg.id;
             }
         },
@@ -543,9 +554,9 @@ export default {
                         tag.board_ids = tag.board_ids.filter(id => id !== msg.board_id);
                 }
             }
-            this.addBoardToTagModal = false;
+            this.modals.moveBoardToTagModal = false;
         },
-        openBoardTagModal() {
+        openboardEditTagModal() {
             // Ensure matches server side, somewhat arbitrary
             const MAX_TAG_COUNT = 200;
 
@@ -555,7 +566,7 @@ export default {
                 this.toastErrorMsg = `You have reached the maximum number of tags (${MAX_TAG_COUNT})`;
                 return;
             }
-            this.boardTagModal = true;
+            this.modals.boardEditTagModal = true;
         },
         // When tag edit modal is done
         async onTagUpdate(update) {
@@ -580,8 +591,8 @@ export default {
                     await this.getTags();
                 }
             }
-            this.boardTagModal = false;
-            this.boardTagEditBoardsModal = false;
+            this.modals.boardEditTagModal = false;
+            this.modals.boardEditTagBoardsModal = false;
         },
         // Delete a tag
         async deleteTag(tag) {
@@ -592,7 +603,7 @@ export default {
         async openShareModal(id) {
             try {
                 this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
-                this.shareBoardModal = true;
+                this.modals.shareBoardModal = true;
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
@@ -600,19 +611,24 @@ export default {
         },
         // Open the create board button
         async openCreateBoard() {
-            this.editBoard = false;
-            this.createBoardModal = true;
+            this.modals.editBoardModal = false;
+            this.modals.createBoardModal = true;
             this.currentBoard = {};
         },
         // Called when a board is newly created or cancelled
         async onBoardCreateOrEdit(created) {
-            this.createBoardModal = false;
+            this.modals.createBoardModal = false;
             if (created) {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
-                    this.editBoard ? 'Board edited!' : 'Board created!'];
+                    this.modals.editBoardModal ? 'Board edited!' : 'Board created!'];
                 this.getBoardsAndTags();
             }
         },
+
+    
+        // Navigation
+        // ------------------
+
         // Switch folder
         switchTag(tag) {
             this.deselectAllBoardsAndTags();
@@ -635,7 +651,10 @@ export default {
             }
             return {};
         },
+
+
         // Selection
+        // ------------------
         onTagSelect(update) {
             let tag = this.getTagById(update.id);
             if (!tag.name) return;
@@ -702,7 +721,7 @@ export default {
             let selected = [...this.selectedBoards];
             if (!selected.length) return;
             else if (selected.length === 1) await this.openShareModal(selected[0]);
-            else this.massShareBoardModal = true;
+            else this.modals.massShareBoardModal = true;
         },
         async massColorChange(col, index) {
             try {
@@ -726,7 +745,7 @@ export default {
                             tag.color = col;
                     }
                 }
-                [this.color, this.selectedSwatchIndex] = [col, index];
+                [this.selectedColor, this.selectedSwatchIndex] = [col, index];
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to edit colors: ' + this.$apiErrorToString(e);
@@ -736,10 +755,7 @@ export default {
             this.shiftKey = event.shiftKey;
 
             // Ctrl-A select all boards
-            if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
-                    !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal &&
-                    !this.boardTagModal && !this.boardTagEditBoardsModal && !this.deleteTagModal &&
-                    !this.addBoardToTagModal) {
+            if (event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => x)) {
                 event.preventDefault();
                 this.selectAllBoardsAndTags();
                 return false;

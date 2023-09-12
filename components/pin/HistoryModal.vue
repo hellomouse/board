@@ -193,6 +193,7 @@ export default {
         },
         // Load history preview
         async loadHistoryPreview() {
+            if (!this.pin.pin_id) return;
             try {
                 let his = await this.$fetchApi('/api/board/pins/history/preview', 'GET', { pin_id: this.pin.pin_id });
                 this.history = his.history;
