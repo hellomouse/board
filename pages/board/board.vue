@@ -736,8 +736,8 @@ export default {
             this.modals.editBoardModal = true;
         },
         async openBoardShareModal() {
-            await this.updateBoardInfo(); // Sync information before opening
             this.modals.shareBoardModal = true;
+            await this.updateBoardInfo(); // Sync information before opening
         },
         async onBoardDeleteUpdate(msg) {
             if (msg.type === 'close_board_delete') // Close board delete modal

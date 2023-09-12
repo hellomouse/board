@@ -11,17 +11,19 @@ server:
 - rename all parameter names consistent
 - server side check length is non-zero
 
+ 
 
-loading states for other modals
+loading states for modals
 
 make the color palette pickers better
+
+
+
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
 
-
-
-share modal / edit board modal - loading state, open immedately while loading
+also lazy tweet iframe - click to trigger
 
 
 downloader:

@@ -83,7 +83,7 @@ useSeoMeta({
             <v-tooltip :disabled="!canBulkOpBoards" text="Share Boards" location="bottom">
                 <template #activator="{ props }">
                     <v-btn
-                        :disabled="!canBulkOpBoards"
+                        :disabled="!canBulkOpBoards || canBulkOpTags"
                         v-bind="props"
                         icon="mdi-account-plus"
                         @click="openMassShareBoardModal()"
@@ -602,8 +602,8 @@ export default {
         },
         async openShareModal(id) {
             try {
-                this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
                 this.modals.shareBoardModal = true;
+                this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
