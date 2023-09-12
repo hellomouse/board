@@ -10,6 +10,7 @@ server:
 - proper refs
 - rename all parameter names consistent
 - server side check length is non-zero
+- cache db results?
 
 
 loading states for modals
@@ -17,18 +18,15 @@ loading states for modals
 make the color palette pickers better
 
 
+if change url reset preview text
 
+make ui better - especially download button on pins
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
 
 also lazy tweet iframe - click to trigger
 
-
-downloader:
-    isolate files in iframe or something
-    puppeteer ublock origin
-    dompurify output of downloaded sites
 
 ----
 later:

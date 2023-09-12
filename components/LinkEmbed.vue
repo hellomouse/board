@@ -3,22 +3,12 @@
 <template>
     <div class="container">
         <!-- Fake video iframes that load on click -->
-        <div v-if="youtubeId && !iframeInteract" class="video-img-wrapper">
+        <div v-if="(youtubeId || bilibiliId) && !iframeInteract" class="video-img-wrapper">
             <img
                 class="max-width mb-2 video-img"
                 loading="lazy"
                 height="200"
-                :src="fallbackImgSrc"
-                onerror="this.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='"
-                @click="iframeInteract = true"
-            />
-        </div>
-        <div v-if="bilibiliId && !iframeInteract" class="video-img-wrapper">
-            <img
-                class="max-width mb-2 video-img"
-                loading="lazy"
-                height="200"
-                :src="fallbackImgSrc"
+                :src="videoThumbSrc"
                 onerror="this.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='"
                 @click="iframeInteract = true"
             />
@@ -100,6 +90,7 @@ export default {
             youtubeId: (yt && yt[7].length === 11) ? yt[7] : false,
             isTweet: this.url.includes('twitter.com/'),
             bilibiliId: bilibiliId || false,
+            videoThumbSrc: bilibiliId ? this.imgSrc : this.fallbackImgSrc,
 
             iframeInteract: false,
             fallback: `if (this.src !== '${this.fallbackImgSrc || ''}' && '${this.fallbackImgSrc || ''}' !== '') { this.src = '${this.fallbackImgSrc || ''}'; } else { this.style.display = 'none'; }`
