@@ -66,6 +66,10 @@ export default {
         show: {
             type: Boolean,
             required: true
+        },
+        activeTagId: {
+            type: Number,
+            required: true
         }
     },
     data() {
@@ -111,8 +115,14 @@ export default {
             };
 
             // Creation requires perms, editing requires id
-            if (!this.editMode) params.perms = {};
-            else                params.id = this.board.id;
+            // Also if creating in a tag set tag id
+            if (!this.editMode) {
+                params.perms = {};
+                if (this.activeTagId >= 0)
+                    params.tag_id = this.activeTagId;
+            }
+            else
+                params.id = this.board.id;
 
             this.loading = true;
             try {

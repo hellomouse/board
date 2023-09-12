@@ -189,6 +189,7 @@ useSeoMeta({
                 :edit-mode="editBoard"
                 :show="createBoardModal"
                 :board="currentBoard"
+                :active-tag-id="currentActiveTag.name ? currentActiveTag.id : -1"
 
                 @update="onBoardCreateOrEdit"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
@@ -462,6 +463,19 @@ export default {
             try {
                 let tags = await this.$fetchApi('/api/board/tags', 'GET', {});
                 this.tags = tags.tags;
+
+                let tagIdMap = {};
+                for (let tag of this.tags)
+                    tagIdMap[tag.id] = tag;
+
+                // Current active tag no longer exists
+                if (!tagIdMap[this.currentActiveTag.id])
+                    this.switchTag({});
+                // Otherwise update current tag
+                else {
+                    this.currentActiveTag = tagIdMap[this.currentActiveTag.id];
+                    this.boardIdFilter = this.currentActiveTag.board_ids;
+                }
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get tags: ' + this.$apiErrorToString(e);

@@ -36,6 +36,7 @@
                             for the creator.
                         </td>
                     </tr>
+                    <tr><td>tag_id: number?</td><td>Tag ID to add board to when created</td></tr>
                 </tbody>
             </v-table>
 

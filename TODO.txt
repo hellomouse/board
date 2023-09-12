@@ -13,15 +13,9 @@ boards folders
             - tag groups to add / remove to
         - require bulk endpoint
 
-- show tags on boards as well
-- when creating board in folder auto add to folder
-    - modify create board api to specify ids of tag groups to add to
-- dont get board_ids for all folders until clicked or edit
 - check for tag count limit when creating
 
 
-
-board / tag bulk download
 
 loading states for other modals
 
@@ -54,6 +48,7 @@ pfp - or just make /pfp/username.png or something
 
 
 - option to download board
+    - board / tag bulk download
 
 -------
 
