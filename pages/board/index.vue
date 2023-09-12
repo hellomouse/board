@@ -38,7 +38,7 @@ useSeoMeta({
                     <button
                         class="px-4 py-2 hoverable hover-list-item"
                         :disabled="currentActiveTag.name"
-                        @click="currentBoardTag = {}; boardTagModal = true"
+                        @click="currentBoardTag = {}; openBoardTagModal();"
                     >
                         <v-icon icon="mdi-tag" />Filter Tag
                     </button>
@@ -519,6 +519,18 @@ export default {
             else if (msg.type === 'share') { // Open share board modal
                 await this.openShareModal(msg.id);
             }
+        },
+        openBoardTagModal() {
+            // Ensure matches server side, somewhat arbitrary
+            const MAX_TAG_COUNT = 200;
+
+            // Check if the user has too many tags
+            if (this.tags.length >= MAX_TAG_COUNT) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = `You have reached the maximum number of tags (${MAX_TAG_COUNT})`;
+                return;
+            }
+            this.boardTagModal = true;
         },
         // When tag edit modal is done
         async onTagUpdate(update) {

@@ -13,7 +13,6 @@ boards folders
             - tag groups to add / remove to
         - require bulk endpoint
 
-- check for tag count limit when creating
 
 
 
@@ -33,6 +32,9 @@ server side check length is non-zero
 dompurify output of downloaded sites
 
 share modal / edit board modal - loading state, open immedately while loading
+
+
+reloading boards + tags - don't flicker nothing 
 
 ----
 later:
