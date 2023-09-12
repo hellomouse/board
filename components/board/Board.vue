@@ -68,6 +68,15 @@
                             <v-icon icon="mdi-pencil" />Edit
                         </button>
                         <button
+                            v-if="creatorId === loggedInUserId"
+                            class="px-4 hoverable hover-list-item edit-list-item"
+                            @click="$emit('update', {
+                                type: 'edit-tags',
+                                id: boardId
+                            })">
+                            <v-icon icon="mdi-tag" />Edit Tags
+                        </button>
+                        <button
                             v-if="['Owner'].includes(currentUserPerm)"
                             class="px-4 text-red [ hoverable hover-list-item ] [ edit-list-item edit-list-item--line ]"
                             @click="$emit('update', {
@@ -86,6 +95,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/auth.js';
+
 export default {
     name: 'BoardBoard',
     props: {
@@ -123,6 +134,12 @@ export default {
         return {
             numClicks: 0
         };
+    },
+    computed: {
+        loggedInUserId() {
+            let user = useAuthStore(this.$pinia).user;
+            return user ? user.id : '';
+        }
     },
     methods: {
         copyShareLink() {

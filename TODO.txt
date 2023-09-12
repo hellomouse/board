@@ -4,17 +4,10 @@ link tags - periodically refresh or hide link preview if not rendered?
     - only show pins user can access
     - send event data: when pin update, somehow get from ipc
 
-boards folders
-- tag boards
-    - board has dropdown -> edit tags -> add / remove
-    - bulk add to tags - select board, add / remove to tag
-        - have 1 modal:
-            - board_ids to affect
-            - tag groups to add / remove to
-        - require bulk endpoint
 
+refactor code
 
-
+rename tags to folders at some point??
 
 loading states for other modals
 

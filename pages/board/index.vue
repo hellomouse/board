@@ -232,11 +232,21 @@ useSeoMeta({
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
 
-            <boardTagBoardModal
+            <BoardTagBoardModal
                 :show="boardTagEditBoardsModal"
                 :tag="currentBoardTag"
 
                 @update="onTagUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
+            <BoardAddToTagModal
+                :show="addBoardToTagModal"
+                :tags="tags"
+                :board-id="currentBoard.id"
+  
+                @update="onBoardTagMoveUpdate"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
@@ -308,6 +318,7 @@ export default {
             boardTagModal: false,
             boardTagEditBoardsModal: false,
             deleteTagModal: false,
+            addBoardToTagModal: false,
 
             // Toasts
             showErrorToast: false,
@@ -519,6 +530,22 @@ export default {
             else if (msg.type === 'share') { // Open share board modal
                 await this.openShareModal(msg.id);
             }
+            else if (msg.type === 'edit-tags') { // Open edit tag modal
+                this.addBoardToTagModal = true;
+                this.currentBoard.id = msg.id;
+            }
+        },
+        // Handle tag moving
+        onBoardTagMoveUpdate(msg) {
+            if (msg.to_tag_id) {
+                for (let tag of this.tags) {
+                    if (tag.id === msg.to_tag_id)
+                        tag.board_ids = [...new Set(tag.board_ids.concat([msg.board_id]))];
+                    else
+                        tag.board_ids = tag.board_ids.filter(id => id !== msg.board_id);
+                }
+            }
+            this.addBoardToTagModal = false;
         },
         openBoardTagModal() {
             // Ensure matches server side, somewhat arbitrary
@@ -713,7 +740,8 @@ export default {
             // Ctrl-A select all boards
             if (event.ctrlKey && event.key === 'a' && !this.createBoardModal &&
                     !this.shareBoardModal && !this.deleteBoardModal && !this.massShareBoardModal &&
-                    !this.boardTagModal && !this.boardTagEditBoardsModal && !this.deleteTagModal) {
+                    !this.boardTagModal && !this.boardTagEditBoardsModal && !this.deleteTagModal &&
+                    !this.addBoardToTagModal) {
                 event.preventDefault();
                 this.selectAllBoardsAndTags();
                 return false;
