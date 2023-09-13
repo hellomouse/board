@@ -108,7 +108,7 @@ Example usage:
                         <v-select
                             v-model="publicLevel"
                             :disabled="!forceEdit && ![OWNER, EDIT].includes(currentUserPerm)" class="user__perm"
-                            :items="permLevelsFiltered.filter(x => x !== OWNER).concat([NO_ACCESS])"
+                            :items="permLevelsFiltered.filter(x => ![OWNER, EDIT, SELFEDIT].includes(x)).concat([NO_ACCESS])"
                         ></v-select>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ Example usage:
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
-import { NO_ACCESS, OWNER, EDIT } from '~/helpers/board/perms.js';
+import { NO_ACCESS, OWNER, EDIT, SELFEDIT } from '~/helpers/board/perms.js';
 
 const INPUT_RATE_LIMIT_MS = 300; // In ms
 
@@ -227,7 +227,7 @@ export default {
         }
     },
     data: () => ({
-        NO_ACCESS, EDIT, OWNER,
+        NO_ACCESS, EDIT, OWNER, SELFEDIT,
         publicLevel: NO_ACCESS,
 
         // Autocomplete:

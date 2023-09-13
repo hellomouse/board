@@ -15,8 +15,6 @@ server:
 
 loading states for modals
 
-- remove edit for public? since all public pins can't be edited anyways
-
 ----
 later:
 
