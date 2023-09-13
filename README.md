@@ -4,7 +4,7 @@
 </div>
 <br>
 
-![Preview](https://i.imgur.com/imGdBuj.png)
+![Preview](https://i.imgur.com/gc2EPGE.png)
 
 Hellomouse Apps is an app suite for Hellomouse. Currently we have the following apps:
 - **Board:** A pinterest / notes app for archiving websites, images, or just your own ideas, under `/board`.
