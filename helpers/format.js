@@ -1,15 +1,12 @@
+import { escape } from 'html-escaper';
+
 /**
  * Escape html
  * @param {string} text Text to escape
  * @return {string} Text with escaped HTML
  */
 export function escapeHtml(text) {
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+    return escape(text);
 }
 
 /**
