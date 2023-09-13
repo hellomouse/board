@@ -77,7 +77,6 @@ export default {
             const lines = this.content.split('\n');
             this.url = lines[0].startsWith('http') ? lines[0] : 'https://' + lines[0];
             this.desc = lines[1] || '';
- 
             this.imgUrl = lines[2];
             this.title = lines[3];
             this.metaDesc = lines[4];

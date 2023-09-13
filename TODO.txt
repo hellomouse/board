@@ -13,12 +13,10 @@ server:
 - cache db results?
 
 
-loading states for modals
-
 can't ctrl-a in search nav
 
-if change url reset preview text
 
+loading states for modals
 
 better light mode
 

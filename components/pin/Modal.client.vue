@@ -200,12 +200,15 @@ export default {
                 url1 = (this.pin && this.pin.content) ? this.pin.content.split('\n')[0] : '';
                 url2 = this.content.split('\n')[0];
 
-                // Inject URL metadata from original to new
+                // Inject URL metadata from original to new if url is the same
                 let content = params.content.split('\n');
                 while (content.length < 6)
                     content.push('');
-                for (let i = 2; i < 6; i++)
-                    content[i] = content[i] || (this.pin && this.pin.content ? this.pin.content.split('\n')[i] : '');
+                for (let i = 2; i < 6; i++) {
+                    let newLine = url1 === url2 ?
+                        (content[i] || (this.pin && this.pin.content ? this.pin.content.split('\n')[i] : '')) : '';
+                    content[i] = newLine;
+                }
                 params.content = content.join('\n');
             }
 
@@ -248,17 +251,15 @@ export default {
             }
 
             // Link pin: generate preview
-            if (type === 2) {
-                if (url1 !== url2) {
-                    try {
-                        await this.$fetchApi('/api/board/pins/preview', 'POST', {
-                            url: url2,
-                            pin_id: pinId
-                        });
-                    } catch (e) {
-                        let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
-                        this.$emit('error', errorMsg);
-                    }
+            if (type === 2 && url1 !== url2) {
+                try {
+                    await this.$fetchApi('/api/board/pins/preview', 'POST', {
+                        url: url2,
+                        pin_id: pinId
+                    });
+                } catch (e) {
+                    let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
+                    this.$emit('error', errorMsg);
                 }
             }
 
