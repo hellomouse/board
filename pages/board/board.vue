@@ -364,10 +364,11 @@ useSeoMeta({
         <lazy-board-share-modal
             v-if="!isFavoritesPage"
     
+            :loading-data="shareBoardModalLoading"
             :show="modals.shareBoardModal"
             :board="currentBoard"
 
-            @update="e => { if (e.type === 'close') modals.shareBoardModal = false; }"
+            @update="e => { if (e.type === 'close') modals.shareBoardModal = shareBoardModalLoading = false; }"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
@@ -445,6 +446,9 @@ export default {
                 createPinModal: false,
                 pinCopyToBoardModal: false
             },
+
+            // Modal loading
+            shareBoardModalLoading: false,
 
             // Whether in edit mode
             editPin: false,
@@ -737,8 +741,10 @@ export default {
             this.modals.editBoardModal = true;
         },
         async openBoardShareModal() {
+            this.shareBoardModalLoading = true;
             this.modals.shareBoardModal = true;
             await this.updateBoardInfo(); // Sync information before opening
+            this.shareBoardModalLoading = false;
         },
         async onBoardDeleteUpdate(msg) {
             if (msg.type === 'close_board_delete') // Close board delete modal

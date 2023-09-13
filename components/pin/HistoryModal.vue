@@ -8,7 +8,7 @@
             <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">Pin History</h1>
 
-                <div v-if="history.length > 0">
+                <div v-if="!loading && history.length > 0">
                     <div class="d-flex">
                         <div class="d-flex" style="width: 100%">
                             <div style="width: 50%" class="history-title pl-1">+R{{ revisionTitle[0] || '?' }} / Additions</div>
@@ -34,9 +34,17 @@
                 </div>
     
                 <!-- Empty state -->
-                <div v-if="history.length === 0" class="empty-state-container">
+                <div v-if="!loading && history.length === 0" class="empty-state-container">
                     <img src="/error-state.png" alt="Empty state" />
                     <h2>There is no history for this pin yet</h2>
+                </div>
+
+                <!-- Loading state -->
+                <div v-if="loading" style="height: 300px; text-align: center">
+                    <v-progress-circular
+                        style="margin-top: 100px"
+                        :width="2" :size="40" color="primary" indeterminate
+                    />
                 </div>
 
 
@@ -91,6 +99,7 @@ export default {
             confirmationModal: false,
             oldHtml: '',
             newHtml: '',
+            loading: false,
             history: [],
             revisionTitle: ['', ''],
             currentRevision: 0,
@@ -194,6 +203,7 @@ export default {
         // Load history preview
         async loadHistoryPreview() {
             if (!this.pin.pin_id) return;
+            this.loading = true;
             try {
                 let his = await this.$fetchApi('/api/board/pins/history/preview', 'GET', { pin_id: this.pin.pin_id });
                 this.history = his.history;
@@ -202,6 +212,7 @@ export default {
                 this.$emit('error', errorMsg);
             }
             await this.switchHistory(0);
+            this.loading = false;
         }
     }
 }

@@ -23,6 +23,7 @@ Example usage:
         :initial-users="shareUsers"
         :initial-public-perm="sharePublicPerm"
         :share-board-modal-loading="showLoading"
+        :loading-data="loadingData"
 
         @update="shareModalApply"
         @error="e => $emit('error', e)"
@@ -43,6 +44,10 @@ export default {
         board: {
             type: Object,
             required: true
+        },
+        loadingData: {
+            type: Boolean,
+            default: false
         }
     },
     data: () => ({

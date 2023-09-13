@@ -27,8 +27,14 @@ Example usage:
     >
         <v-card rounded="0" width="500">
             <v-card-text class="my-2 px-3">
-                <h1 class="mb-2 mx-1 text-truncate">
+                <h1 v-if="!loadingData" class="mb-2 mx-1 text-truncate">
                     Share "{{ resourceName }}"
+                </h1>
+                <h1 v-if="loadingData" class="mb-2 mx-1 text-truncate">
+                    Share "<v-progress-circular
+                        class="mx-1"
+                        :width="2" :size="20" color="primary" indeterminate
+                    />"
                 </h1>
 
                 <div class="d-flex flex-row align-center">
@@ -107,14 +113,24 @@ Example usage:
 
                         <v-select
                             v-model="publicLevel"
-                            :disabled="!forceEdit && ![OWNER, EDIT].includes(currentUserPerm)" class="user__perm"
+                            :loading="loadingData"
+                            :disabled="(!forceEdit && ![OWNER, EDIT].includes(currentUserPerm)) || loadingData"
+                            class="user__perm"
                             :items="permLevelsFiltered.filter(x => ![OWNER, EDIT, SELFEDIT].includes(x)).concat([NO_ACCESS])"
                         ></v-select>
                     </div>
                 </div>
 
+                <!-- Loading user share list -->
+                <div v-if="loadingData" class="user-list user-list--tall pa-2">
+                    <v-progress-circular
+                        class="centered-progress"
+                        :width="2" :size="30" color="primary" indeterminate
+                    />
+                </div>
+
                 <!-- User share list -->
-                <div class="user-list pa-2" style="min-height: 150px;">
+                <div v-if="!loadingData" class="user-list user-list--tall pa-2">
                     <div
                         v-for="user in users" :key="user"
                         class="[ user ] d-flex flex-row align-center"
@@ -222,6 +238,11 @@ export default {
         },
         // Don't disable if user doesn't have permission
         forceEdit: {
+            type: Boolean,
+            default: false
+        },
+        // Loading data state (note: loading is for the button applying changes)
+        loadingData: {
             type: Boolean,
             default: false
         }
@@ -388,10 +409,21 @@ export default {
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
 
+.centered-progress {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    transform: translateX(-50%);
+}
+
 .user-list {
     border: 1px solid var(--border-color);
     overflow-y: auto;
     max-height: 300px;
+    
+    &.user-list--tall {
+        min-height: 150px;
+    }
 }
 
 .user {

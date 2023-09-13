@@ -216,8 +216,9 @@ useSeoMeta({
             <lazy-board-share-modal
                 :show="modals.shareBoardModal"
                 :board="currentBoard"
+                :loading-data="shareBoardModalLoading"
 
-                @update="e => { if (e.type === 'close') modals.shareBoardModal = false; }"
+                @update="e => { if (e.type === 'close') modals.shareBoardModal = shareBoardModalLoading = false; }"
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
@@ -328,6 +329,9 @@ export default {
                 deleteTagModal: false,
                 moveBoardToTagModal: false,
             },
+
+            // Modal loading states
+            shareBoardModalLoading: false,
 
             // Toasts
             showErrorToast: false,
@@ -600,8 +604,10 @@ export default {
         },
         async openShareModal(id) {
             try {
+                this.shareBoardModalLoading = true;
                 this.modals.shareBoardModal = true;
                 this.currentBoard = await this.$fetchApi('/api/board/boards/single', 'GET', { id: id });
+                this.shareBoardModalLoading = false;
             } catch (e) {
                 this.showErrorToast = true;
                 this.toastErrorMsg = 'Failed to get board info: ' + this.$apiErrorToString(e);
