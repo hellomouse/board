@@ -13,18 +13,12 @@ server:
 - cache db results?
 
 
-can't ctrl-a in search nav
-
 loading states for modals
 
 better light mode
 
-
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways
-
-also lazy tweet iframe - click to trigger
-
 
 ----
 later:

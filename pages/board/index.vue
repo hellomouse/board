@@ -753,7 +753,8 @@ export default {
             this.shiftKey = event.shiftKey;
 
             // Ctrl-A select all boards
-            if (event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => x)) {
+            if (event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => this.modals[x]) &&
+                    document.activeElement.tagName.toLowerCase() !== 'input') {
                 event.preventDefault();
                 this.selectAllBoardsAndTags();
                 return false;
