@@ -109,7 +109,7 @@ export default {
     border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 
     &.selected {
-        outline: 1px solid rgb(var(--v-theme-primary)) !important;
+        outline: 1px solid rgb(var(--v-theme-on-surface)) !important;
     }
 }
 </style>

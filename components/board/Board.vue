@@ -182,7 +182,7 @@ export default {
     user-select: none;
 
     &.selected {
-        outline: 1px solid rgb(var(--v-theme-primary)) !important;
+        outline: 1px solid rgb(var(--v-theme-on-surface)) !important;
     }
     
     &__menu {

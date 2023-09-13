@@ -511,7 +511,7 @@ export default {
     }
 
     &.pinned {
-        border: 1px solid rgb(var(--v-theme-primary));
+        border: 1px solid rgba(var(--v-theme-on-surface), 0.3);
     }
 
 
