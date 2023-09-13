@@ -433,7 +433,7 @@ export default {
     overflow: auto;
     overflow-x: hidden;
     position: relative;
-    border: 1px solid transparent;
+    border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
     transition: border 0.2s;
     
     background-position: center !important;

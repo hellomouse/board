@@ -175,6 +175,7 @@ export default {
 
 .board-tile {
     max-width: 100%;
+    outline: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
     border-right: 3px solid;
     display: inline-block;
     outline-offset: -1px;

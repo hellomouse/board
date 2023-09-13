@@ -17,5 +17,5 @@ export function escapeHtml(text) {
  */
 export function formatHrefLink(content, color='') {
     return escapeHtml(content)
-        .replace(/(https?:\/\/[\w\.\d:?&=#]+)/gm, `<a style="color: ${color}" href="$1" target="_blank">$1</a>`);
+        .replace(/(https?:\/\/[\w.\d:?&=#]+)/gm, `<a style="color: ${color}" href="$1" target="_blank">$1</a>`);
 }

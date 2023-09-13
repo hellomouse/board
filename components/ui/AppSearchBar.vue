@@ -4,7 +4,7 @@
         label="" rounded="0"
         prepend-inner-icon="mdi-magnify"
         :placeholder="placeholder"
-        class="my-2"
+        class="my-2 navbar-search"
         style="width: 570px"
         density="compact"
         clearable
@@ -27,3 +27,12 @@ export default {
     }),
 }
 </script>
+
+<style lang="scss">
+.navbar-search .v-field {
+    font-size: 1rem;
+    vertical-align: middle;
+
+    input { margin: auto 0; }
+}
+</style>

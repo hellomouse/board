@@ -12,13 +12,14 @@
 
         <v-btn
             v-for="b in downloadContentArray" :key="b.strategy"
-            flat color="teal-darken-1"
+            variant="tonal" size="small"
+            flat color="teal-lighten-3"
             :href="'/files/site_downloads/' + b.url"
             target="_blank"
             class="mb-1 mr-1" height="30"
-            :prepend-icon="b.icon"
             append-icon="mdi-download"
         >{{ b.name }}</v-btn>
+        <!-- :prepend-icon="b.icon" -->
     </div>
 </template>
 

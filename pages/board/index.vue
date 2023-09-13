@@ -68,7 +68,7 @@ useSeoMeta({
             </v-tooltip>
 
             <v-menu activator="#palette-activator" :close-on-content-click="false" location="bottom">
-                <v-sheet class="pa-4" width="240">
+                <v-sheet class="pa-4" width="208">
                     <v-btn
                         v-for="(col, index) in swatches" :key="col"
                         density="compact" width="40" style="min-width: 40px;"

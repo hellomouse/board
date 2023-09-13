@@ -15,12 +15,14 @@ server:
 
 loading states for modals
 
-make the color palette pickers better
-
+can't ctrl-a in search nav
 
 if change url reset preview text
 
-make ui better - especially download button on pins
+
+better light mode
+
+pins - view more or expand instead of scroll
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways

@@ -175,7 +175,7 @@ $popout-gap: 5px;
     width: 100%;
     display: flex;
     box-sizing: border-box;
-    justify-content: start;
+    justify-content: flex-start;
     padding: 0 20px;
     background-color: rgb(var(--v-theme-background));
 

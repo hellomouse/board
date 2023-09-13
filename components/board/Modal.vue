@@ -20,7 +20,7 @@ Example usage:
     >
         <v-card rounded="0" width="500" class="py-2">
             <v-card-text class="px-4">
-                <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Board</h1>
+                <h1 class="mb-2 text-truncate">{{ editMode ? 'Edit' : 'Create' }} Board</h1>
 
                 <v-text-field
                     v-model="name" density="compact" class="mb-2" label="Name"
