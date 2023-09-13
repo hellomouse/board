@@ -15,12 +15,10 @@ server:
 
 can't ctrl-a in search nav
 
-
 loading states for modals
 
 better light mode
 
-pins - view more or expand instead of scroll
 
 all the perm checks for can view - check if public can view as well
 - remove edit for public? since all public pins can't be edited anyways

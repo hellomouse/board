@@ -2,7 +2,6 @@
     <v-sheet
         elevation="0"
         min-width="250"
-        max-height="600"
         class="pin-tile"
         :style="{ background: background }"
         :class="pinTileClasses"
@@ -46,7 +45,11 @@
             </div>
         </div>
 
-        <div class="px-4 py-1 pin-tile__content" style="max-height: 500px; overflow-y: auto">
+        <div 
+            ref="pin" class="px-4 py-1 pin-tile__content"
+            :class="!isExpanded && $refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX ? 'pin-tile__content--oversized' : ''"
+            :style="{ 'max-height': maxHeight  + 'px' }"
+        >
             <!-- Markdown -->
             <span v-if="type === 'Markdown'" v-html="content"></span>
 
@@ -64,6 +67,12 @@
                 @check="v => resendContent(pinId, checklistToContent(v))"
             />
         </div>
+
+        <v-btn
+            v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX"
+            variant="text" color="blue" block class="mt-2"
+            @click="toggleShowMore"
+        >{{ isExpanded ? 'Show Less' : 'Show More' }}</v-btn>
 
         <div class="pl-4 pin-tile__bottom">
             <div class="pin-tile__timestamp-wrapper">
@@ -164,6 +173,7 @@ import { useOptionStore } from '~/store/optionStore.js';
 import { contentToChecklist, checklistToContent } from '~/helpers/board/pin-checklist.js';
 
 const RESEND_CONTENT_INTERVAL = 500;
+const INITIAL_PIN_CONTENT_HEIGHT_PX = 500;
 
 export default {
     name: 'BoardPin',
@@ -204,7 +214,11 @@ export default {
 
             // Misc
             resendContentTimeout: null,
-            resendContentLast: 0
+            resendContentLast: 0,
+
+            // Expansion
+            maxHeight: INITIAL_PIN_CONTENT_HEIGHT_PX,
+            INITIAL_PIN_CONTENT_HEIGHT_PX
         };
     },
     computed: {
@@ -258,7 +272,9 @@ export default {
 
         locked() { return this.flags.split(' | ').includes('LOCKED'); },
         pinned() { return this.flags.split(' | ').includes('PINNED'); },
-        archived() { return this.flags.split(' | ').includes('ARCHIVED'); }
+        archived() { return this.flags.split(' | ').includes('ARCHIVED'); },
+
+        isExpanded() { return this.maxHeight !== INITIAL_PIN_CONTENT_HEIGHT_PX; }
     },
     watch: {
         deselectTrigger() { this.selected = false; },
@@ -271,6 +287,10 @@ export default {
     methods: {
         contentToChecklist,
         checklistToContent,
+        toggleShowMore() {
+            this.maxHeight = this.maxHeight !== INITIAL_PIN_CONTENT_HEIGHT_PX ?
+                INITIAL_PIN_CONTENT_HEIGHT_PX : this.$refs.pin.scrollHeight + 100;
+        },
         deletePin() {
             this.deleting = true;
             this.deletionTimeout = setTimeout(async () => {
@@ -531,13 +551,17 @@ export default {
     }
 
     &__content {
-        // Thin scrollbars
-        scrollbar-width: thin;
-        &::-webkit-scrollbar {
-            width: 2px !important;
-        }
+        transition: max-height 0.1s;
+    }
 
-        opacity: 0.9;
+    &__content--oversized {
+        --mask: linear-gradient(to bottom, 
+        rgba(0,0,0,1) 0,   rgba(0,0,0,1) 80%, 
+        rgba(0,0,0,0) 95%, rgba(0,0,0,0) 0
+        ) 100% 80% / 100% 100% repeat-x;
+
+        -webkit-mask: var(--mask); 
+        mask: var(--mask);
     }
 
     &__bottom {
