@@ -114,7 +114,6 @@ export default {
                 return;
 
             // Get board
-            this.boards = [];
             this.loadingBoards = true;
             try {
                 let boards = await this.$fetchApi('/api/board/boards', 'GET', {
