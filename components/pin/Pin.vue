@@ -551,6 +551,7 @@ export default {
     }
 
     &__content {
+        word-break: break-word;
         transition: max-height 0.1s;
     }
 
