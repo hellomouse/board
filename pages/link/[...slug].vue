@@ -24,7 +24,7 @@ useSeoMeta({
             <h1>{{ displayName }} Links</h1>
 
             <p>
-                Hellomouse @{{ $route.params.slug.at(-1) || '' }}
+                Hellomouse @{{ $route.params.slug ? $route.params.slug.at(-1) : '' }}
             </p>
 
             <div v-if="loading" class="link-container">
@@ -141,7 +141,7 @@ export default {
             return this.links.map((link, i) => `${i + 1}: ${link.url}`).join('\n');
         },
         isSelf() {
-            return (this.$route.params.slug.at(-1) || '') === (this.user ? this.user.id : 'not_slug');
+            return this.$route.params.slug && (this.$route.params.slug.at(-1) || '') === (this.user ? this.user.id : 'not_slug');
         }
     },
     watch: {
@@ -158,8 +158,7 @@ export default {
             if (this.$route.path === '/link' || this.$route.path.startsWith('/link/')) {
                 // If home page redirect to self or 404 if not logged in
                 if (!this.$route.params.slug)
-                    // eslint-disable-next-line no-undef
-                    return await navigateTo(this.user ? ('/link/' + this.user.id) : '/404');
+                    return this.$router.replace({ path: (this.user ? ('/link/' + this.user.id) : '/404') });
                 await this.fetchLinks();
             }
         },
@@ -168,13 +167,12 @@ export default {
             this.loading = true;
             try {
                 let links = await this.$fetchApi('/api/link', 'GET', {
-                    user_id: this.$route.params.slug.at(-1) || ''
+                    user_id: this.$route.params.slug ? this.$route.params.slug.at(-1) : ''
                 });
                 
                 // No user, redirect
                 if (!links.creator_name) {
-                    // eslint-disable-next-line no-undef
-                    navigateTo('/404');
+                    this.$router.replace({ path: '/404' });
                     return;
                 }
 
