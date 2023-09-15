@@ -37,9 +37,16 @@ better light mode
 ----
 link tree:
 - per user automatic, setup with your name + pfp
-- set desc
-- add / remove links
+- download all as txt
+- toast for adding a new url
 
+api:
+- remove links
+- api for getting links - also return owner data
+
+api doc
+
+- readme
 ----
 music player:
 - create playlists - left nav with playlists

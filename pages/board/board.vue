@@ -625,14 +625,16 @@ export default {
                 if (!this.isFavoritesPage && useAuthStore(this.$pinia).isLoggedIn) {
                     let that = this;
                     setTimeout(async () => {
-                        let pins = await that.$fetchApi('/api/board/pins/favorites/check', 'POST', {
-                            pin_ids: that.pins.map(p => p.pin_id)
-                        });
-                        pins = pins.pins;
-                        for (let pin of that.pins) {
-                            if (pins.includes(pin.pin_id))
-                                pin.favorited = true;
-                        }
+                        try {
+                            let pins = await that.$fetchApi('/api/board/pins/favorites/check', 'POST', {
+                                pin_ids: that.pins.map(p => p.pin_id)
+                            });
+                            pins = pins.pins;
+                            for (let pin of that.pins) {
+                                if (pins.includes(pin.pin_id))
+                                    pin.favorited = true;
+                            }
+                        } catch(e) { console.error(e); }
                     }, 200);
                 }
 
