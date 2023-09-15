@@ -35,12 +35,17 @@ useSeoMeta({
             </div>
 
             <div v-if="!loading" class="link-container mt-6">
-                <v-text-field
-                    v-if="isSelf"
-                    v-model="urlInput" label="Add URL" class="mb-4"
-                    variant="solo-filled" rounded="0" density="compact"
-                    maxlength="4096" @keydown.enter="addUrl"
-                />
+                <div v-if="isSelf" class="d-flex">
+                    <v-text-field
+                        v-model="urlInput" label="Add URL" class="mb-4"
+                        variant="solo-filled" rounded="0" density="compact"
+                        maxlength="4096" @keydown.enter="addUrl"
+                    />
+                    <v-checkbox-btn
+                        v-model="deleteMode" color="red"
+                        style="max-width: 150px; margin-top: -13px"
+                        label="Delete mode" />
+                </div>
 
                 <div v-if="loading">lol loading</div>
 
@@ -53,11 +58,13 @@ useSeoMeta({
                     v-for="link in links"
                     :key="link.id"
 
-                    class="mb-2 mx-sm-1 d-inline-block"
+                    class="mb-2 mx-sm-1"
 
                     :link-id="link.id"
                     :url="link.url"
-                    :show-delete="false"
+                    :show-delete="isSelf && deleteMode"
+
+                    @delete="deleteLink"
                 />
 
                 <!-- Dummy for spacing -->
@@ -118,6 +125,9 @@ export default {
             displayName: '...',
             copyModal: false,
             loading: false,
+
+            deleteMode: false,
+            lastDelete: 0,
 
             showErrorToast: false,
             toastErrorMsg: '',
@@ -191,6 +201,19 @@ export default {
                 [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Link Added!'];
             } catch (e) {
                 [this.showErrorToast, this.toastErrorMsg] = [true, 'Failed to add link: ' + this.$apiErrorToString(e)];
+            }
+        },
+        async deleteLink(id, url) {
+            if (Date.now() - this.lastDelete < 500)
+                return; // Don't allow spamming delete
+            this.lastDelete = Date.now();
+
+            try {
+                await this.$fetchApi('/api/link', 'DELETE', { id });
+                this.links = this.links.filter(l => l.id !== id);
+                [this.showSuccessToast, this.toastSuccessMsg] = [true, 'Deleted ' + url + '!'];
+            } catch (e) {
+                [this.showErrorToast, this.toastErrorMsg] = [true, 'Failed to delete link: ' + this.$apiErrorToString(e)];
             }
         }
     }
