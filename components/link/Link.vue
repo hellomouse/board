@@ -5,7 +5,7 @@
 -->
 
 <template>
-    <div>
+    <div class="link">
         <!-- Amazon -->
         <a
             v-if="matchDomain(['amazon'], true)"
@@ -798,5 +798,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.link {
+    max-width: 100%;
+    box-sizing: border-box;
+}
 </style>

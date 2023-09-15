@@ -37,8 +37,8 @@ better light mode
 ----
 link tree:
 - per user automatic, setup with your name + pfp
-- download all as txt
-- toast for adding a new url
+
+
 
 api:
 - remove links
