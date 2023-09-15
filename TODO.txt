@@ -37,7 +37,6 @@ better light mode
 ----
 linktree
 
-api doc
 
 - readme
 ----
