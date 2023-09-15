@@ -7,11 +7,14 @@ link tags - periodically refresh or hide link preview if not rendered?
 
 refactor code
 server:
-- proper refs
-- rename all parameter names consistent
 - server side check length is non-zero
 - cache db results?
 - all the perm checks for can view - check if public can view as well
+    - maybe login should be no view error
+
+
+
+login redirect back to board keep query params as well!
 
 ----
 later:
@@ -58,5 +61,3 @@ general
 user settings page
 
 track user login ip and time, invalidate sessions
-
-persist sessions across server restart

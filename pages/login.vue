@@ -12,11 +12,13 @@
                 append-icon="mdi-account"
                 class="mb-1"
             ></v-text-field>
+            <!-- Max length should match server side -->
             <v-text-field
                 v-model="password" label="Password" density="compact"
                 clearable variant="solo-filled" rounded="0"
                 :append-icon="!show_password ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show_password ? 'text' : 'password'"
+                :maxlength="32"
                 class="mb-4"
                 @click:append="show_password = !show_password"
                 @keyup.enter="postLogin"
