@@ -40,8 +40,15 @@ link tree:
 - set desc
 - add / remove links
 
-- logo, favicon, add to list, meta
-
+----
+music player:
+- create playlists - left nav with playlists
+    - name + desc
+- shared playlists
+- add song / delete song / rearrange songs in playlist
+    - add from youtube, bilibili, soundcloud, file + manual
+    - add lyrics - auto get from sub data?
+- shuffle mode / radio mode
 ----
 
 general

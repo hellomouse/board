@@ -9,4 +9,9 @@ export const APPS = [
         src: "/logos/site.png",
         title: "Site"
     },
+    {
+        href: "/site/link",
+        src: "/logos/link.png",
+        title: "Link"
+    },
 ];
