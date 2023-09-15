@@ -4,16 +4,6 @@ link tags - periodically refresh or hide link preview if not rendered?
     - only show pins user can access
     - send event data: when pin update, somehow get from ipc
 
-
-refactor code
-server:
-- server side check length is non-zero
-- cache db results?
-- all the perm checks for can view - check if public can view as well
-    - maybe login should be no view error
-- check no race conditions in db stuff
-
-
 ----
 later:
 

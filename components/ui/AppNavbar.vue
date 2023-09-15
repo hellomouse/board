@@ -27,7 +27,10 @@
                 </div>
             </v-menu>
 
-            <NuxtLink v-if="!isLoggedIn" class="login-link" :to="'/login?r=' + $route.path">
+            <NuxtLink
+                v-if="!isLoggedIn" class="login-link"
+                :to="'/login?r=' + thisPath"
+            >
                 Sign In
             </NuxtLink>
 
@@ -86,7 +89,10 @@ export default {
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
         isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; },
-        isDarkMode() { return useOptionStore(this.$pinia).dark_theme; }
+        isDarkMode() { return useOptionStore(this.$pinia).dark_theme; },
+        thisPath() {
+            return this.$route.path + '?' + (new URLSearchParams(this.$route.query).toString());
+        }
     },
     methods: {
         async logout() {
