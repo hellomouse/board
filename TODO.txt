@@ -11,8 +11,7 @@ server:
 - cache db results?
 - all the perm checks for can view - check if public can view as well
     - maybe login should be no view error
-
-
+- check no race conditions in db stuff
 
 login redirect back to board keep query params as well!
 

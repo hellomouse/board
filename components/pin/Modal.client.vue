@@ -174,6 +174,12 @@ export default {
                 return;
             }
 
+            // Ensure this matches database config
+            if (this.content.length > 20000) {
+                this.$emit('error', 'Exceeded maximum pin size of 20,000 characters (including HTML formatting)');
+                return;
+            }
+
             let type = this.pin.type;
             if (typeof type === 'string') // Convert type to numeric
                 type = pinTypeNameToNumber(type)
