@@ -34,11 +34,7 @@ responsive mobile
 
 better light mode
 
-----
-linktree
 
-
-- readme
 ----
 music player:
 - create playlists - left nav with playlists

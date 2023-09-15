@@ -11,7 +11,9 @@ Hellomouse Apps is an app suite for Hellomouse. Currently we have the following 
    - Create boards and pins and share them with other users / the public
    - Create pins with text formatting, checklists, images, or link previews
    - Archive websites with a single click (save as HTML, PDF, special handling for some sites)
+- **Link:** A linktree clone with style support for hundreds of sites
 - **Docs:** Documentation for the app suite API under `/docs`
+- **Site:** Dashboard to view site archive tasks
 
 ### Other Components
 These will also need to be installed for the app to function.
