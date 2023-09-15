@@ -21,10 +21,10 @@ useSeoMeta({
 <template>
     <NuxtLayout name="link">
         <v-container class="text-center">
-            <h1>[Username]'s Links</h1>
+            <h1>{{ displayName }} Links</h1>
 
             <p>
-                [description] {{ $route.params.slug }} {{ $route.path }}
+                Hellomouse @{{ $route.params.slug.at(-1) || '' }}
             </p>
 
             <div v-if="loading" class="link-container">
@@ -34,7 +34,7 @@ useSeoMeta({
                 />
             </div>
 
-            <div v-if="!loading" class="link-container">
+            <div v-if="!loading" class="link-container mt-6">
                 <v-text-field
                     v-if="isSelf"
                     v-model="urlInput" label="Add URL" class="mb-4"
@@ -115,6 +115,7 @@ export default {
         return {
             urlInput: '',
             links: [],
+            displayName: '...',
             copyModal: false,
             loading: false,
 
@@ -149,11 +150,6 @@ export default {
                 if (!this.$route.params.slug)
                     // eslint-disable-next-line no-undef
                     return await navigateTo(this.user ? ('/link/' + this.user.id) : '/404');
-
-                // Check if user exists, if not redirect to 404
-                // TODO
-
-                // Get links
                 await this.fetchLinks();
             }
         },
@@ -162,8 +158,17 @@ export default {
             this.loading = true;
             try {
                 let links = await this.$fetchApi('/api/link', 'GET', {
-                    user_id: this.$route.params.slug.at(-1)
+                    user_id: this.$route.params.slug.at(-1) || ''
                 });
+                
+                // No user, redirect
+                if (!links.creator_name) {
+                    // eslint-disable-next-line no-undef
+                    navigateTo('/404');
+                    return;
+                }
+
+                this.displayName = links.creator_name + (links.creator_name.toLowerCase().endsWith('s') ? '\'' : '\'s');
                 links.links.sort((a, b) => a.url.localeCompare(b.url));
                 this.links = links.links;
             } catch (e) {

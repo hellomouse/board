@@ -38,11 +38,8 @@ better light mode
 link tree:
 - per user automatic, setup with your name + pfp
 
-
-
 api:
 - remove links
-- api for getting links - also return owner data
 
 api doc
 
