@@ -13,7 +13,6 @@ server:
     - maybe login should be no view error
 - check no race conditions in db stuff
 
-board public - error getting users
 
 ----
 later:

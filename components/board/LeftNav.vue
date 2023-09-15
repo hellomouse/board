@@ -108,6 +108,10 @@ export default {
     },
     methods: {
         async getBoards() {
+            // Not logged in
+            if (!this.isLoggedIn)
+                return;
+
             // Last fetched recently, abort
             // Last fetch is 60s
             if (Date.now() - useBoardStore(this.$pinia).lastFetch < 1000 * 60)

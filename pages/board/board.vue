@@ -188,7 +188,7 @@ useSeoMeta({
                                 <v-icon icon="mdi-information-outline" />Properties
                             </button>
                             <button
-                                v-if="['Owner', 'Edit'].includes(currentUserPerm)"
+                                v-if="isLoggedIn && ['Owner', 'Edit'].includes(currentUserPerm)"
                                 class="px-4 hoverable hover-list-item edit-list-item"
                                 @click="openBoardShareModal"
                             >
@@ -362,7 +362,7 @@ useSeoMeta({
         />
 
         <lazy-board-share-modal
-            v-if="!isFavoritesPage"
+            v-if="isLoggedIn && !isFavoritesPage"
     
             :loading-data="shareBoardModalLoading"
             :show="modals.shareBoardModal"
@@ -513,7 +513,8 @@ export default {
                     return false;
             }
             return true;
-        }
+        },
+        isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; }
     },
     watch: {
         selected() {
@@ -621,7 +622,7 @@ export default {
                 let pins = await this.$fetchApi(url, 'GET', opts);
 
                 // Check which pins are favorited if not favorites page (favorites page all are favorited)
-                if (!this.isFavoritesPage) {
+                if (!this.isFavoritesPage && useAuthStore(this.$pinia).isLoggedIn) {
                     let that = this;
                     setTimeout(async () => {
                         let pins = await that.$fetchApi('/api/board/pins/favorites/check', 'POST', {
