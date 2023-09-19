@@ -257,12 +257,14 @@ export default {
             }
 
             // Link pin: generate preview
+            let schedulePinPreview = false;
             if (type === 2 && url1 !== url2) {
                 try {
                     await this.$fetchApi('/api/board/pins/preview', 'POST', {
                         url: url2,
                         pin_id: pinId
                     });
+                    schedulePinPreview = true;
                 } catch (e) {
                     let errorMsg = `Failed to schedule pin preview: ${this.$apiErrorToString(e)}`;
                     this.$emit('error', errorMsg);
@@ -270,7 +272,7 @@ export default {
             }
 
             this.loading = false;
-            this.$emit('update', true);
+            this.$emit('update', { id: pinId, schedulePinPreview });
         }
     }
 }

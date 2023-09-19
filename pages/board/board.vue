@@ -688,13 +688,40 @@ export default {
                 return;
 
             this.modals.createPinModal = false;
-            if (created) {
+            if (created !== false) {
                 this.pinCount++;
                 this.pageCount = Math.ceil(this.pinCount / PINS_PER_PAGE);
 
                 [this.showSuccessToast, this.toastSuccessMsg] = [true,
                     this.editPin ? 'Pin edited!' : 'Pin created!'];
                 this.updatePins();
+
+                // Schedule update to update link preview
+                if (created.schedulePinPreview && created.id) {
+                    setTimeout(async () => {
+                        let delay = 1500;
+                        for (let i = 0; i < 3; i++) { // Three attempts
+                            try {
+                                let pin = await this.$fetchApi('/api/board/pins/single', 'GET', { id: created.id });
+                                if (pin.content && pin.content.split('\n')[3]) {
+                                    // Content ready
+                                    for (let p of this.pins) {
+                                        if (p.pin_id === created.id) {
+                                            p.content = pin.content;
+                                            break;
+                                        }
+                                    }
+                                    return;
+                                }
+                            } catch(e) {
+                                console.error('Failed to get pin link preview', e);
+                            }
+
+                            await new Promise(r => setTimeout(r, delay));
+                            delay = delay * 2 + Math.round(Math.random() * 500);
+                        }
+                    }, 500);
+                }
             }
         },
         // Pin option (such as edit / delete) triggered

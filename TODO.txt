@@ -1,8 +1,7 @@
-link tags - periodically refresh or hide link preview if not rendered?
-- sse endpoint for this
-- return pin updates with data?
-    - only show pins user can access
-    - send event data: when pin update, somehow get from ipc
+
+processing state file
+-> if 404 in downloads -> redirect to page that checks status
+    -> redirect when done
 
 ----
 later:
@@ -40,10 +39,13 @@ music player:
 - create playlists - left nav with playlists
     - name + desc
 - shared playlists
+    - instead of on left nav, just have + add playlist button for playlists
+      you did not create and have not added
 - add song / delete song / rearrange songs in playlist
     - add from youtube, bilibili, soundcloud, file + manual
     - add lyrics - auto get from sub data?
 - shuffle mode / radio mode
+    - share link have someone else listen with u
 ----
 
 general
@@ -51,3 +53,5 @@ general
 user settings page
 
 track user login ip and time, invalidate sessions
+
+download boards as bookmarks folder / import bookmarks?
