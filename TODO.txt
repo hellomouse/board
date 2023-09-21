@@ -33,7 +33,6 @@ responsive mobile
 
 better light mode
 
-
 ----
 music player:
 - create playlists - left nav with playlists

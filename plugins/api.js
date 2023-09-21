@@ -36,6 +36,8 @@ export default defineNuxtPlugin(nuxtApp => {
             return 'Invalid parameters';
         if (e.includes('500 '))
             return 'Server error';
+        if (e.includes('429 '))
+            return 'Ratelimited, slow down!';
         return 'Unknown error';
     });
 
