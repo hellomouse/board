@@ -89,9 +89,12 @@ export default {
                     password: this.password
                 }, 30000);
             } catch(e) {
-                this.error_msg = (e + '').includes('401') ?
-                    'Incorrect username or password' :
-                    'Error logging in';
+                if ((e + '').includes('401'))
+                    this.error_msg = 'Incorrect username or password';
+                else if ((e + '').includes('429'))
+                    this.error_msg = 'Too many login attempts, try again later';
+                else
+                    this.error_msg = 'Error logging in';
                 this.loading = false;
                 return;
             }

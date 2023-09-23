@@ -2,7 +2,7 @@
 processing state file
 -> if 404 in downloads -> redirect to page that checks status
     -> redirect when done
-
+    - have the api serve files
 ----
 later:
 
