@@ -180,7 +180,6 @@
             method="GET"
             endpoint="/api/board/pins/single"
             param-type="URLParams"
-            :auth="true"
         >
             Returns 401 if not logged in, 403 if pin does not exist, and 500 on error.<br>
 
@@ -457,6 +456,76 @@
                 <pre class="api-json-block"><code>{ msg: "Task queued" }</code></pre><br>
 
                 <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Get Link History Preview"
+            method="GET"
+            endpoint="/api/board/pins/history/preview"
+            param-type="URLParams"
+        >
+            Get history preview (for the list) for a pin, returns 500 on error.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_id: Uuid</td><td>ID of the pin to get history for</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{ history: [{
+    editor: "string",
+    time: Date,
+    id: History id (number)
+}, ...] }</code></pre><br>
+
+                <b>Error:</b> 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc
+            title="Get Link History"
+            method="GET"
+            endpoint="/api/board/pins/history"
+            param-type="URLParams"
+        >
+            Get history by ID for a pin, returns 500 on error, and empty object if it fails to locate the history.<br>
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>pin_id: Uuid</td><td>ID of the pin to get history for</td></tr>
+                    <tr><td>history_id: number</td><td>ID of the history to get</td></tr>
+                </tbody>
+            </v-table>
+
+            <p>
+                <b>Success:</b> 200 OK
+                <pre class="api-json-block"><code>{
+    history: {
+        editor: string,
+        time: Date,
+        content: string,
+        flags: pin flags,
+        attachment_paths: string[],
+        metadata: json
+    } 
+}</code></pre><br>
+
+                <b>Error:</b> 500 Server error<br>
             </p>
         </ApiDoc>
     </div>

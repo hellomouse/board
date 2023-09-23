@@ -190,7 +190,6 @@
             method="GET"
             endpoint="/api/board/boards/single"
             param-type="URLParams"
-            :auth="true"
         >
             Get a single board by ID. Returns 401 if not logged in or does not have permission
             to view the board, 403 if board does not exist, and 500 on error.<br>

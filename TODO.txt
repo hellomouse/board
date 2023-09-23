@@ -46,11 +46,8 @@ music player:
 - shuffle mode / radio mode
     - share link have someone else listen with u
 ----
-
 general
 
 user settings page
 
 track user login ip and time, invalidate sessions
-
-download boards as bookmarks folder / import bookmarks?
