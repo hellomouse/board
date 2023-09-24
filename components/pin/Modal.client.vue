@@ -88,6 +88,30 @@ import MarkdownShortcuts from 'quill-markdown-shortcuts';
 import MagicUrl from 'quill-magic-url';
 import BlotFormatter from 'quill-blot-formatter';
 
+// Start hack for math
+// -------------------------
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+import jquery from 'jquery';
+
+if (process.client) {
+    window.katex = katex;
+    window.$ = jquery;
+}
+
+// eslint-disable-next-line no-undef
+defineAsyncComponent(async () =>
+    process.client ? (await import('@edtr-io/mathquill/build/mathquill.js')) : null);
+import '@edtr-io/mathquill/build/mathquill.css';
+
+// eslint-disable-next-line no-undef
+defineAsyncComponent(async () => {
+    let tmp = process.client ? (await import('mathquill4quill'))({ QuillEditor, katex }): null;
+    return tmp(QuillEditor.value);
+});
+import 'mathquill4quill/mathquill4quill.css';
+// ------------------------- (End hack)
+
 import { pinTypeNameToNumber } from '~/helpers/board/pin.js';
 import { getBackground, getColor, SWATCHES } from '~/helpers/board/pin-colors.js';
 import { useOptionStore } from '~/store/optionStore.js';
@@ -135,7 +159,7 @@ export default {
                 name: 'blotFormatter',
                 module: BlotFormatter,
                 options: {}
-            },
+            }
         ];
         return { modules }
     },
@@ -144,7 +168,7 @@ export default {
             content: this.pin?.content,
             color: this.pin?.metadata?.color,
             loading: false,
-            toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['clean']],
+            toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['formula'], ['clean']],
             selectedSwatchIndex: 0,
             downloadOptions: {}
         };
@@ -168,7 +192,6 @@ export default {
     },
     methods: {
         async createPin() {
-            // TODO: per type checks
             if (!this.content) {
                 this.$emit('error', 'Content cannot be empty');
                 return;

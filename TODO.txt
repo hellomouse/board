@@ -1,16 +1,12 @@
 
-processing state file
--> if 404 in downloads -> redirect to page that checks status
-    -> redirect when done
-    - have the api serve files
 ----
 later:
 
 pin create/edit modal:
-    - https://github.com/MuhammedAlkhudiry/quill-find-replace-module
+    - write own find/replace
     - https://github.com/NoelOConnell/quill-image-uploader
     - https://vueup.github.io/vue-quill/guide/modules.html
-    - https://github.com/c-w/mathquill4quill
+
 
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
@@ -19,6 +15,12 @@ pfp - or just make /pfp/username.png or something
 - option to download board
     - board / tag bulk download
 
+
+
+processing state file
+-> if 404 in downloads -> redirect to page that checks status
+    -> redirect when done
+    - have the api serve files
 -------
 
 future todo:
