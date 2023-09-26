@@ -127,7 +127,7 @@ export default {
 }
 
 .subtitle {
-    opacity: $secondary-text-opacity;
+    opacity: var(--secondary-text-opacity);
 }
 
 .login-container {

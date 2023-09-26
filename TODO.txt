@@ -32,8 +32,6 @@ responsive mobile
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
 
-better light mode
-
 ----
 music player:
 - create playlists - left nav with playlists

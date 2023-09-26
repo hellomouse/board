@@ -205,7 +205,7 @@ export default {
     }
 
     &__desc {
-        opacity: $secondary-text-opacity;
+        opacity: var(--secondary-text-opacity);
     }
 }
 </style>

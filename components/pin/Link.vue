@@ -12,8 +12,8 @@
 
         <v-btn
             v-for="b in downloadContentArray" :key="b.strategy"
-            variant="tonal" size="small"
-            flat color="teal-lighten-3"
+            :variant="isLightTheme ? 'flat' : 'tonal'" size="small"
+            flat :color="isLightTheme ? 'teal-lighten-1' : 'teal-lighten-3'"
             :href="'/files/site_downloads/' + b.url"
             target="_blank"
             class="mb-1 mr-1" height="30"
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { useOptionStore } from '~/store/optionStore.js';
+
 export default {
     props: {
         content: {
@@ -70,7 +72,8 @@ export default {
                         }[strategy]
                     }
                 });
-        }
+        },
+        isLightTheme() { return !useOptionStore(this.$pinia).dark_theme; }
     },
     watch: {
         content() {

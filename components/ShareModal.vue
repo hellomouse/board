@@ -432,7 +432,7 @@ export default {
     }
 
     &__username {
-        opacity: $secondary-text-opacity;
+        opacity: var(--secondary-text-opacity);
         font-size: 0.9rem;
     }
 

@@ -305,6 +305,6 @@ export default {
 @import "~/assets/variables.scss";
 
 .last-edited {
-    opacity: $secondary-text-opacity;
+    opacity: var(--secondary-text-opacity);
 }
 </style>

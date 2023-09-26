@@ -45,8 +45,8 @@ export default defineNuxtPlugin(nuxtApp => {
                         warning: colors.amber.base,
                         error: colors.deepOrange.accent4,
                         success: colors.green.accent3,
-                        background: '#ffffff',
-                        surface: '#f7f7f7',
+                        background: '#fcfcfc', // '#f7f7f7',
+                        surface: '#ffffff',
                         'background-light': '#f2f2f2'
                     }
                 },

@@ -542,7 +542,7 @@ export default {
         }
 
         &__creator {
-            opacity: $secondary-text-opacity
+            opacity: var(--secondary-text-opacity);
         }
         
         &__icon-row {
@@ -574,7 +574,7 @@ export default {
         .pin-tile__timestamp {
             display: inline-block;
             font-size: 0.75rem;
-            opacity: $secondary-text-opacity;
+            opacity: var(--secondary-text-opacity);
         }
 
         .v-btn {

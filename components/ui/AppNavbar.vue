@@ -157,7 +157,7 @@ $popout-gap: 5px;
         font-size: 1.2rem;
     }
     &__user-id {
-        opacity: $secondary-text-opacity;
+        opacity: var(--secondary-text-opacity);
         margin-top: -2px;
     }
 

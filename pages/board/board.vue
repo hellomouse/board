@@ -983,7 +983,7 @@ export default {
     }
 }
 
-.subtitle { opacity: $secondary-text-opacity; }
+.subtitle { opacity: var(--secondary-text-opacity); }
 
 .bulk-pin-edits {
     position: fixed;
@@ -1033,7 +1033,7 @@ export default {
 
 // Board properties modal
 .board-properties {
-    color: rgb(var(--v-theme-on-surface), $secondary-text-opacity);
+    color: rgb(var(--v-theme-on-surface), var(--secondary-text-opacity));
 
     &__prop {
         width: 70px;

@@ -1,11 +1,13 @@
-$secondary-text-opacity: 0.7;
-
 :root {
     --border-color: #444;
+    --secondary-text-opacity: 0.7;
 }
 
 .v-theme--light {
     --border-color: #ccc;
+    --secondary-text-opacity: 1;
+    --v-border-opacity: 0.24;
+    --v-medium-emphasis-opacity: 0.8;
 }
 
 $pfp-size-tile: 50px;

@@ -38,7 +38,7 @@
                         <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`" @click="hideIfPhone()">
                             <div
                                 class="hoverable hover-list-item left-nav__list-item left-nav__board-item
-                                [ pl-3 text-truncate text-medium-emphasis ]"
+                                [ pl-3 text-truncate subtitle ]"
                             >
                                 <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
                             </div>
@@ -149,6 +149,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/variables.scss";
+
+.subtitle {
+    opacity: var(--secondary-text-opacity);
+}
 
 .toggle-btn {
     position: fixed;
