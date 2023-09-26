@@ -9,7 +9,7 @@
             <slot></slot>
 
             <div class="mt-3">
-                <NuxtLink to="/board">
+                <NuxtLink to="/board" @click="hideIfPhone()">
                     <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex" @click="$emit('click-my-boards', true)">
                         <button class="left-nav__list-item">
                             <v-icon icon="mdi-view-dashboard" /> My Boards
@@ -35,7 +35,7 @@
                             marginBottom: expandSideBoards ? '8px' : '0px'
                         }"
                     >
-                        <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`">
+                        <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`" @click="hideIfPhone()">
                             <div
                                 class="hoverable hover-list-item left-nav__list-item left-nav__board-item
                                 [ pl-3 text-truncate text-medium-emphasis ]"
@@ -46,12 +46,12 @@
                     </div>
                 </div>
 
-                <NuxtLink to="/board?shared_with_me=true">
+                <NuxtLink to="/board?shared_with_me=true" @click="hideIfPhone()">
                     <button class="pl-2 hoverable hover-list-item left-nav__list-item">
                         <v-icon icon="mdi-folder-account" /> Shared With Me
                     </button>
                 </NuxtLink>
-                <NuxtLink to="/board/board?favorites=1">
+                <NuxtLink to="/board/board?favorites=1" @click="hideIfPhone()">
                     <button class="pl-2 mb-4 hoverable hover-list-item left-nav__list-item">
                         <v-icon icon="mdi-star" /> Favorites
                     </button>
@@ -138,6 +138,10 @@ export default {
                 this.loadingBoards = false;
                 return;
             }
+        },
+        hideIfPhone() {
+            if (process.client && window.innerWidth < 600)
+                this.showNav = false;
         }
     }
 }
