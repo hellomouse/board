@@ -50,4 +50,10 @@ export default {
         opacity: 0.94;
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .logo__title {
+        display: none;
+    }
+}
 </style>

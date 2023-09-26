@@ -8,7 +8,7 @@
     $sidenav-hidden-left-margin: 24px;
 
     &.sidenav-hidden {
-        max-width: 100% !important;
+        max-width: calc(100% - $sidenav-hidden-left-margin) !important;
         margin-left: $sidenav-hidden-left-margin;
     }
 

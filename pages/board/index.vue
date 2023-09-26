@@ -107,7 +107,7 @@ useSeoMeta({
                 <p>Press the 'New Board' button on the left to create one</p>
             </div>
             
-            <div class="d-flex flex-direction-row">
+            <div class="title-flex">
                 <h1>
                     <span
                         style="cursor: pointer" @click="switchTag({})"
@@ -824,6 +824,24 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/sort.scss";
 @import "~/assets/css/state.scss";
+
+.title-flex {
+    display: flex;
+    flex-direction: row;
+
+    @media only screen and (max-width: 600px) {
+        & {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+
+            h1 {
+                border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+                margin-bottom: 5px;
+            }
+        }
+    }
+}
 
 .scroll-container {
     max-height: calc(100vh - 150px);

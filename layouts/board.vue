@@ -29,7 +29,7 @@ theme.global.name.value = optStore.dark_theme ? 'dark' : 'light';
             <v-spacer />
         </UiAppNavbar>
 
-        <v-main class="mx-8 mt-4">
+        <v-main class="mx-sm-8 mt-4">
             <slot />
         </v-main>
     </v-app>

@@ -1,7 +1,6 @@
 <template>
     <v-sheet
         elevation="0"
-        width="250"
         class="board-tile hoverable [ mr-3 mb-3 ]"
         :style="{ borderColor: color }"
         :class="selected ? 'selected' : ''"
@@ -173,7 +172,14 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/dropdown-menu.scss";
 
+@media only screen and (max-width: 600px) {
+    .board-tile {
+        width: 95% !important;
+    }
+}
+
 .board-tile {
+    width: 250px;
     max-width: 100%;
     outline: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
     border-right: 3px solid;

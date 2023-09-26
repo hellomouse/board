@@ -1,7 +1,6 @@
 <template>
     <v-sheet
         elevation="0"
-        width="250"
         class="tag-tile hoverable [ mr-3 mb-3 ]"
         :class="selected ? 'selected' : ''"
     >
@@ -101,7 +100,14 @@ export default {
 @import "~/assets/variables.scss";
 @import "~/assets/css/dropdown-menu.scss";
 
+@media only screen and (max-width: 600px) {
+    .tag-tile {
+        width: 95% !important;
+    }
+}
+
 .tag-tile {
+    width: 250px;
     max-width: 100%;
     display: inline-block;
     outline-offset: -1px;

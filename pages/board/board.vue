@@ -165,7 +165,11 @@ useSeoMeta({
             </div>
 
             <div v-if="!errorState && !initialLoad && !isSinglePin" @click="deselectAllPins()">
-                <h1>
+                <h1 style="margin-bottom: -16px">
+                    <span style="max-width: calc(100% - 40px)" class="d-inline-block text-truncate">
+                        {{ currentBoard.name }}{{ $route.query.search ? ' - Search Results' : '' }}
+                    </span>
+
                     <v-menu v-if="!isFavoritesPage">
                         <template #activator="{ props }">
                             <v-btn
@@ -173,6 +177,7 @@ useSeoMeta({
                                 icon="mdi-dots-vertical"
                                 v-bind="props"
                                 class="board-tile__menu d-inline-block"
+                                style="margin-top: -24px"
                                 flat color="transparent"
                             ></v-btn>
                         </template>
@@ -210,14 +215,11 @@ useSeoMeta({
                             </button>
                         </v-sheet>
                     </v-menu>
-
-                    {{ currentBoard.name }}{{ $route.query.search ? ' - Search Results' : '' }}
                 </h1>
 
-                <div class="d-flex">
+                <div class="title-flex">
                     <p
                         class="subtitle text-truncate"
-                        :class="!isFavoritesPage ? 'ml-11' : ''"
                         style="vertical-align: top; margin-right: auto; margin-left: 0"
                     >{{ currentBoard.desc }}</p>
 
@@ -966,6 +968,20 @@ export default {
 @import "~/assets/css/sort.scss";
 @import "~/assets/css/dropdown-menu.scss";
 @import "~/assets/css/state.scss";
+@import "~/assets/css/mobile.scss";
+
+.title-flex {
+    display: flex;
+    @media only screen and (max-width: 600px) {
+        & { 
+            display: block;
+            p {
+                margin-left: 0 !important; 
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
 
 .subtitle { opacity: $secondary-text-opacity; }
 

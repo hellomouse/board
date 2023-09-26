@@ -202,5 +202,11 @@ $popout-gap: 5px;
         line-height: 100%;
         height: 100%;
     }
+
+    @media only screen and (max-width: 600px) {
+        &__links {
+            min-width: 120px;
+        }
+    }
 }
 </style>

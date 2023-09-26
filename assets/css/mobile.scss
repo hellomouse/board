@@ -1,0 +1,6 @@
+.show-on-phone { display: none; }
+
+@media only screen and (max-width: 600px) {
+    .show-on-phone { display: block !important; }
+    .hide-on-phone { display: none !important; }
+}
