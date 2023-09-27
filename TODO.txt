@@ -15,8 +15,6 @@ pfp - or just make /pfp/username.png or something
 - option to download board
     - board / tag bulk download
 
-
-
 processing state file
 -> if 404 in downloads -> redirect to page that checks status
     -> redirect when done
@@ -27,10 +25,6 @@ future todo:
 
 better search (split words, images, dates, etc...)
 
-responsive mobile
-- history modal too wide
-- fix share modal on phone
-    - different ui on phone - click on user to show dropdown popped from bottom
 
 ----
 music player:
@@ -44,9 +38,19 @@ music player:
     - add lyrics - auto get from sub data?
 - shuffle mode / radio mode
     - share link have someone else listen with u
+- readme
 ----
 general
 
 user settings page
 
 track user login ip and time, invalidate sessions
+
+
+----
+maybe
+
+responsive mobile
+- history modal too wide
+- fix share modal on phone
+    - different ui on phone - click on user to show dropdown popped from bottom

@@ -14,6 +14,7 @@ Hellomouse Apps is an app suite for Hellomouse. Currently we have the following 
 - **Link:** A linktree clone with style support for hundreds of sites
 - **Docs:** Documentation for the app suite API under `/docs`
 - **Site:** Dashboard to view site archive tasks
+- **Music:** Music player with auto-download support for sites like Youtube, Bilibili, Soundcloud, etc...
 
 ### Other Components
 These will also need to be installed for the app to function.
