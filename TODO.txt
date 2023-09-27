@@ -30,6 +30,8 @@ better search (split words, images, dates, etc...)
 music player:
 - create playlists - left nav with playlists
     - name + desc
+- add songs to playlist
+    - insert list of urls or single files
 - shared playlists
     - instead of on left nav, just have + add playlist button for playlists
       you did not create and have not added
