@@ -108,6 +108,7 @@ useSeoMeta({
                                 <v-btn
                                     variant="text" size="small" v-bind="props"
                                     :icon="loadedPlaylist.is_in_userlist ? 'mdi-playlist-remove' : 'mdi-playlist-plus'"
+                                    @click="toggleInPlaylists"
                                 ></v-btn>
                             </template>
                         </v-tooltip>
@@ -304,6 +305,31 @@ export default {
                     this.$router.push({path: '/music', query: { playlistId: this.playlists[0].id }});
             } else if (up.type === 'close_playlist_delete')
                 this.deletePlaylistModal = false;
+        },
+        // Toggle in playlists
+        async toggleInPlaylists() {
+            if (!this.loadedPlaylist) return;
+            let newState = !this.loadedPlaylist.is_in_userlist;
+
+            try {
+                await this.$fetchApi('/api/music/user_playlist', newState ? 'POST' : 'DELETE',
+                    { id: this.loadedPlaylist.id });
+
+                if (newState) { // Added
+                    this.playlists.push({ id: this.loadedPlaylist.id, name: this.loadedPlaylist.name });
+                    this.playlistIdNameMap[this.loadedPlaylist.id] = this.loadedPlaylist.name;
+                    this.playlists.sort((a, b) => b.name > a.name ? -1 : 1);
+                } else { // Deleted
+                    delete this.playlistIdNameMap[this.loadedPlaylist.id];
+                    this.playlists = this.playlists.filter(p => p.id !== this.loadedPlaylist.id);
+                }
+                useMusicStore(this.$pinia).playlists = [...this.playlists];
+
+                this.loadedPlaylist.is_in_userlist = newState;
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to add / remove from playlists: ' + this.$apiErrorToString(e);
+            }
         }
     }
 }
