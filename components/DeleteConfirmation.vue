@@ -20,7 +20,7 @@ Example usage:
         width="auto"
     >
         <v-card rounded="0" width="500">
-            <v-card-text class="my-8">
+            <v-card-text class="my-2">
                 <h1 class="mb-4 text-truncate">{{ title }}</h1>
                 <slot></slot>
                 

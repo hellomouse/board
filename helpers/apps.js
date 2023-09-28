@@ -14,4 +14,9 @@ export const APPS = [
         src: "/logos/link.png",
         title: "Link"
     },
+    {
+        href: "/music",
+        src: "/logos/music.png",
+        title: "Music"
+    },
 ];

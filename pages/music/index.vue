@@ -22,23 +22,26 @@ useSeoMeta({
     <NuxtLayout name="music">
         <div class="d-flex">
             <!-- Your playlists on the left -->
-            <div class="playlist-list mr-3">
+            <div class="playlist-list mr-2">
                 <v-btn
                     height="45"
                     block color="red"
                     prepend-icon="mdi-plus"
+
+                    @click="[currentPlaylistId, editPlaylistModal] = ['', true]"
                 >New Playlist</v-btn>
 
-                <v-label class="mt-4 mb-1"><small>MY PLAYLISTS</small></v-label>
+                <v-label class="mt-4 ml-2 mb-1"><small>MY PLAYLISTS</small></v-label>
 
-                <div style="max-height: calc(100vh - 170px); overflow-y: auto">
-                    <div
-                        v-for="n in 100"
+                <div style="max-height: calc(100vh - 180px); overflow-y: auto">
+                    <NuxtLink
+                        v-for="playlist in playlists"
+                        :key="playlist.id"
+                        :to="'/music?playlistId=' + playlist.id"
                         class="hoverable hover-list-item playlist-list__list-item [ pl-2 text-truncate ]"
-                        :key="n"
                     >
-                        <v-icon icon="mdi-playlist-play" /> Item {{n}}
-                    </div>
+                        <v-icon icon="mdi-playlist-play" /> {{ playlist.name }}
+                    </NuxtLink>
                 </div>
             </div>
 
@@ -77,8 +80,8 @@ useSeoMeta({
             <div class="song-list">
                 <div class="song-list__header">
                     <div class="pt-4 px-4">
-                        <p class="playlist-name">Playlist Name</p>
-                        <p class="playlist-song-count">n songs</p>
+                        <p class="playlist-name text-truncate">{{ loadedPlaylist.name }}</p>
+                        <p class="playlist-song-count text-truncate">{{ loadedPlaylist.song_count }} songs</p>
                     </div>
 
                     <div class="d-flex">
@@ -96,21 +99,40 @@ useSeoMeta({
                             </template>
                         </v-tooltip>
 
-                        <v-tooltip text="Add to Playlists" location="top">
+                        <v-tooltip
+                            v-if="!isOwnPlaylist"
+                            :text="loadedPlaylist.is_in_userlist ? 'Remove from Playlists' : 'Add to Playlists'"
+                            location="top"
+                        >
                             <template #activator="{ props }">
-                                <v-btn variant="text" size="small" v-bind="props" icon="mdi-playlist-plus"></v-btn>
+                                <v-btn
+                                    variant="text" size="small" v-bind="props"
+                                    :icon="loadedPlaylist.is_in_userlist ? 'mdi-playlist-remove' : 'mdi-playlist-plus'"
+                                ></v-btn>
                             </template>
                         </v-tooltip>
 
                         <v-tooltip text="Edit Playlist" location="top">
-                            <template #activator="{ props }">
-                                <v-btn variant="text" size="small" v-bind="props" icon="mdi-playlist-edit"></v-btn>
+                            <template v-if="isOwnPlaylist" #activator="{ props }">
+                                <v-btn
+                                    variant="text" size="small" v-bind="props" icon="mdi-playlist-edit"
+                                    @click="[currentPlaylistId, editPlaylistModal] = [playlistId, true]"
+                                ></v-btn>
                             </template>
                         </v-tooltip>
 
                         <v-tooltip text="Share Playlist" location="top">
                             <template #activator="{ props }">
                                 <v-btn variant="text" size="small" v-bind="props" icon="mdi-account-plus"></v-btn>
+                            </template>
+                        </v-tooltip>
+
+                        <v-tooltip v-if="isOwnPlaylist" text="Delete Playlist" location="top">
+                            <template #activator="{ props }">
+                                <v-btn
+                                    variant="text" size="small" v-bind="props" icon="mdi-playlist-remove"
+                                    @click="deletePlaylistModal = true"
+                                ></v-btn>
                             </template>
                         </v-tooltip>
                     </div>
@@ -127,41 +149,162 @@ useSeoMeta({
                     ></v-list-item>
                 </v-list>
             </div>
+
+            <v-snackbar
+                v-model="showErrorToast" color="error" rounded="0" theme="dark"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastErrorMsg }}
+            </v-snackbar>
+            <v-snackbar
+                v-model="showSuccessToast" color="success"
+                rounded="0" theme="dark" timeout="2000"
+                transition="scroll-y-reverse-transition"
+            >
+                {{ toastSuccessMsg }}
+            </v-snackbar>
+
+            <music-playlist-modal
+                :show="editPlaylistModal"
+                :playlist-id="currentPlaylistId"
+                :initial-name="currentPlaylistId ? loadedPlaylist.name : ''"
+
+                @update="createEditPlaylistUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
+
+            <music-delete-playlist-modal
+                :show="deletePlaylistModal"
+                :playlist-id="playlistId"
+                :playlist-name="playlistIdNameMap[playlistId] || ''"
+
+                @update="onPlaylistUpdate"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
         </div>
     </NuxtLayout>
 </template>
 
 <script>
 import { useAuthStore } from '~/store/auth.js';
+import { useMusicStore } from '~/store/musicStore.js';
 
 export default {
     data() {
         return {
-            tab: 1
+            tab: 1,
+            playlists: [],
+            loadedPlaylist: {},
+            playlistIdNameMap: {}, // Id -> name
+
+            currentPlaylistId: '',
+            editPlaylistModal: false,
+            deletePlaylistModal: false,
+
+            // Toasts
+            showErrorToast: false,
+            showSuccessToast: false,
+            toastErrorMsg: '',
+            toastSuccessMsg: '',
         };
     },
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
+        playlistId() { return this.$route.query.playlistId; },
+        isOwnPlaylist() {
+            return this.loadedPlaylist && this.loadedPlaylist.creator_id === this.user.id;
+        }
     },
     watch: {
         '$route.query'() {
             if (this.$route.path === '/music') {
-
+                console.log(this.$route.query);
+                this.getCurrentPlaylist();
             }
         },
     },
     mounted() {
-
+        
     },
     destroyed() {
 
     },
-    // Get boards on page first load
+    // Get playlists on page first load
     created() {
-
+        this.updatePlaylists();
+        this.getCurrentPlaylist();
     },
     methods: {
+        // Get metadata of current playlist
+        async getCurrentPlaylist() {
+            if (!useAuthStore(this.$pinia).isLoggedIn || !this.playlistId) return;
 
+            try {
+                let playlist = await this.$fetchApi('/api/music/playlist/single', 'GET', { id: this.playlistId });
+                this.loadedPlaylist = playlist.playlist || {};
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get playlist: ' + this.$apiErrorToString(e);
+            }
+        },
+        // Fetch playlists
+        async updatePlaylists() {
+            if (!useAuthStore(this.$pinia).isLoggedIn) {
+                this.playlists = [];
+                return;
+            }
+
+            const musicStore = useMusicStore(this.$pinia);
+            if (Date.now() < musicStore.lastFetch + 60 * 1000 && musicStore.playlists.length) {
+                this.playlists = musicStore.playlists;
+                return;
+            }
+
+            try {
+                let playlists = await this.$fetchApi('/api/music/playlist', 'GET', {});
+                this.playlists = playlists.playlists;
+                musicStore.playlists = [...this.playlists];
+
+                for (let playlist of this.playlists)
+                    this.playlistIdNameMap[playlist.id] = playlist.name;
+            } catch (e) {
+                this.showErrorToast = true;
+                this.toastErrorMsg = 'Failed to get playlists: ' + this.$apiErrorToString(e);
+            }
+        },
+        // When playlist is added or edited
+        createEditPlaylistUpdate(opts) {
+            this.editPlaylistModal = false;
+            if (opts === false) return;
+            if (!opts.wasEdit) {
+                this.playlists.push({ id: opts.id, name: opts.name });
+                this.$router.push({ path: '/music', query: { playlistId: opts.id } });
+            }
+            else {
+                for (let playlist of this.playlists) {
+                    if (playlist.id === opts.id) {
+                        playlist.name = opts.name;
+                        break;
+                    }
+                }
+            }
+            this.playlistIdNameMap[opts.id] = opts.name;
+            this.playlists.sort((a, b) => b.name > a.name ? -1 : 1);
+            useMusicStore(this.$pinia).playlists = [...this.playlists];
+        },
+        // Playlist deletion
+        onPlaylistUpdate(up) {
+            if (up.type === 'playlist_delete') {
+                delete this.playlistIdNameMap[up.id];
+                this.playlists = this.playlists.filter(p => p.id !== up.id);
+
+                if (this.playlists[0])
+                    this.$router.push({path: '/music', query: { playlistId: this.playlists[0].id }});
+            } else if (up.type === 'close_playlist_delete')
+                this.deletePlaylistModal = false;
+        }
     }
 }
 </script>
@@ -172,13 +315,17 @@ export default {
 @import "~/assets/css/state.scss";
 
 .playlist-list {
-    min-width: 200px;
+    min-width: 220px;
+    max-width: 220px;
 
     &__list-item {
         cursor: pointer;
         height: $menu-item-height;
         line-height: $menu-item-height;
         user-select: none;
+
+        color: rgb(var(--v-theme-on-surface));
+        text-decoration: none;
     }
 }
 
@@ -201,6 +348,7 @@ export default {
 
 .song-list {
     min-width: 250px;
+    max-width: 250px;
     box-sizing: border-box;
 
     &__header {
