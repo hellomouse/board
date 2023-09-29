@@ -30,11 +30,6 @@ better search (split words, images, dates, etc...)
 music player:
 - api docs
 
-- empty state if no playlist in url?
-    - empty state
-    - when getting a playlist don't show songs if you dont have access
-
-
 - add songs to playlist
     - insert list of urls or single files
 

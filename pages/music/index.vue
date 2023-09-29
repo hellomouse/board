@@ -20,6 +20,17 @@ useSeoMeta({
 
 <template>
     <NuxtLayout name="music">
+        <div v-if="initialLoad" class="state-loader state-center">
+            <v-progress-linear color="primary" indeterminate class="mb-2" />
+            Loading Playlist...
+        </div>
+
+        <div v-if="errorState" class="state-center">
+            <img src="/error-state.png" width="200">
+            <h1>Could not get playlist</h1>
+            <p class="mb-4">Playlist does not exist or you do not have permission to view</p>
+        </div>
+
         <div class="d-flex">
             <!-- Your playlists on the left -->
             <div class="playlist-list mr-2">
@@ -31,7 +42,7 @@ useSeoMeta({
                     @click="[currentPlaylistId, editPlaylistModal] = ['', true]"
                 >New Playlist</v-btn>
 
-                <v-label class="mt-4 ml-2 mb-1"><small>MY PLAYLISTS</small></v-label>
+                <v-label v-if="playlists.length > 0" class="mt-4 ml-2 mb-1"><small>MY PLAYLISTS</small></v-label>
 
                 <div style="max-height: calc(100vh - 180px); overflow-y: auto">
                     <NuxtLink
@@ -45,7 +56,7 @@ useSeoMeta({
                 </div>
             </div>
 
-            <div style="width: 100%">
+            <div v-if="!errorState && !initialLoad" style="width: 100%">
                 <!-- Main video player -->
                 <video class="video"></video>
 
@@ -77,7 +88,7 @@ useSeoMeta({
             </div>
 
             <!-- Song list on right -->
-            <div class="song-list">
+            <div v-if="!errorState && !initialLoad" class="song-list">
                 <div class="song-list__header">
                     <div class="pt-4 px-4">
                         <p class="playlist-name text-truncate">{{ loadedPlaylist.name }}</p>
@@ -214,8 +225,12 @@ export default {
         return {
             tab: 1,
             playlists: [],
+            songs: [],
             loadedPlaylist: {},
             playlistIdNameMap: {}, // Id -> name
+
+            initialLoad: true,
+            errorState: false,
 
             currentPlaylistId: '',
             editPlaylistModal: false,
@@ -263,14 +278,18 @@ export default {
         // Get metadata of current playlist
         async getCurrentPlaylist() {
             if (!useAuthStore(this.$pinia).isLoggedIn || !this.playlistId) return;
+            this.initialLoad = true;
+            this.errorState = false;
 
             try {
                 let playlist = await this.$fetchApi('/api/music/playlist/single', 'GET', { id: this.playlistId });
                 this.loadedPlaylist = playlist.playlist || {};
             } catch (e) {
                 this.showErrorToast = true;
+                this.errorState = true;
                 this.toastErrorMsg = 'Failed to get playlist: ' + this.$apiErrorToString(e);
             }
+            this.initialLoad = false;
         },
         // Fetch playlists
         async updatePlaylists() {
