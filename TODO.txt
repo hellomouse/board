@@ -32,6 +32,7 @@ music player:
 
 - empty state if no playlist in url?
     - empty state
+    - when getting a playlist don't show songs if you dont have access
 
 
 - add songs to playlist
@@ -40,6 +41,7 @@ music player:
 - add song / delete song / rearrange songs in playlist
     - add from youtube, bilibili, soundcloud, file + manual
     - add lyrics - auto get from sub data?
+
 - shuffle mode / radio mode
     - share link have someone else listen with u
 - readme

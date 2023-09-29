@@ -113,8 +113,8 @@ useSeoMeta({
                             </template>
                         </v-tooltip>
 
-                        <v-tooltip text="Edit Playlist" location="top">
-                            <template v-if="isOwnPlaylist" #activator="{ props }">
+                        <v-tooltip v-if="isOwnPlaylist" text="Edit Playlist" location="top">
+                            <template #activator="{ props }">
                                 <v-btn
                                     variant="text" size="small" v-bind="props" icon="mdi-playlist-edit"
                                     @click="[currentPlaylistId, editPlaylistModal] = [playlistId, true]"
@@ -122,9 +122,16 @@ useSeoMeta({
                             </template>
                         </v-tooltip>
 
-                        <v-tooltip text="Share Playlist" location="top">
+                        <v-tooltip
+                            v-if="loadedPlaylist && loadedPlaylist.perms && loadedPlaylist.perms[user.id] &&
+                                [EDIT, OWNER].includes(loadedPlaylist.perms[user.id].perm_level)"
+                            text="Share Playlist" location="top"
+                        >
                             <template #activator="{ props }">
-                                <v-btn variant="text" size="small" v-bind="props" icon="mdi-account-plus"></v-btn>
+                                <v-btn
+                                    variant="text" size="small" v-bind="props" icon="mdi-account-plus"
+                                    @click="sharePlaylistModal = true"
+                                ></v-btn>
                             </template>
                         </v-tooltip>
 
@@ -184,6 +191,15 @@ useSeoMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
+
+            <music-share-modal
+                :show="sharePlaylistModal"
+                :playlist="loadedPlaylist"
+
+                @update="e => { if (e.type === 'close') sharePlaylistModal = false; }"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
         </div>
     </NuxtLayout>
 </template>
@@ -191,6 +207,7 @@ useSeoMeta({
 <script>
 import { useAuthStore } from '~/store/auth.js';
 import { useMusicStore } from '~/store/musicStore.js';
+import { EDIT, OWNER } from '~/helpers/board/perms.js';
 
 export default {
     data() {
@@ -203,19 +220,24 @@ export default {
             currentPlaylistId: '',
             editPlaylistModal: false,
             deletePlaylistModal: false,
+            sharePlaylistModal: false,
 
             // Toasts
             showErrorToast: false,
             showSuccessToast: false,
             toastErrorMsg: '',
             toastSuccessMsg: '',
+
+            EDIT, OWNER
         };
     },
     computed: {
         user() { return useAuthStore(this.$pinia).user; },
         playlistId() { return this.$route.query.playlistId; },
         isOwnPlaylist() {
-            return this.loadedPlaylist && this.loadedPlaylist.creator_id === this.user.id;
+            return this.loadedPlaylist && this.loadedPlaylist.perms &&
+                this.loadedPlaylist.perms[this.user.id] &&
+                this.loadedPlaylist.perms[this.user.id].perm_level === OWNER;
         }
     },
     watch: {
