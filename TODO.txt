@@ -31,14 +31,41 @@ music player:
 - api docs
 
 - add songs to playlist
-    - insert list of urls or single files
+    - file: manually fill in all fields + upload thumbnail?
 
 - add song / delete song / rearrange songs in playlist
-    - add from youtube, bilibili, soundcloud, file + manual
     - add lyrics - auto get from sub data?
+        - should have dropdown to select language
+        - index number in playlist
+
+    - subs aren't colored
+    - soundcloud id should have artist as well
+        - update in undo id
+
+    - stylized track
+
+    - song id in url
+        - store distance to end + song id?
+        - or give up after 100 songs if not found
+
+    - after adding songs:
+        - update playlist count
+        - update song list
+
+    - api to get songs and page
+        - dont download if file already exists
+        - download songcloud + newgrounds
+
+
+bugs: (check all)
+- if public can view all users can view dont need to be logged in
+
+
+api for adding / editing lyrics
 
 - shuffle mode / radio mode
     - share link have someone else listen with u
+    - add individual song to queue
 - readme
 ----
 general

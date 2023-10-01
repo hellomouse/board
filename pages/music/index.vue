@@ -35,6 +35,7 @@ useSeoMeta({
             <!-- Your playlists on the left -->
             <div class="playlist-list mr-2">
                 <v-btn
+                    v-if="isLoggedIn"
                     height="45"
                     block color="red"
                     prepend-icon="mdi-plus"
@@ -56,32 +57,69 @@ useSeoMeta({
                 </div>
             </div>
 
-            <div v-if="!errorState && !initialLoad" style="width: 100%">
+            <div v-if="!errorState && !initialLoad" class="middle-container">
+                <div
+                    v-if="!loadedPlaylist || !loadedPlaylist.song_count"
+                    style="margin-left: 100px; margin-top: 200px"
+                >
+                    <h1>You have no songs</h1>
+                    <p>Add some with the button on the bottom right</p>
+                </div>
+
                 <!-- Main video player -->
-                <video class="video"></video>
+                <video
+                    v-show="loadedPlaylist && loadedPlaylist.song_count"
+                    ref="video"
+                    :key="currentVideoSrc"
+                    class="video" controls autoplay
+                >
+                    <source
+                        :src="currentVideoSrc"
+                        :type="`video/${currentVideoSrc.split('.').at(-1)}`"
+                    />
+                    <track
+                        v-for="(sub, i) in currentVideoSubs"
+                        :key="sub"
+                        :label="`${sub.split('.')[1].toUpperCase()}`"
+                        kind="subtitles"
+                        :srclang="`${sub.split('.')[1]}`"
+                        :src="`/files/videos/${encodeURIComponent(currentVideoId)}/${sub}`"
+                        :default="i === 0"
+                    />
+                </video>
 
                 <!-- Desc / meta below player -->
-                <div class="meta-container px-4 pt-1">
-                    <div class="d-flex">
-                        <h1 class="text-truncate mr-10">Title of Video</h1>
-                        <v-spacer />
+                <div v-if="loadedPlaylist && loadedPlaylist.song_count" class="meta-container px-4 pt-1">
+                    <h1 class="text-truncate mr-10 video-title">{{ currentVideoTitle }}</h1>
+                    <p class="text-truncate mr-10 video-upload-date">Uploaded {{ currentVideoUploadDate || '(unknown)' }}</p>
+                    <hr class="my-2">
 
-                        <v-tabs
-                            v-model="tab"
-                            class="small-tabs"
-                            align-tabs="right"
-                        >
-                            <v-tab :value="1">Description</v-tab>
-                            <v-tab :value="2">Lyrics</v-tab>
-                        </v-tabs>
-                    </div>
+                    <v-tabs
+                        v-model="tab"
+                        class="small-tabs"
+                        align-tabs="right"
+                    >
+                        <v-tab :value="1">Description</v-tab>
+                        <v-tab :value="2">Lyrics</v-tab>
+                    </v-tabs>
                         
                     <v-window v-model="tab">
-                        <v-window-item :value="1" class="pt-1">
-                            <p>Description of video</p>
+                        <v-window-item :value="1" class="pt-1 pb-8">
+                            <a class="text-truncate video-artist mr-10 mb-4" :href="currentVideoArtist.url">
+                                {{ currentVideoArtist.name || 'Unknown Artist' }}
+                            </a>
+                            <p class="video-desc" v-html="formatHrefLink(currentVideoDescription, '#42A5F5', true)"></p>
+
+                            <p class="mt-3">
+                                <a
+                                    class="text-primary text-decoration-none"
+                                    target="_blank" rel="noopener noreferrer"
+                                    :href="videoHref"
+                                >Video ID: {{ songs[currentSongIndex] ? songs[currentSongIndex].id : '' }}</a>
+                            </p>
                         </v-window-item>
-                        <v-window-item :value="2" class="pt-1">
-                            <p>Description of video 2</p>
+                        <v-window-item :value="2" class="pt-1 pb-8">
+                            <p class="video-desc">{{ songLyrics }}</p>
                         </v-window-item>
                     </v-window>
                 </div>
@@ -92,7 +130,7 @@ useSeoMeta({
                 <div class="song-list__header">
                     <div class="pt-4 px-4">
                         <p class="playlist-name text-truncate">{{ loadedPlaylist.name }}</p>
-                        <p class="playlist-song-count text-truncate">{{ loadedPlaylist.song_count }} songs</p>
+                        <p class="playlist-song-count text-truncate">{{ loadedPlaylist.song_count.toLocaleString() }} song{{ loadedPlaylist.song_count !== 1 ? 's' : '' }}</p>
                     </div>
 
                     <div class="d-flex">
@@ -159,14 +197,25 @@ useSeoMeta({
 
                 <v-list lines="one" class="song-list__list">
                     <v-list-item
-                        v-for="n in 100"
-                        :key="n"
+                        v-for="(song, i) in songs"
+                        :key="song.id"
                         class="list-item-no-round-avatar"
-                        prepend-avatar="https://cdn.vuetifyjs.com/images/lists/1.jpg"
-                        :title="'Item ' + n"
-                        subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit"
+                        :data-duration="song.duration_string"
+                        :prepend-avatar="song.thumbnail_file ? encodeURIComponent(`/files/videos/${song.id}/${song.thumbnail_file}`) : '/default-pfp.png'"
+                        :title="song.title"
+                        :subtitle="song.uploader"
+                        :active="currentSongIndex === i"
+
+                        @click="currentSongIndex = i"
                     ></v-list-item>
                 </v-list>
+
+                <v-btn
+                    color="red mt-2"
+                    block flat
+                    prepend-icon="mdi-plus"
+                    @click="addSongModal = true"
+                >Add Songs</v-btn>
             </div>
 
             <v-snackbar
@@ -211,6 +260,15 @@ useSeoMeta({
                 @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
                 @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             />
+
+            <music-add-song-modal
+                :show="addSongModal"
+                :playlist-id="loadedPlaylist ? loadedPlaylist.id : ''"
+
+                @update="e => { addSongModal = false; }"
+                @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+                @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+            />
         </div>
     </NuxtLayout>
 </template>
@@ -219,6 +277,7 @@ useSeoMeta({
 import { useAuthStore } from '~/store/auth.js';
 import { useMusicStore } from '~/store/musicStore.js';
 import { EDIT, OWNER } from '~/helpers/board/perms.js';
+import { formatHrefLink } from '~/helpers/format.js';
 
 export default {
     data() {
@@ -226,8 +285,19 @@ export default {
             tab: 1,
             playlists: [],
             songs: [],
+            currentSongIndex: 0,
             loadedPlaylist: {},
             playlistIdNameMap: {}, // Id -> name
+
+            // Video
+            currentVideoTitle: 'Untitled',
+            currentVideoDescription: 'No description provided',
+            currentVideoSrc: '',
+            currentVideoSubs: [],
+            currentVideoId: '',
+            currentVideoArtist: {},
+            currentVideoUploadDate: '',
+            songLyrics: '',
 
             initialLoad: true,
             errorState: false,
@@ -236,6 +306,7 @@ export default {
             editPlaylistModal: false,
             deletePlaylistModal: false,
             sharePlaylistModal: false,
+            addSongModal: false,
 
             // Toasts
             showErrorToast: false,
@@ -247,12 +318,26 @@ export default {
         };
     },
     computed: {
-        user() { return useAuthStore(this.$pinia).user; },
+        isLoggedIn() { return useAuthStore(this.$pinia).isLoggedIn; },
+        user() { return useAuthStore(this.$pinia).user || {}; },
         playlistId() { return this.$route.query.playlistId; },
         isOwnPlaylist() {
             return this.loadedPlaylist && this.loadedPlaylist.perms &&
                 this.loadedPlaylist.perms[this.user.id] &&
                 this.loadedPlaylist.perms[this.user.id].perm_level === OWNER;
+        },
+        videoHref() {
+            if (!this.songs[this.currentSongIndex]) return;
+            let id = this.songs[this.currentSongIndex].id.split('#');
+            if (id[0] === 'yt')
+                return `https://www.youtube.com/watch?v=${id[1]}`;
+            if (id[0] === 'bilibili')
+                return `https://www.bilibili.com/video/${id[1]}/`;
+            if (id[0] === 'soundcloud')
+                return `${id[1]}`;
+            if (id[0] === 'newgrounds')
+                return `https://newgrounds.com/audio/listen/${id[1]}`;
+            return '';
         }
     },
     watch: {
@@ -262,6 +347,9 @@ export default {
                 this.getCurrentPlaylist();
             }
         },
+        currentSongIndex() {
+            this.loadCurrentSong();
+        }
     },
     mounted() {
         
@@ -275,25 +363,88 @@ export default {
         this.getCurrentPlaylist();
     },
     methods: {
+        async loadCurrentSong() {
+            if (!this.songs.length) return;
+            let song = this.songs[this.currentSongIndex];
+            if (!song) return;
+            let songId = song.id;
+
+            // Fetch more song metadata
+            try {
+                let songs = await this.$fetchApi('/api/music/song', 'GET', { id: songId });
+                song = songs.song;
+            } catch (e) {
+                this.showErrorToast = true;
+                this.errorState = true;
+                this.toastErrorMsg = 'Failed to get song data: ' + this.$apiErrorToString(e);
+                return;
+            }
+
+            console.log(song)
+
+            this.currentVideoId = songId;
+            this.currentVideoSrc = `/files/videos/${encodeURIComponent(songId)}/${song.video_file}`;
+            this.currentVideoTitle = song.title;
+            this.currentVideoDescription = song.description;
+            this.currentVideoSubs = song.subtitle_files;
+            this.currentVideoUploadDate = this.$formatTimestamp(song.upload_date);
+            this.currentVideoArtist = {
+                name: song.uploader,
+                url: song.uploader_url
+            };
+
+            // TODO: test repeatedly
+            setTimeout(() => {
+                console.log(this.$refs.video.textTracks.length)
+                if (!this.$refs.video.textTracks.length) {
+                    this.songLyrics = 'No lyrics provided';
+                    return;
+                }
+
+                let cues = [...this.$refs.video.textTracks[0].cues];
+                let lines = [];
+                let dupeLineCount = 0;
+
+                for (let i = 0; i < cues.length; i++) {
+                    if (i > 0 && cues[i].startTime - cues[i - 1].endTime > 2) // > 2s delay = new line
+                        lines.push('');
+                    let line = cues[i].text.replace(/<.+?>/g, '');
+
+                    if (i < cues.length - 1 && cues[i + 1].text.replace(/<.+?>/g, '') !== cues[i].text.replace(/<.+?>/g, '')) {
+                        lines.push(line + (dupeLineCount > 0 ? ` (x${dupeLineCount})` : ''));
+                        dupeLineCount = 0;
+                    }
+                    else dupeLineCount++;
+                }
+                this.songLyrics = lines.join('\n');
+            }, 500);
+        },
+
         // Get metadata of current playlist
         async getCurrentPlaylist() {
-            if (!useAuthStore(this.$pinia).isLoggedIn || !this.playlistId) return;
+            if (!this.playlistId) return;
             this.initialLoad = true;
             this.errorState = false;
 
             try {
                 let playlist = await this.$fetchApi('/api/music/playlist/single', 'GET', { id: this.playlistId });
                 this.loadedPlaylist = playlist.playlist || {};
+
+                // TODO: pagination + auto scroll
+                let songs = await this.$fetchApi('/api/music/playlist/song', 'GET', { id: this.playlistId, limit: 100 });
+                this.songs = songs.songs || [];
             } catch (e) {
+                console.error(e);
                 this.showErrorToast = true;
                 this.errorState = true;
                 this.toastErrorMsg = 'Failed to get playlist: ' + this.$apiErrorToString(e);
             }
             this.initialLoad = false;
+            this.loadCurrentSong();
         },
         // Fetch playlists
         async updatePlaylists() {
-            if (!useAuthStore(this.$pinia).isLoggedIn) {
+            if (!this.isLoggedIn) {
                 this.playlists = [];
                 return;
             }
@@ -385,6 +536,10 @@ export default {
     min-width: 220px;
     max-width: 220px;
 
+    position: fixed;
+    top: 80px;
+    left: 44px;
+
     &__list-item {
         cursor: pointer;
         height: $menu-item-height;
@@ -396,6 +551,12 @@ export default {
     }
 }
 
+.middle-container {
+    width: 100%;
+    max-width: calc(100% - 540px);
+    margin-left: 239px;
+}
+
 .video {
     width: 100%;
     height: 420px;
@@ -403,7 +564,27 @@ export default {
 }
 
 .meta-container {
-    & > h1 {
+    .video-title {
+        font-weight: normal !important;
+        font-size: 22px;
+        margin: 4px 0 4px 0;
+    }
+
+    .video-upload-date {
+        opacity: var(--v-medium-emphasis-opacity);
+    }
+
+    .video-artist {
+        opacity: 1;
+        color: rgb(var(--v-theme-on-surface));
+        font-weight: bold;
+        text-decoration: none;
+        display: block;
+    }
+
+    hr {
+        height: 0px;
+        border: none;
         border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
     }
 
@@ -411,12 +592,22 @@ export default {
         transform: scale(0.75);
         transform-origin: top left;
     }
+
+    .video-desc {
+        white-space: pre-wrap;
+        color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)) !important;
+        text-decoration: none !important;
+    }
 }
 
 .song-list {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 290px;
+    max-width: 290px;
     box-sizing: border-box;
+
+    position: fixed;
+    top: 80px;
+    right: 44px;
 
     &__header {
         background-color: rgba(var(--v-theme-on-surface), var(--v-activated-opacity));
@@ -432,7 +623,7 @@ export default {
     }
 
     &__list {
-        height: calc(100vh - 180px);
+        height: calc(100vh - 230px);
     }
 }
 </style>
@@ -440,7 +631,25 @@ export default {
 <style lang="scss">
 // Make the playlist thumbnails not round, we're using
 // the v-list avatars
+.list-item-no-round-avatar {
+    position: relative;
+}
+
+.list-item-no-round-avatar:before {
+    content: attr(data-duration);
+    position: absolute;
+    left: 18px;
+    top: 26px;
+
+    font-size: 10px;
+    padding: 1px 2px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 10;
+}
+
 .list-item-no-round-avatar .v-avatar {
     border-radius: 0 !important;
+    width: 70px;
 }
 </style>

@@ -27,6 +27,12 @@ body .v-sheet.v-card {
     border-radius: 0;
 }
 
+// Required label for inputs
+.required label::after {
+    content: "*";
+    color: #F44336;
+}
+
 // Modals should not exceed page width
 .v-card {
     max-width: 100%;

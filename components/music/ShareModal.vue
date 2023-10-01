@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '~/store/auth.js';
+
 export default {
     props: {
         // Whether to show modal
@@ -45,6 +47,8 @@ export default {
     watch: {
         async playlist(newVal, _oldVal) {
             if (!Object.keys(newVal).length || !newVal.perms)
+                return;
+            if (!useAuthStore(this.$pinia).isLoggedIn)
                 return;
 
             let playlist = newVal;
