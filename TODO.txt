@@ -36,7 +36,6 @@ music player:
 - add song / delete song / rearrange songs in playlist
     - add lyrics - auto get from sub data?
         - should have dropdown to select language
-        - index number in playlist
 
     - subs aren't colored
     - soundcloud id should have artist as well
@@ -47,6 +46,7 @@ music player:
     - song id in url
         - store distance to end + song id?
         - or give up after 100 songs if not found
+        - or api to get playlist location
 
     - after adding songs:
         - update playlist count
@@ -55,7 +55,6 @@ music player:
     - api to get songs and page
         - dont download if file already exists
         - download songcloud + newgrounds
-
 
 bugs: (check all)
 - if public can view all users can view dont need to be logged in

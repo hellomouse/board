@@ -117,6 +117,14 @@ useSeoMeta({
                                     :href="videoHref"
                                 >Video ID: {{ songs[currentSongIndex] ? songs[currentSongIndex].id : '' }}</a>
                             </p>
+
+                            <p class="mt-3">
+                                <a
+                                    class="text-primary text-decoration-none"
+                                    target="_blank" rel="noopener noreferrer"
+                                    :href="currentVideoSrc"
+                                >Download file</a>
+                            </p>
                         </v-window-item>
                         <v-window-item :value="2" class="pt-1 pb-8">
                             <p class="video-desc">{{ songLyrics }}</p>
@@ -128,8 +136,9 @@ useSeoMeta({
             <!-- Song list on right -->
             <div v-if="!errorState && !initialLoad" class="song-list">
                 <div class="song-list__header">
-                    <div class="pt-4 px-4">
+                    <div class="pt-4 px-4" style="margin-bottom: -8px">
                         <p class="playlist-name text-truncate">{{ loadedPlaylist.name }}</p>
+                        <p class="playlist-creator text-truncate">@{{ loadedPlaylist.creator_id }}</p>
                         <p class="playlist-song-count text-truncate">{{ loadedPlaylist.song_count.toLocaleString() }} song{{ loadedPlaylist.song_count !== 1 ? 's' : '' }}</p>
                     </div>
 
@@ -207,7 +216,14 @@ useSeoMeta({
                         :active="currentSongIndex === i"
 
                         @click="currentSongIndex = i"
-                    ></v-list-item>
+                    >
+                        <template v-slot:subtitle="{ subtitle }">
+                            <span class="text-truncate d-inline-block" style="max-width:100px">{{ subtitle }}</span>
+                            <span class="text-truncate d-inline-block" style="max-width:100px; float:right">
+                                <small>{{ (i + 1).toLocaleString() }}</small>
+                            </span>
+                        </template>
+                    </v-list-item>
                 </v-list>
 
                 <v-btn
@@ -615,6 +631,14 @@ export default {
         .playlist-name {
             color: rgb(var(--v-theme-on-surface));
             font-size: 1.15rem;
+        }
+
+        .playlist-creator {
+            font-size: 0.85rem;
+            color: rgb(var(--v-theme-on-surface));
+            font-weight: bold;
+            line-height: 1;
+            margin-top: 5px;
         }
         .playlist-song-count {
             opacity: var(--v-medium-emphasis-opacity);
