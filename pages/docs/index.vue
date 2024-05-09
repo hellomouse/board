@@ -10,6 +10,7 @@
             <li><a href="/docs/board">Board and Pins</a></li>
             <li><a href="/docs/site">Site Service</a></li>
             <li><a href="/docs/link">Link</a></li>
+            <li><a href="/docs/files">Files</a></li>
         </ul>
     </v-container>
 </template>
