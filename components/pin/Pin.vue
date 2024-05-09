@@ -59,6 +59,17 @@
                 :content="content"
             />
 
+            <!-- Files -->
+            <div v-if="attachmentPaths.length" class="attachments-container">
+                <b>Attachments:</b>
+                <a
+                    v-for="p in splitAttachmentPaths"
+                    :key="p[0]"
+                    :href="`/api/files/single?id=${p[0]}`"
+                    style="display: block"
+                ><v-icon icon="mdi-link" size="x-small" /> {{ p[1] }}</a>
+            </div>
+
             <!-- Checklist pin -->
             <pin-checklist
                 v-if="type === 'Checklist'"
@@ -222,6 +233,12 @@ export default {
         };
     },
     computed: {
+        splitAttachmentPaths() {
+            return this.attachmentPaths.map(x => {
+                const index = x.indexOf(',');
+                return [x.slice(0, index), x.slice(index + 1)];
+            });
+        },
         background() {
             let color = getColor(this.color, !useOptionStore(this.$pinia).dark_theme);
             return getBackground(color);
@@ -586,6 +603,17 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.attachments-container {
+    margin-top: 10px;
+    border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+    opacity: 0.9;
+    padding: 10px;
+    font-size: 0.9rem;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 140px;
+}
+
 .delete-confirmation-overlay {
     position: absolute;
     width: 100%;

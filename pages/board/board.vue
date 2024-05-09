@@ -271,6 +271,7 @@ useSeoMeta({
                     :initial-selected="pin.selected"
                     :color="pin.metadata.color"
                     :metadata="pin.metadata"
+                    :attachment-paths="pin.attachment_paths"
                     :perm="currentUserPerm"
                     :always-show-details="alwaysShowCardDetails"
                     :deselect-trigger="deselectTrigger"
@@ -302,6 +303,7 @@ useSeoMeta({
             :board-id="currentBoard.id || ''"
 
             @update="onPinCreate"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
         />
 

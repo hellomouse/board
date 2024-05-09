@@ -28,6 +28,7 @@ TODO
                     </client-only>
 
                     <v-file-input 
+                        v-model="selected_files"
                         label="Attachments" variant="solo-filled"
                         multiple show-size rounded=0 chips
                         density="compact" style="min-height: 47px"
@@ -170,7 +171,8 @@ export default {
             loading: false,
             toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['formula'], ['clean']],
             selectedSwatchIndex: 0,
-            downloadOptions: {}
+            downloadOptions: {},
+            selected_files: []
         };
     },
     computed: {
@@ -205,14 +207,54 @@ export default {
 
             let type = this.pin.type;
             if (typeof type === 'string') // Convert type to numeric
-                type = pinTypeNameToNumber(type)
+                type = pinTypeNameToNumber(type);
+
+            let attachmentPaths = this.pin.attachment_paths || [];
+            if (type === 0 && this.selected_files?.length) { // Markdown pin
+                if (this.selected_files.length > 50) {
+                    this.$emit('error', 'Too many files, at most 50 files at a time!');
+                    return;
+                }
+
+                let formData = new FormData();
+                for (let file of this.selected_files)
+                    formData.append('files', file, file.name);
+
+                let requestOptions = {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'enctype': 'multipart/form-data' },
+                    body: formData,
+                    connection: 'close',
+                    credentials: 'include',
+                    signal: AbortSignal.timeout(10000)
+                };
+                this.$emit('success', `Uploading files... please wait...`);
+
+                // eslint-disable-next-line no-undef
+                let results = await $fetch('/api/files', requestOptions);
+                if (results.failed.length)
+                    this.$emit('error', `Failed to upload ${results.failed.length} / ${(this.selected_files?.length || 0)} files`);
+                else
+                    this.$emit('success', `Uploaded ${results.succeeded.length} / ${(this.selected_files?.length || 0)} files`);
+                
+                // Combine filename in ID to store
+                let uploadedFiles = [];
+                for (let i = 0; i < this.selected_files.length; i++) {
+                    if (!results.failed.includes(i))
+                        uploadedFiles.push(this.selected_files[i]);
+                }
+                results.succeeded = results.succeeded.map((val, i) =>
+                    `${val},${uploadedFiles[i].name}`);
+                attachmentPaths = [...new Set(results.succeeded.concat(attachmentPaths))];
+            }
 
             let params = {
                 pin_type: type,
                 board_id: this.boardId,
                 flags: this.pin.flags || '',
                 content: this.content,
-                attachment_paths: [],
+                attachment_paths: attachmentPaths,
                 metadata: {
                     color: this.color
                 }

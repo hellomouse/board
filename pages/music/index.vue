@@ -127,6 +127,14 @@ useSeoMeta({
                             </p>
                         </v-window-item>
                         <v-window-item :value="2" class="pt-1 pb-8">
+                            <v-select
+                                v-if="lyricsLanguages.length"
+                                v-model="lyricsLanguage"
+                                density="compact" class="mb-4"
+                                label="Language" style="max-width: 200px"
+                                :items="lyricsLanguages"
+                                @update:modelValue="loadLyrics"
+                            ></v-select>
                             <p class="video-desc">{{ songLyrics }}</p>
                         </v-window-item>
                     </v-window>
@@ -315,6 +323,10 @@ export default {
             currentVideoUploadDate: '',
             songLyrics: '',
 
+            // Lyrics
+            lyricsLanguages: [],
+            lyricsLanguage: 0,
+
             initialLoad: true,
             errorState: false,
 
@@ -417,23 +429,34 @@ export default {
                     return;
                 }
 
-                let cues = [...this.$refs.video.textTracks[0].cues];
-                let lines = [];
-                let dupeLineCount = 0;
-
-                for (let i = 0; i < cues.length; i++) {
-                    if (i > 0 && cues[i].startTime - cues[i - 1].endTime > 2) // > 2s delay = new line
-                        lines.push('');
-                    let line = cues[i].text.replace(/<.+?>/g, '');
-
-                    if (i < cues.length - 1 && cues[i + 1].text.replace(/<.+?>/g, '') !== cues[i].text.replace(/<.+?>/g, '')) {
-                        lines.push(line + (dupeLineCount > 0 ? ` (x${dupeLineCount})` : ''));
-                        dupeLineCount = 0;
-                    }
-                    else dupeLineCount++;
-                }
-                this.songLyrics = lines.join('\n');
+                this.lyricsLanguages = [...this.$refs.video.textTracks].map((x, i) => ({
+                    title: x.label,
+                    value: i
+                }));
+                this.lyricsLanguage = 0;
+                this.loadLyrics();
             }, 500);
+        },
+
+        loadLyrics() {
+            console.log('lyrics', this.lyricsLanguage)
+            console.log(this.$refs.video.textTracks[this.lyricsLanguage])
+            let cues = [...this.$refs.video.textTracks[this.lyricsLanguage].cues];
+            let lines = [];
+            let dupeLineCount = 0;
+
+            for (let i = 0; i < cues.length; i++) {
+                if (i > 0 && cues[i].startTime - cues[i - 1].endTime > 2) // > 2s delay = new line
+                    lines.push('');
+                let line = cues[i].text.replace(/<.+?>/g, '');
+
+                if (i < cues.length - 1 && cues[i + 1].text.replace(/<.+?>/g, '') !== cues[i].text.replace(/<.+?>/g, '')) {
+                    lines.push(line + (dupeLineCount > 0 ? ` (x${dupeLineCount})` : ''));
+                    dupeLineCount = 0;
+                }
+                else dupeLineCount++;
+            }
+            this.songLyrics = lines.join('\n');
         },
 
         // Get metadata of current playlist

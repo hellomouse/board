@@ -11,6 +11,12 @@ pin create/edit modal:
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
 
+document file api
+
+remove attachments??
+image gallery file upload
+storage page
+
 
 - option to download board
     - board / tag bulk download
@@ -36,8 +42,10 @@ music player:
 - add song / delete song / rearrange songs in playlist
     - add lyrics - auto get from sub data?
         - should have dropdown to select language
+        - can't get cues for not showing
+        - process lyircs server side
 
-    - subs aren't colored
+    - subs aren't colored - maybe need some sub rendering lib
     - soundcloud id should have artist as well
         - update in undo id
 
