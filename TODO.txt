@@ -10,10 +10,16 @@ pin create/edit modal:
 
 pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
+pfp api
 
-document file api
 
+done:
+clear file selector when upload
+API for deleting files
 remove attachments??
+- actually delete the file
+
+
 image gallery file upload
 storage page
 

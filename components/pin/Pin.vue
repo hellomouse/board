@@ -1,13 +1,6 @@
 <template>
-    <v-sheet
-        elevation="0"
-        min-width="250"
-        class="pin-tile"
-        :style="{ background: background }"
-        :class="pinTileClasses"
-
-        @click="clickHandler"
-    >
+    <v-sheet elevation="0" min-width="250" class="pin-tile" :style="{ background: background }" :class="pinTileClasses"
+        @click="clickHandler">
         <div class="toggle" @click="onSelect" />
 
         <div v-if="deleting" class="delete-confirmation-overlay">
@@ -27,17 +20,9 @@
             </div>
 
             <div class="pin-tile__header__icon-row">
-                <v-tooltip
-                    v-for="icon in flag_icons"
-                    :key="pinId + icon"
-                    :text="icon.text"
-                    location="top"
-                >
+                <v-tooltip v-for="icon in flag_icons" :key="pinId + icon" :text="icon.text" location="top">
                     <template #activator="{ props }">
-                        <v-icon
-                            v-bind="props"
-                            class="pa-2 ml-2"
-                        >
+                        <v-icon v-bind="props" class="pa-2 ml-2">
                             {{ icon.icon }}
                         </v-icon>
                     </template>
@@ -45,130 +30,87 @@
             </div>
         </div>
 
-        <div 
-            ref="pin" class="px-4 py-1 pin-tile__content"
+        <div ref="pin" class="px-4 py-1 pin-tile__content"
             :class="!isExpanded && $refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX ? 'pin-tile__content--oversized' : ''"
-            :style="{ 'max-height': maxHeight  + 'px' }"
-        >
+            :style="{ 'max-height': maxHeight  + 'px' }">
             <!-- Markdown -->
             <span v-if="type === 'Markdown'" v-html="content"></span>
 
             <!-- Link pin -->
-            <pin-link
-                v-if="type === 'Link'"
-                :content="content"
-            />
+            <pin-link v-if="type === 'Link'" :content="content" />
 
             <!-- Files -->
-            <div v-if="attachmentPaths.length" class="attachments-container">
-                <b>Attachments:</b>
-                <a
-                    v-for="p in splitAttachmentPaths"
-                    :key="p[0]"
-                    :href="`/api/files/single?id=${p[0]}`"
-                    style="display: block"
-                ><v-icon icon="mdi-link" size="x-small" /> {{ p[1] }}</a>
-            </div>
+            <pin-attachment-list
+                v-if="attachmentPaths?.length"
+                :allow-edit="userHasPermToEdit"
+                :files="attachmentPaths"
+                @deleteAttachmentModal="v => $emit('deleteAttachmentModal', v)"
+            />
 
             <!-- Checklist pin -->
-            <pin-checklist
-                v-if="type === 'Checklist'"
-                :simple="true" :locked="locked"
+            <pin-checklist v-if="type === 'Checklist'" :simple="true" :locked="locked"
                 :checklist="contentToChecklist(content) || []"
-                @check="v => resendContent(pinId, checklistToContent(v))"
-            />
+                @check="v => resendContent(pinId, checklistToContent(v))" />
         </div>
 
-        <v-btn
-            v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX"
-            variant="text" color="blue" block class="mt-2"
-            @click="toggleShowMore"
-        >{{ isExpanded ? 'Show Less' : 'Show More' }}</v-btn>
+        <v-btn v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX" variant="text" color="blue"
+            block class="mt-2" @click="toggleShowMore">{{ isExpanded ? 'Show Less' : 'Show More' }}</v-btn>
 
         <div class="pl-4 pin-tile__bottom">
             <div class="pin-tile__timestamp-wrapper">
                 <div v-if="created" class="pin-tile__timestamp truncate-text">
-                    <v-icon icon="mdi-clock"/> {{ created }}
+                    <v-icon icon="mdi-clock" /> {{ created }}
                 </div>
                 <div v-if="edited && edited !== created" class="pin-tile__timestamp truncate-text">
-                    &nbsp; | &nbsp;<v-icon icon="mdi-pencil"/> {{ edited }}
+                    &nbsp; | &nbsp;<v-icon icon="mdi-pencil" /> {{ edited }}
                 </div>
             </div>
 
             <v-menu>
                 <template #activator="{ props }">
-                    <v-btn
-                        density="comfortable"
-                        icon="mdi-dots-vertical"
-                        v-bind="props"
-                        :color="'transparent'"
-                        flat
-                    ></v-btn>
+                    <v-btn density="comfortable" icon="mdi-dots-vertical" v-bind="props" :color="'transparent'"
+                        flat></v-btn>
                 </template>
-                
+
                 <v-sheet elevation="8" rounded="0">
                     <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyPermaLink">
                         <v-icon icon="mdi-link" />Permalink
                     </button>
-                    <button
-                        v-if="userHasPermToEdit"
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        :disabled="locked"
-                        @click="emitEditUpdate()"
-                    >
+                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                        :disabled="locked" @click="emitEditUpdate()">
                         <v-icon icon="mdi-pencil" />Edit
                     </button>
-                    <button
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        @click="emitCopyToBoardUpdate()"
-                    >
+                    <button class="px-4 hoverable hover-list-item edit-list-item" @click="emitCopyToBoardUpdate()">
                         <v-icon icon="mdi-content-copy" />Copy to Board
                     </button>
-                    <button
-                        v-if="userHasPermToEdit"
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        :disabled="locked"
-                        @click="emitHistoryUpdate()"
-                    >
+                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                        :disabled="locked" @click="emitHistoryUpdate()">
                         <v-icon icon="mdi-clock" />History
                     </button>
-                    <button
-                        class="px-4 hoverable hover-list-item edit-list-item edit-list-item--line"
-                        @click="toggleFavorite()"
-                    >
+                    <button class="px-4 hoverable hover-list-item edit-list-item edit-list-item--line"
+                        @click="toggleFavorite()">
                         <v-icon :icon="favorited ? 'mdi-star-off' : 'mdi-star'" />
                         {{ favorited ? 'Unfavorite' : 'Favorite' }}
                     </button>
 
-                    <button
-                        v-if="userHasPermToEdit"
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        @click="toggleFlag('PINNED')"
-                    >
+                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('PINNED')">
                         <v-icon :icon="pinned ? 'mdi-pin-off' : 'mdi-pin'" />
                         {{ pinned ? 'Unpin' : 'Pin' }}
                     </button>
-                    <button
-                        v-if="userHasPermToEdit"
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        @click="toggleFlag('LOCKED')"
-                    >
+                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('LOCKED')">
                         <v-icon :icon="locked ? 'mdi-lock-open' : 'mdi-lock'" />
                         {{ locked ? 'Unlock' : 'Lock' }}
                     </button>
-                    <button
-                        v-if="userHasPermToEdit"
-                        class="px-4 hoverable hover-list-item edit-list-item"
-                        @click="toggleFlag('ARCHIVED')"
-                    >
+                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                        @click="toggleFlag('ARCHIVED')">
                         <v-icon :icon="archived ? 'mdi-folder-off' : 'mdi-folder-zip'" />
                         {{ archived ? 'Unarchive' : 'Archive' }}
                     </button>
-                    <button
-                        v-if="userHasPermToEdit"
+                    <button v-if="userHasPermToEdit"
                         class="px-4 text-red [ hoverable hover-list-item ] edit-list-item edit-list-item--line"
-                        @click="deletePin()"
-                    >
+                        @click="deletePin()">
                         <v-icon icon="mdi-trash-can" color="red" />Delete
                     </button>
                 </v-sheet>
@@ -233,12 +175,6 @@ export default {
         };
     },
     computed: {
-        splitAttachmentPaths() {
-            return this.attachmentPaths.map(x => {
-                const index = x.indexOf(',');
-                return [x.slice(0, index), x.slice(index + 1)];
-            });
-        },
         background() {
             let color = getColor(this.color, !useOptionStore(this.$pinia).dark_theme);
             return getBackground(color);
@@ -603,17 +539,6 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.attachments-container {
-    margin-top: 10px;
-    border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-    opacity: 0.9;
-    padding: 10px;
-    font-size: 0.9rem;
-    overflow-y: auto;
-    overflow-x: auto;
-    max-height: 140px;
-}
-
 .delete-confirmation-overlay {
     position: absolute;
     width: 100%;

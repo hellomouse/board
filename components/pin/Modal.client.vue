@@ -28,6 +28,7 @@ TODO
                     </client-only>
 
                     <v-file-input 
+                        ref="fileInput"
                         v-model="selected_files"
                         label="Attachments" variant="solo-filled"
                         multiple show-size rounded=0 chips
@@ -247,6 +248,7 @@ export default {
                 results.succeeded = results.succeeded.map((val, i) =>
                     `${val},${uploadedFiles[i].name}`);
                 attachmentPaths = [...new Set(results.succeeded.concat(attachmentPaths))];
+                this.selected_files = [];
             }
 
             let params = {

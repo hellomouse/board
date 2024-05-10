@@ -23,17 +23,19 @@ Example usage:
             <v-card-text class="my-2">
                 <h1 class="mb-4 text-truncate">{{ title }}</h1>
                 <slot></slot>
-                
                 <br>
-                <p>Type <span class="text-primary">{{ confirmationString }}</span> to confirm deletion</p>
-                <v-text-field
-                    v-model="inputString"
-                    :placeholder="confirmationString" rounded="0"
-                    density="compact"
-                    class="mt-2 mb-10"
-                    variant="solo-filled"
-                    @keyup.enter="() => { if (inputString === confirmationString) $emit('update', true) }"
-                />
+                
+                <div v-if="confirmationString?.length">
+                    <p>Type <span class="text-primary">{{ confirmationString }}</span> to confirm deletion</p>
+                    <v-text-field
+                        v-model="inputString"
+                        :placeholder="confirmationString" rounded="0"
+                        density="compact"
+                        class="mt-2 mb-10"
+                        variant="solo-filled"
+                        @keyup.enter="() => { if (!confirmationString || inputString === confirmationString) $emit('update', true) }"
+                    />
+                </div>
 
                 <div style="float: right">
                     <v-btn
@@ -45,7 +47,7 @@ Example usage:
                     </v-btn>
                     <v-btn
                         :loading="loading"
-                        color="red" :disabled="inputString !== confirmationString"
+                        color="red" :disabled="confirmationString?.length && inputString !== confirmationString"
                         @click="$emit('update', true)"
                     >
                         Delete

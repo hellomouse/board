@@ -283,6 +283,11 @@ useSeoMeta({
                     @success="msg => { [this.showSuccessToast, this.toastSuccessMsg] = [true, msg]; }"
                     @select="updateSelected"
                     @flagsUpdate="updatePinFlags"
+                    @deleteAttachmentModal="v => {
+                        attachmentToDelete = v;
+                        attachmentToDeletePinId = pin.pin_id;
+                        modals.deleteAttachmentModal = true;
+                    }"
                 />
             </div>
 
@@ -361,6 +366,16 @@ useSeoMeta({
             :board="currentBoard"
 
             @update="onBoardDeleteUpdate"
+            @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
+            @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
+        />
+
+        <lazy-pin-delete-attachment-modal
+            :show="modals.deleteAttachmentModal"
+            :file-name-and-id="attachmentToDelete"
+
+            @update="modals.deleteAttachmentModal = false"
+            @attachmentRemoved="updatePinAttachmentsAfterRemove"
             @error="e => [toastErrorMsg, showErrorToast] = [e, true]"
             @success="e => [toastSuccessMsg, showSuccessToast] = [e, true]"
         />
@@ -445,6 +460,7 @@ export default {
                 editBoardModal: false,
                 shareBoardModal: false,
                 deleteBoardModal: false,
+                deleteAttachmentModal: false,
                 boardPropertiesModal: false,
                 pinHistoryModal: false,
                 createPinModal: false,
@@ -459,6 +475,8 @@ export default {
 
             // Data
             pins: [],
+            attachmentToDelete: ['', ''],
+            attachmentToDeletePinId: null,
 
             // Toasts
             showErrorToast: false,
@@ -961,6 +979,17 @@ export default {
             }
             return true;
         },
+        // After pin attachment is removed
+        async updatePinAttachmentsAfterRemove(attachment) {
+            const attachmentId = attachment[0];
+            if (!this.attachmentToDeletePinId) return;
+
+            let pin = this.pins.filter(p => p.pin_id === this.attachmentToDeletePinId)[0];
+            this.attachmentToDeletePinId = null;
+            if (!pin) return;
+            pin.attachment_paths = pin.attachment_paths.filter(p => p.split(',')[0] !== attachmentId);
+            await this.$fetchApi('/api/board/pins', 'PUT', { id: pin.pin_id, attachment_paths: pin.attachment_paths });
+        }
     }
 }
 </script>

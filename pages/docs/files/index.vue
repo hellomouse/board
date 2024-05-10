@@ -39,6 +39,28 @@
             <b>Error:</b> 500 Server error<br>
         </ApiDoc>
 
+        <ApiDoc title="Delete file by id" method="DELETE" endpoint="/api/files/single" param-type="URLParams" :auth="true">
+            Delete a file by id. You can only delete files you uploaded.
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id: uuid</td>
+                        <td>Id of the file to delete</td>
+                    </tr>
+                </tbody>
+            </v-table>
+
+            <p><b>Success:</b> 200 OK. The file is deleted.</p>
+            <b>Error:</b> 500 Server error<br>
+        </ApiDoc>
+
         <ApiDoc
             title="Get (own) files"
             method="GET"
