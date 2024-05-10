@@ -47,7 +47,7 @@ Example usage:
                     </v-btn>
                     <v-btn
                         :loading="loading"
-                        color="red" :disabled="confirmationString?.length && inputString !== confirmationString"
+                        color="red" :disabled="(confirmationString?.length > 0) && inputString !== confirmationString"
                         @click="$emit('update', true)"
                     >
                         Delete

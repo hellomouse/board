@@ -1,6 +1,9 @@
 <template>
-    <v-sheet elevation="0" min-width="250" class="pin-tile" :style="{ background: background }" :class="pinTileClasses"
-        @click="clickHandler">
+    <v-sheet
+        elevation="0" min-width="250" class="pin-tile"
+        :style="{ background: background }" :class="pinTileClasses"
+        @click="clickHandler"
+    >
         <div class="toggle" @click="onSelect" />
 
         <div v-if="deleting" class="delete-confirmation-overlay">
@@ -30,14 +33,19 @@
             </div>
         </div>
 
-        <div ref="pin" class="px-4 py-1 pin-tile__content"
+        <div
+            ref="pin" class="px-4 py-1 pin-tile__content"
             :class="!isExpanded && $refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX ? 'pin-tile__content--oversized' : ''"
-            :style="{ 'max-height': maxHeight  + 'px' }">
+            :style="{ 'max-height': maxHeight  + 'px' }"
+        >
             <!-- Markdown -->
             <span v-if="type === 'Markdown'" v-html="content"></span>
 
             <!-- Link pin -->
             <pin-link v-if="type === 'Link'" :content="content" />
+
+            <!-- Gallery pin -->
+            <pin-gallery v-if="type === 'ImageGallery'" :attachment-paths="attachmentPaths" />
 
             <!-- Files -->
             <pin-attachment-list
@@ -48,12 +56,14 @@
             />
 
             <!-- Checklist pin -->
-            <pin-checklist v-if="type === 'Checklist'" :simple="true" :locked="locked"
+            <pin-checklist
+                v-if="type === 'Checklist'" :simple="true" :locked="locked"
                 :checklist="contentToChecklist(content) || []"
                 @check="v => resendContent(pinId, checklistToContent(v))" />
         </div>
 
-        <v-btn v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX" variant="text" color="blue"
+        <v-btn
+            v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX" variant="text" color="blue"
             block class="mt-2" @click="toggleShowMore">{{ isExpanded ? 'Show Less' : 'Show More' }}</v-btn>
 
         <div class="pl-4 pin-tile__bottom">
@@ -68,7 +78,8 @@
 
             <v-menu>
                 <template #activator="{ props }">
-                    <v-btn density="comfortable" icon="mdi-dots-vertical" v-bind="props" :color="'transparent'"
+                    <v-btn
+                        density="comfortable" icon="mdi-dots-vertical" v-bind="props" :color="'transparent'"
                         flat></v-btn>
                 </template>
 
@@ -76,39 +87,46 @@
                     <button class="px-4 hoverable hover-list-item edit-list-item" @click="copyPermaLink">
                         <v-icon icon="mdi-link" />Permalink
                     </button>
-                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                    <button
+                        v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
                         :disabled="locked" @click="emitEditUpdate()">
                         <v-icon icon="mdi-pencil" />Edit
                     </button>
                     <button class="px-4 hoverable hover-list-item edit-list-item" @click="emitCopyToBoardUpdate()">
                         <v-icon icon="mdi-content-copy" />Copy to Board
                     </button>
-                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                    <button
+                        v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
                         :disabled="locked" @click="emitHistoryUpdate()">
                         <v-icon icon="mdi-clock" />History
                     </button>
-                    <button class="px-4 hoverable hover-list-item edit-list-item edit-list-item--line"
+                    <button
+                        class="px-4 hoverable hover-list-item edit-list-item edit-list-item--line"
                         @click="toggleFavorite()">
                         <v-icon :icon="favorited ? 'mdi-star-off' : 'mdi-star'" />
                         {{ favorited ? 'Unfavorite' : 'Favorite' }}
                     </button>
 
-                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                    <button
+                        v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('PINNED')">
                         <v-icon :icon="pinned ? 'mdi-pin-off' : 'mdi-pin'" />
                         {{ pinned ? 'Unpin' : 'Pin' }}
                     </button>
-                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                    <button
+                        v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('LOCKED')">
                         <v-icon :icon="locked ? 'mdi-lock-open' : 'mdi-lock'" />
                         {{ locked ? 'Unlock' : 'Lock' }}
                     </button>
-                    <button v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
+                    <button
+                        v-if="userHasPermToEdit" class="px-4 hoverable hover-list-item edit-list-item"
                         @click="toggleFlag('ARCHIVED')">
                         <v-icon :icon="archived ? 'mdi-folder-off' : 'mdi-folder-zip'" />
                         {{ archived ? 'Unarchive' : 'Archive' }}
                     </button>
-                    <button v-if="userHasPermToEdit"
+                    <button
+                        v-if="userHasPermToEdit"
                         class="px-4 text-red [ hoverable hover-list-item ] edit-list-item edit-list-item--line"
                         @click="deletePin()">
                         <v-icon icon="mdi-trash-can" color="red" />Delete
@@ -337,7 +355,7 @@ export default {
             if (this.numClicks === 1) {
                 let self = this;
                 setTimeout(() => {
-                    if (self.numClicks >= 3 && !this.locked && this.userHasPermToEdit)
+                    if (self.type !== 'ImageGallery' && self.numClicks >= 3 && !this.locked && this.userHasPermToEdit)
                         this.emitEditUpdate();
                     self.numClicks = 0;
                 }, 300);

@@ -12,7 +12,6 @@ pfp - or just make /pfp/username.png or something
     - then can remove pfp url from user
 pfp api
 
-image gallery file upload
 
 
 - option to download board
