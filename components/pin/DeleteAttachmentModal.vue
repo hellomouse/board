@@ -15,14 +15,14 @@ Example usage:
 <template>
     <DeleteConfirmation
         :show="show"
-        title="Delete Attachment"
+        :title="title"
         :loading="deleteModalLoading"
         :confirmation-string="''"
         @update="die => deleteAttachment(die)"
     >
         <p>
             Are you sure you want to remove the attachment: <code>{{ fileNameAndId[1] }}</code>?
-            This will also delete the file from the server and <b>cannot be undone!</b>
+            {{ desc }} and <b>cannot be undone!</b>
         </p>
     </DeleteConfirmation>
 </template>
@@ -39,6 +39,15 @@ export default {
         fileNameAndId: {
             type: Array,
             required: true
+        },
+
+        title: {
+            type: String,
+            default: 'Delete Attachment'
+        },
+        desc: {
+            type: String,
+            default: 'This will also delete the file from the server'
         }
     },
     data: () => ({
@@ -53,7 +62,6 @@ export default {
 
             this.deleteModalLoading = true;
             try {
-                console.log(this.fileNameAndId[0])
                 await this.$fetchApi('/api/files/single', 'DELETE', { id: this.fileNameAndId[0] });
             } catch (e) {
                 let errorMsg = `Failed to delete file: ${this.$apiErrorToString(e)}`;
