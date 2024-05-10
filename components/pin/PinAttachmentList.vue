@@ -40,6 +40,7 @@ export default {
 
 <style lang="scss" scoped>
 .attachments-container {
+    max-width: 300px;
     margin-top: 10px;
     border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
     opacity: 0.9;
