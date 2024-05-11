@@ -1,45 +1,36 @@
 <template>
     <div>
-        <v-sheet
-            elevation="0"
-            class="pr-3 mb-3 left-nav"
-            color="transparent"
-            :style="{ left: showNav ? '32px' : '-210px' }"
-        >
+        <v-sheet elevation="0" class="pr-3 mb-3 left-nav" color="transparent"
+            :style="{ left: showNav ? '32px' : '-210px' }">
             <slot></slot>
 
             <div class="mt-3">
                 <NuxtLink to="/board" @click="hideIfPhone()">
-                    <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex" @click="$emit('click-my-boards', true)">
+                    <div class="pl-2 hoverable hover-list-item left-nav__list-item d-flex"
+                        @click="$emit('click-my-boards', true)">
                         <button class="left-nav__list-item">
                             <v-icon icon="mdi-view-dashboard" /> My Boards
                         </button>
                         <v-spacer />
-                    
-                        <button
-                            class="[ text-center ] hoverable left-nav__board-item-btn"
+
+                        <button class="[ text-center ] hoverable left-nav__board-item-btn"
                             :class="expandSideBoards ? 'left-nav__board-item-btn--expanded' : ''"
-                            @click="expandSideBoards = !expandSideBoards;"
-                            @click.prevent=""
-                        >
+                            @click="expandSideBoards = !expandSideBoards;" @click.prevent="">
                             <v-icon icon="mdi-chevron-up" />
                         </button>
                     </div>
                 </NuxtLink>
-            
+
                 <div style="max-height: calc(100vh - 300px); overflow-y: auto">
-                    <div 
-                        class="expand-boards-container" :style="{
+                    <div class="expand-boards-container" :style="{
                             maxHeight: expandSideBoards ? '2000px' : '0px',
                             overflowY: expandSideBoards ? 'auto' : 'hidden',
                             marginBottom: expandSideBoards ? '8px' : '0px'
-                        }"
-                    >
-                        <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`" @click="hideIfPhone()">
-                            <div
-                                class="hoverable hover-list-item left-nav__list-item left-nav__board-item
-                                [ pl-3 text-truncate subtitle ]"
-                            >
+                        }">
+                        <NuxtLink v-for="board in boards" :key="board.id" :to="`/board/board?id=${board.id}`"
+                            @click="hideIfPhone()">
+                            <div class="hoverable hover-list-item left-nav__list-item left-nav__board-item
+                                [ pl-3 text-truncate subtitle ]">
                                 <v-icon icon="mdi-subdirectory-arrow-right" />{{ board.name }}
                             </div>
                         </NuxtLink>
@@ -56,21 +47,16 @@
                         <v-icon icon="mdi-star" /> Favorites
                     </button>
                 </NuxtLink>
-                <button class="pl-2 hoverable hover-list-item left-nav__list-item">
-                    <v-icon icon="mdi-cloud" /> Storage
-                </button>
+                <NuxtLink to="/storage">
+                    <button class="pl-2 hoverable hover-list-item left-nav__list-item">
+                        <v-icon icon="mdi-cloud" /> Storage
+                    </button>
+                </NuxtLink>
             </div>
         </v-sheet>
 
-        <v-btn
-            v-if="isLoggedIn"
-            elevation="2" fab small
-            :icon="showNav ? 'mdi-chevron-left' : 'mdi-chevron-right'"
-            class="toggle-btn"
-            :class="!showNav ? 'closed' : ''"
-
-            @click="showNav = !showNav"
-        />
+        <v-btn v-if="isLoggedIn" elevation="2" fab small :icon="showNav ? 'mdi-chevron-left' : 'mdi-chevron-right'"
+            class="toggle-btn" :class="!showNav ? 'closed' : ''" @click="showNav = !showNav" />
     </div>
 </template>
 
