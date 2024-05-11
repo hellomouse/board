@@ -1,7 +1,3 @@
-<!--
-TODO
--->
-
 <template>
     <v-dialog
         v-model="showModal"
@@ -10,9 +6,6 @@ TODO
         <v-card rounded="0" width="720" class="py-2">
             <v-card-text class="px-4">
                 <h1 class="mb-4 text-truncate">{{ editMode ? 'Edit' : 'Create' }} {{ pinTitle }} Pin</h1>
-
-                <!-- TODO: content box, attachments
-                or insert files by url?? -->
 
                 <!-- Markdown -->
                 <div v-if="pin?.type === 0 || !pin.type || pin?.type === 'Markdown'">
@@ -85,10 +78,6 @@ const QuillEditor = defineAsyncComponent(async () =>
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '~/assets/css/quill-theme.css';
 
-import MarkdownShortcuts from 'quill-markdown-shortcuts';
-import MagicUrl from 'quill-magic-url';
-import BlotFormatter from 'quill-blot-formatter';
-
 // Start hack for math
 // -------------------------
 import katex from 'katex';
@@ -144,24 +133,31 @@ export default {
             required: true
         }
     },
-    setup: () => {
-        const modules = [
-            {
-                name: 'markdownShortcuts',
-                module: MarkdownShortcuts,
-                options: {}
-            },
-            {
-                name: 'magicUrl',
-                module: MagicUrl,
-                options: {}
-            },
-            {
-                name: 'blotFormatter',
-                module: BlotFormatter,
-                options: {}
-            }
-        ];
+    setup: async () => {
+        let modules = [];
+        if (process.client) {
+            const MarkdownShortcuts = await import('quill-markdown-shortcuts');
+            const MagicUrl = await import('quill-magic-url');
+            const BlotFormatter = await import('quill-blot-formatter/dist/BlotFormatter');
+
+            modules = [
+                {
+                    name: 'markdownShortcuts',
+                    module: MarkdownShortcuts.default,
+                    options: {}
+                },
+                {
+                    name: 'magicUrl',
+                    module: MagicUrl.default,
+                    options: {}
+                },
+                {
+                    name: 'blotFormatter',
+                    module: BlotFormatter.default,
+                    options: {}
+                }
+            ];
+        }
         return { modules }
     },
     data() {

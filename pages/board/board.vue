@@ -971,7 +971,7 @@ export default {
         // Selection keyboard
         keydownHandler(event) {
             // Ctrl-A select all pins when no modal is open
-            if (event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => this.modals[x]) &&
+            if (process.client && event.ctrlKey && event.key === 'a' && !Object.keys(this.modals).some(x => this.modals[x]) &&
                 document.activeElement.tagName.toLowerCase() !== 'input') {
                 event.preventDefault();
                 this.selectAllPins();
