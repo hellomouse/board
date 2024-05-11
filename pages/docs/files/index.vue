@@ -96,6 +96,39 @@
                 <b>Error:</b> 401 Unauthorized, 500 Server error<br>
             </p>
         </ApiDoc>
+
+        <ApiDoc title="Upload Pfp" method="POST" endpoint="/api/files/pfp" param-type="Multipart" :auth="true">
+            Upload a profile picture as in a file upload webform. The body should be the raw multipart data. Additional files are ignored; 
+            the file must be a WEBP, PNG, or JPEG. The file will be cropped to a smaller square image.
+
+            <p>
+            <pre class="api-json-block"><code>{ msg: "File upload result" }</code></pre><br>
+
+            <b>Error:</b> 401 Unauthorized, 500 Server error<br>
+            </p>
+        </ApiDoc>
+
+        <ApiDoc title="Get pfp by user id" method="GET" endpoint="/api/files/pfp" param-type="URLParams">
+            Get a profile picture by user id.
+
+            <v-table density="compact" class="api-parameter-table my-4">
+                <thead>
+                    <tr>
+                        <th class="text-left">Parameter</th>
+                        <th class="text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id: user id</td>
+                        <td>Id of the user to get pfp from</td>
+                    </tr>
+                </tbody>
+            </v-table>
+
+            <p><b>Success:</b> 200 OK. The file is directly served.</p>
+            <b>Error:</b> 500 Server error<br>
+        </ApiDoc>
     </div>
 </template>
 

@@ -3,7 +3,8 @@
 <template>
     <div class="user__pfp" :style="{ width: size, height: size, flex: `0 0 ${size}` }">
         <img
-            :src="src" alt="Profile picture"
+            :src="`/api/files/pfp?id=${userId}`" 
+            alt="Profile picture"
             @error="$event.target.src = '/default-pfp.png'"
         >
     </div>
@@ -13,7 +14,7 @@
 export default {
     name: 'ProfilePicture',
     props: {
-        src: {
+        userId: {
             type: String,
             required: true
         },

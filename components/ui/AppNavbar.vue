@@ -37,7 +37,7 @@
             <v-menu v-if="isLoggedIn">
                 <template #activator="{ props }">
                     <button class="image-button navbar-btn mx-2" icon="mdi-cog" v-bind="props">
-                        <profile-picture :src="user.pfp_url" />
+                        <profile-picture :user-id="user.id" />
                     </button>
                 </template>
                 <div>
@@ -51,9 +51,11 @@
                             <p class="text-truncate popout-sheet__user-id">@{{ user.id }}</p>
                         </div>
 
-                        <button class="py-3 px-4 hoverable hover-list-item">
+                        <NuxtLink
+                            class="py-3 px-4 hoverable hover-list-item"
+                            style="color: rgb(var(--v-theme-on-surface)); text-decoration: none" to="/user-settings">
                             <v-icon icon="mdi-cog" /> Settings
-                        </button>
+                        </NuxtLink>
                         <button
                             class="py-3 px-4 hoverable hover-list-item"
                             @click="toggleDarkMode()"

@@ -20,7 +20,7 @@
                 @click="clickHandler"
             >{{ desc }}</div>
             <div class="board-tile__owner-row pt-1 mt-1">
-                <profile-picture class="mr-1" size="12pt" src="" />
+                <profile-picture class="mr-1" size="12pt" :user-id="creatorId" />
 
                 <div class="d-inline-block text-truncate">
                     <small>@{{ creatorId }}</small>

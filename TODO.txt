@@ -8,15 +8,6 @@ pin create/edit modal:
     - https://vueup.github.io/vue-quill/guide/modules.html
 
 
-pfp - or just make /pfp/username.png or something
-    - then can remove pfp url from user
-pfp api
-
-
-
-- option to download board
-    - board / tag bulk download
-
 processing state file
 -> if 404 in downloads -> redirect to page that checks status
     -> redirect when done
@@ -70,13 +61,6 @@ api for adding / editing lyrics
     - share link have someone else listen with u
     - add individual song to queue
 - readme
-----
-general
-
-user settings page
-
-track user login ip and time, invalidate sessions
-
 
 ----
 maybe
@@ -85,3 +69,6 @@ responsive mobile
 - history modal too wide
 - fix share modal on phone
     - different ui on phone - click on user to show dropdown popped from bottom
+track user login ip and time, invalidate sessions
+- option to download board
+    - board / tag bulk download

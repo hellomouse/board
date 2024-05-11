@@ -83,7 +83,7 @@ Example usage:
                             >
                                 <profile-picture
                                     class="mr-2"
-                                    size="30px" :src="item.value.pfp_url"
+                                    size="30px" :user-id="item.value.id"
                                 />
                                 <div class="d-flex flex-column justify-center">
                                     <div class="user__name text-truncate">{{ item.value.name }}</div>
@@ -135,7 +135,7 @@ Example usage:
                         v-for="user in users" :key="user"
                         class="[ user ] d-flex flex-row align-center"
                     >
-                        <profile-picture class="mr-2" :src="user.pfp_url" />
+                        <profile-picture class="mr-2" :user-id="user.id" />
                         <div class="d-flex flex-column justify-center">
                             <div class="user__name text-truncate">{{ user.name }}</div>
                             <div class="user__username text-truncate">@{{ user.id }}</div>

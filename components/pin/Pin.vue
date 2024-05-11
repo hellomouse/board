@@ -18,7 +18,9 @@
 
         <div class="pin-tile__header pt-4 px-4">
             <div class="pin-tile__header__creator-wrapper text-truncate">
-                <profile-picture class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt" src="" />
+                <profile-picture
+                    class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt"
+                    :user-id="creator" />
                 <span class="pin-tile__header__creator">@{{ creator }}</span>
             </div>
 
