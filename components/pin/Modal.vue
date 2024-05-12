@@ -311,6 +311,7 @@ export default {
                     content[5].push(this.downloadOptions.strategy + ',' + id + '.' + (extMap[this.downloadOptions.strategy] || 'html'));
                     content[5] = content[5].join('|');
                     params.content = content.join('\n');
+                    this.downloadOptions = {};
                 } catch (e) {
                     let errorMsg = `Failed to download site: ${this.$apiErrorToString(e)}`;
                     this.$emit('error', errorMsg);
