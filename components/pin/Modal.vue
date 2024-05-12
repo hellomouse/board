@@ -133,7 +133,7 @@ export default {
             required: true
         }
     },
-    onMounted: async () => {
+    async created() {
         let modules = [];
         if (process.client) {
             const MarkdownShortcuts = await import('quill-markdown-shortcuts');
@@ -158,7 +158,7 @@ export default {
                 }
             ];
         }
-        return { modules }
+        this.modules = modules;
     },
     data() {
         return {
@@ -168,7 +168,8 @@ export default {
             toolbars: [[{ 'header': [1, 2, 3, 4, false] }], ['bold', 'italic', 'underline', 'strike'], ['code-block', 'image', 'link'], [{ 'align': [] }], ['formula'], ['clean']],
             selectedSwatchIndex: 0,
             downloadOptions: {},
-            selected_files: []
+            selected_files: [],
+            modules: []
         };
     },
     computed: {
