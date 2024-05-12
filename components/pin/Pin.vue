@@ -326,7 +326,8 @@ export default {
                     edited: this.edited,
                     content: this.content,
                     attachment_paths: this.attachmentPaths,
-                    metadata: this.metadata
+                    metadata: this.metadata,
+                    flags: this.flags
                 }
             });
         },

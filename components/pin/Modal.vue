@@ -133,33 +133,6 @@ export default {
             required: true
         }
     },
-    async created() {
-        let modules = [];
-        if (process.client) {
-            const MarkdownShortcuts = await import('quill-markdown-shortcuts');
-            const MagicUrl = await import('quill-magic-url');
-            const BlotFormatter = await import('quill-blot-formatter/dist/BlotFormatter');
-
-            modules = [
-                {
-                    name: 'markdownShortcuts',
-                    module: MarkdownShortcuts.default,
-                    options: {}
-                },
-                {
-                    name: 'magicUrl',
-                    module: MagicUrl.default,
-                    options: {}
-                },
-                {
-                    name: 'blotFormatter',
-                    module: BlotFormatter.default,
-                    options: {}
-                }
-            ];
-        }
-        this.modules = modules;
-    },
     data() {
         return {
             content: this.pin?.content,
@@ -188,6 +161,33 @@ export default {
             this.color = this.pin?.metadata?.color || SWATCHES[0];
             this.selectedSwatchIndex = Math.max(0, SWATCHES.indexOf(this.color));
         }
+    },
+    async created() {
+        let modules = [];
+        if (process.client) {
+            const MarkdownShortcuts = await import('quill-markdown-shortcuts');
+            const MagicUrl = await import('quill-magic-url');
+            const BlotFormatter = await import('quill-blot-formatter/dist/BlotFormatter');
+
+            modules = [
+                {
+                    name: 'markdownShortcuts',
+                    module: MarkdownShortcuts.default,
+                    options: {}
+                },
+                {
+                    name: 'magicUrl',
+                    module: MagicUrl.default,
+                    options: {}
+                },
+                {
+                    name: 'blotFormatter',
+                    module: BlotFormatter.default,
+                    options: {}
+                }
+            ];
+        }
+        this.modules = modules;
     },
     methods: {
         updateGalleryImages(v) {
