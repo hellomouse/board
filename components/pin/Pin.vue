@@ -464,6 +464,12 @@ export default {
         max-width: 100%;
     }
 
+    // Code blocks
+    pre, code {
+        max-width: 100%;
+        white-space: pre-wrap;
+    }
+
     // Left margin for lists
     ul, ol {
         margin-left: 16px;
