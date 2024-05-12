@@ -133,7 +133,7 @@ export default {
             required: true
         }
     },
-    setup: async () => {
+    onMounted: async () => {
         let modules = [];
         if (process.client) {
             const MarkdownShortcuts = await import('quill-markdown-shortcuts');
