@@ -18,6 +18,6 @@ export function escapeHtml(text) {
  */
 export function formatHrefLink(content, color='', noUnderline=false) {
     return escapeHtml(content)
-        .replace(/(https?:\/\/[\w.\d:?&=#/;]+)/gm, `<a style="color: ${color};${noUnderline ? 'text-decoration:none' : ''}"
+        .replace(/(https?:\/\/[\w.\d:?@![\]'()*$+,;&=#\-%/;]+)/gm, `<a style="color: ${color};${noUnderline ? 'text-decoration:none' : ''}"
             href="$1" target="_blank">$1</a>`);
 }
