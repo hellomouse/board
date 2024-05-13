@@ -198,7 +198,7 @@ export default {
                 return;
             }
 
-            this.content = ' ';
+            this.content = 'x'; // Placeholder
         },
         async createPin() {
             if (!this.content) {
@@ -255,6 +255,9 @@ export default {
                     `${val},${uploadedFiles[i].name}`);
                 attachmentPaths = [...new Set(results.succeeded.concat(attachmentPaths))];
                 this.selected_files = [];
+
+                if (!this.content)
+                    this.content = 'x'; // Placeholder since we can't have empty content
             }
 
             let params = {
