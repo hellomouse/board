@@ -33,7 +33,7 @@
                 <!-- BEGIN specialization -->
                 <!-- Image gallery -->
                 <div v-if="pin?.type === 1 || pin?.type === 'ImageGallery'">
-                    <pin-gallery-pin @update="updateGalleryImages" />
+                    <pin-gallery-pin v-model:originalContent="content" @update="updateGalleryImages" />
                 </div>
 
                 <!-- Checklist -->
@@ -191,14 +191,8 @@ export default {
     },
     methods: {
         updateGalleryImages(v) {
-            this.selected_files = v;
-            this.content = '';
-            if (!this.selected_files.length) {
-                this.$emit('error', 'You must upload at least one file');
-                return;
-            }
-
-            this.content = 'x'; // Placeholder
+            this.selected_files = v.files;
+            this.content = v.content.trim() || 'x'; // Placeholder
         },
         async createPin() {
             if (!this.content) {
@@ -256,9 +250,11 @@ export default {
                 attachmentPaths = [...new Set(results.succeeded.concat(attachmentPaths))];
                 this.selected_files = [];
 
-                if (!this.content)
+                if (!this.content.trim())
                     this.content = 'x'; // Placeholder since we can't have empty content
             }
+
+            console.log('EDIT', this.content)
 
             let params = {
                 pin_type: type,

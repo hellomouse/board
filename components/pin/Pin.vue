@@ -47,7 +47,7 @@
             <pin-link v-if="type === 'Link'" :content="content" />
 
             <!-- Gallery pin -->
-            <pin-gallery v-if="type === 'ImageGallery'" :attachment-paths="attachmentPaths" />
+            <pin-gallery v-if="type === 'ImageGallery'" :content="content" :attachment-paths="attachmentPaths" />
 
             <!-- Files -->
             <pin-attachment-list

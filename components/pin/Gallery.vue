@@ -1,5 +1,7 @@
 <template>
     <div>
+        <p v-if="content.length > 1">{{ content }}</p>
+
         <div class="fixed-img-view-size">
             <img :src="`/api/files/single?id=${(attachmentPaths[currIndexMod] || '').split(',')[0]}`" />
             <v-btn icon="mdi-arrow-right" class="btn-right" @click="currIndex++" />
@@ -12,6 +14,10 @@
 <script>
 export default {
     props: {
+        content: {
+            type: String,
+            default: ''
+        },
         attachmentPaths: {
             required: true,
             type: Array

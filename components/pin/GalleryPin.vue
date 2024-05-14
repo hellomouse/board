@@ -24,22 +24,47 @@ Example usage:
             density="compact" style="min-height: 47px"
             clearable counter class="mt-2 mb-4"
         />
+
+        <v-textarea
+            v-model="content"
+            label="Note" variant="solo-filled" rounded="0" auto-grow
+            :counter="200" :rows="1"
+            :rules="rules"
+            @input="content = content.replaceAll('\n', '').slice(0, 200)"
+        />
+        <br>
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+        originalContent: {
+            required: true,
+            type: String
+        },
+    },
     data() {
         return {
-            selected_files: []
+            selected_files: [],
+            content: (this.originalContent && this.originalContent.length > 1) ? this.originalContent : '',
+            rules: [
+                v => v && (v.length <= 200 || 'Max 200 characters'),
+                v => v && (v.length > 1 || 'Min 2 characters')
+            ],
         };
     },
     watch: {
-        selected_files(_newVal, _oldVal) {
-            this.$emit('update', this.selected_files);
-        }
+        selected_files(_newVal, _oldVal) { this.emitEditUpdate(); },
+        content(_newVal, _oldVal) { this.emitEditUpdate(); }
     },
     methods: {
+        emitEditUpdate() {
+            this.$emit('update', {
+                files: this.selected_files,
+                content: this.content || ''
+            });
+        },
         getFileImage(file) {
             if (!process.client) return '';
             return URL.createObjectURL(file);
