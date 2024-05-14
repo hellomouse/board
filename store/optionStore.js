@@ -10,6 +10,7 @@ export const useOptionStore = defineStore({
             sort_pins: [],
             sort_boards: [],
             always_show_pin_details: false,
+            compact_pins: false,
             expand_left_nav: true,
             dark_theme: true
         };

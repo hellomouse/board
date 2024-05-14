@@ -250,7 +250,14 @@ useSeoMeta({
                                 </v-btn>
                             </template>
                             <v-sheet color="background-light" elevation="8" rounded="0" class="px-4 py-1">
-                                <v-switch v-model="alwaysShowCardDetails" color="red" label="Always show pin details"></v-switch>
+                                <v-switch
+                                    v-model="alwaysShowCardDetails" color="red" label="Always show pin details"
+                                    density="compact"
+                                ></v-switch>
+                                <v-switch
+                                    v-model="compactPins" color="red" label="Compact pins"
+                                    density="compact"
+                                ></v-switch>
                             </v-sheet>
                         </v-menu>
                     </div>
@@ -274,6 +281,7 @@ useSeoMeta({
                     :attachment-paths="pin.attachment_paths"
                     :perm="currentUserPerm"
                     :always-show-details="alwaysShowCardDetails"
+                    :compact="compactPins"
                     :deselect-trigger="deselectTrigger"
                     :select-trigger="selectTrigger"
                     :initial-favorited="pin.favorited"
@@ -491,6 +499,8 @@ export default {
                 true : useOptionStore(this.$pinia).sort_pins[1],
             alwaysShowCardDetails: useOptionStore(this.$pinia).always_show_pin_details === undefined ?
                 false : useOptionStore(this.$pinia).always_show_pin_details,
+            compactPins: useOptionStore(this.$pinia).compact_pins === undefined ?
+                false : useOptionStore(this.$pinia).compact_pins,
             
             // Meta
             pageTitle: 'Hellomouse Board',
@@ -551,6 +561,9 @@ export default {
         },
         alwaysShowCardDetails() {
             useOptionStore(this.$pinia).always_show_pin_details = this.alwaysShowCardDetails;
+        },
+        compactPins() {
+            useOptionStore(this.$pinia).compact_pins = this.compactPins;
         },
         '$route.path'() {
             if (this.$route.path !== '/board/board' && process.client)

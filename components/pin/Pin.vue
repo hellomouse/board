@@ -17,7 +17,7 @@
         </div>
 
         <div class="pin-tile__header pt-4 px-4">
-            <div class="pin-tile__header__creator-wrapper text-truncate">
+            <div v-if="!compact" class="pin-tile__header__creator-wrapper text-truncate">
                 <profile-picture
                     class="mr-1 d-inline-block" style="vertical-align: middle" size="12pt"
                     :user-id="creator" />
@@ -68,8 +68,8 @@
             v-if="$refs.pin && $refs.pin.clientHeight >= INITIAL_PIN_CONTENT_HEIGHT_PX" variant="text" color="blue"
             block class="mt-2" @click="toggleShowMore">{{ isExpanded ? 'Show Less' : 'Show More' }}</v-btn>
 
-        <div class="pl-4 pin-tile__bottom">
-            <div class="pin-tile__timestamp-wrapper">
+        <div class="pl-4 pin-tile__bottom" :class="compact ? 'pin-tile--compact' : ''">
+            <div v-if="!compact" class="pin-tile__timestamp-wrapper">
                 <div v-if="created" class="pin-tile__timestamp truncate-text">
                     <v-icon icon="mdi-clock" /> {{ created }}
                 </div>
@@ -168,6 +168,7 @@ export default {
         color: { type: String, default: '' },
         perm: { type: String, default: '' },
         alwaysShowDetails: { type: Boolean, default: false },
+        compact: { type: Boolean, default: false },
         initialFavorited: { type: Boolean, default: false },
 
         deselectTrigger: { type: Boolean, default: false },
@@ -550,6 +551,11 @@ export default {
         flex-direction: row;
         align-items: center;
         height: 37px; // 1 higher than button to avoid weird button offset
+
+        &.pin-tile--compact {
+            height: 15px;
+            .v-btn { margin-top: -22px; }
+        }
 
         .pin-tile__timestamp {
             display: inline-block;
