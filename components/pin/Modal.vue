@@ -218,7 +218,7 @@ export default {
                                 (async () => {
                                     // eslint-disable-next-line no-undef
                                     let result = await $fetch('/api/files', requestOptions);
-                                    resolve(`http://localhost:3000/api/files/single?id=${result.succeeded[0]}`);
+                                    resolve(`/api/files/single?id=${result.succeeded[0]}`);
                                 })();
                             });
                         }
