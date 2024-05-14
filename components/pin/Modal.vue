@@ -76,6 +76,7 @@ const QuillEditor = defineAsyncComponent(async () =>
     process.client ? (await import('@vueup/vue-quill')).QuillEditor : null
 );
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import 'quill-image-uploader/dist/quill.imageUploader.min.css';
 import '~/assets/css/quill-theme.css';
 
 // Start hack for math
@@ -168,6 +169,16 @@ export default {
             const MarkdownShortcuts = await import('quill-markdown-shortcuts');
             const MagicUrl = await import('quill-magic-url');
             const BlotFormatter = await import('quill-blot-formatter/dist/BlotFormatter');
+            const ImageUploader = await import('quill-image-uploader');
+
+            // Patch the logic for image uploading >_> because it's broken
+            // (note: removes the base64 preview)
+            // Note: must be function() not an arrow function
+            Reflect.defineProperty(ImageUploader.default.prototype, 'calculatePlaceholderInsertLength', { value: function () {
+                return 0;
+            }});
+            Reflect.defineProperty(ImageUploader.default.prototype, 'insertBase64Image', { value: async function(url) {}});
+            Reflect.defineProperty(ImageUploader.default.prototype, ' removeBase64Image', { value: function () {}});
 
             modules = [
                 {
@@ -184,6 +195,34 @@ export default {
                     name: 'blotFormatter',
                     module: BlotFormatter.default,
                     options: {}
+                },
+                {
+                    name: 'ImageUploader',
+                    module: ImageUploader.default,
+                    options: {
+                        upload: file => {
+                            this.$emit('success', `Uploading image... please wait...`);
+                            return new Promise((resolve, reject) => {
+                                let formData = new FormData();
+                                formData.append('files', file, file.name);
+                                let requestOptions = {
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    headers: { 'enctype': 'multipart/form-data' },
+                                    body: formData,
+                                    connection: 'close',
+                                    credentials: 'include',
+                                    signal: AbortSignal.timeout(10000)
+                                };
+
+                                (async () => {
+                                    // eslint-disable-next-line no-undef
+                                    let result = await $fetch('/api/files', requestOptions);
+                                    resolve(`http://localhost:3000/api/files/single?id=${result.succeeded[0]}`);
+                                })();
+                            });
+                        }
+                    }
                 }
             ];
         }
@@ -253,8 +292,6 @@ export default {
                 if (!this.content.trim())
                     this.content = 'x'; // Placeholder since we can't have empty content
             }
-
-            console.log('EDIT', this.content)
 
             let params = {
                 pin_type: type,
