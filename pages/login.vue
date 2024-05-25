@@ -60,9 +60,8 @@ export default {
         if (this.$route.query && this.$route.query.r && this.$route.query.r.startsWith('/'))
             redirect = this.$route.query.r;
 
-        // TODO: silent sso check
-        // TODO: Move into module
-        keycloak.init({ onLoad: 'check-sso' }).then(async authenticated => {
+        keycloak.init({ onLoad: 'check-sso', silentCheckSsoRedirectUri: `${location.origin}/keycloak_silent_sso.html` })
+        .then(async authenticated => {
         
             if (authenticated) {
                 console.log("Authenticated");
