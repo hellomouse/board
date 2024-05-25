@@ -5,6 +5,14 @@ export default {
     modern: true,
     target: 'server',
 
+    runtimeConfig: {
+        public: {
+            keycloakAuthUrl: process.env.VUE_APP_KEYCLOAK_AUTH_URL,
+            keycloakRealm: process.env.VUE_APP_KEYCLOAK_REALM,
+            keycloakClientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID
+        }
+    },
+
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
         htmlAttrs: {
@@ -40,7 +48,7 @@ export default {
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
         'nuxt-proxy',
-        'nuxt-delay-hydration',
+        'nuxt-delay-hydration'
     ],
 
     proxy: {

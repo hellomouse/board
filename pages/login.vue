@@ -31,7 +31,11 @@
                 @click="postLogin"
             >login</v-btn>
         </v-sheet>
-
+        <v-btn
+            color="primary"
+            variant="outlined"
+            @click="loginWithKeycloak"
+        >Sign in with Keycloak</v-btn>
         <p class="subtitle">Please contact an admin for sign-up</p>
     </div>
 </template>
@@ -40,6 +44,7 @@
 import { useBoardStore } from '~/store/boardStore.js';
 import { useAuthStore } from '~/store/auth.js';
 
+let keycloak;
 export default {
     name: 'LoginPage',
     data: () => ({
@@ -50,16 +55,44 @@ export default {
         error_msg: ''
     }),
     async mounted() {
-        if (useAuthStore(this.$pinia).isLoggedIn) {
-            await new Promise(r => setTimeout(r, 2000));
+        keycloak = this.$keycloak();
+        let redirect = '/';
+        if (this.$route.query && this.$route.query.r && this.$route.query.r.startsWith('/'))
+            redirect = this.$route.query.r;
 
-            if (this.$route.path !== '/login')
-                return;
-            let redirect = '/';
-            if (this.$route.query && this.$route.query.r && this.$route.query.r.startsWith('/'))
-                redirect = this.$route.query.r;
-            this.$router.push({ path: redirect });
-        }
+        // TODO: silent sso check
+        // TODO: Move into module
+        keycloak.init({ onLoad: 'check-sso' }).then(async authenticated => {
+        
+            if (authenticated) {
+                console.log("Authenticated");
+
+                await this.$fetchApi('http://localhost:8080/v1/auth/callback', 
+                    'POST',
+                    { code: keycloak.token }
+                );
+
+                let authStore = useAuthStore(this.$pinia);
+                
+                try {
+                    let user = await this.$fetchApi('http://localhost:8080/v1/users/keycloak', 'GET', { sub: keycloak.tokenParsed.sub });
+                    authStore.login(user);
+                } catch (e) {
+                    this.error_msg = 'Failed to retrieve user information';
+                    return;
+                }
+
+                useBoardStore(this.$pinia).lastFetch = 0;
+                this.$router.push(redirect);
+                
+            }
+            else 
+                console.log("Not Authenticated");
+        
+        }).catch(e => {
+            console.error(e);
+        });
+        
     },
     methods: {
         async postLogin() {
@@ -112,6 +145,9 @@ export default {
             useBoardStore(this.$pinia).lastFetch = 0; // Invalidate left nav board list
             this.loading = false;
             this.$router.push(redirect);
+        },
+        async loginWithKeycloak() {
+            keycloak.login();
         }
     }
 };
