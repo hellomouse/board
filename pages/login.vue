@@ -55,43 +55,15 @@ export default {
         error_msg: ''
     }),
     async mounted() {
-        keycloak = this.$keycloak();
         let redirect = '/';
         if (this.$route.query && this.$route.query.r && this.$route.query.r.startsWith('/'))
             redirect = this.$route.query.r;
-
-        keycloak.init({ onLoad: 'check-sso', silentCheckSsoRedirectUri: `${location.origin}/keycloak_silent_sso.html` })
-        .then(async authenticated => {
         
-            if (authenticated) {
-                console.log("Authenticated");
-
-                await this.$fetchApi('http://localhost:8080/v1/auth/callback', 
-                    'POST',
-                    { code: keycloak.token }
-                );
-
-                let authStore = useAuthStore(this.$pinia);
-                
-                try {
-                    let user = await this.$fetchApi('http://localhost:8080/v1/users/keycloak', 'GET', { sub: keycloak.tokenParsed.sub });
-                    authStore.login(user);
-                } catch (e) {
-                    this.error_msg = 'Failed to retrieve user information';
-                    return;
-                }
-
-                useBoardStore(this.$pinia).lastFetch = 0;
-                this.$router.push(redirect);
-                
-            }
-            else 
-                console.log("Not Authenticated");
-        
-        }).catch(e => {
-            console.error(e);
-        });
-        
+        keycloak = this.$keycloak;
+        if (keycloak.authenticated) {
+            this.handleAuth();
+        } else
+            keycloak.onAuthSuccess = this.handleAuth;
     },
     methods: {
         async postLogin() {
@@ -144,6 +116,32 @@ export default {
             useBoardStore(this.$pinia).lastFetch = 0; // Invalidate left nav board list
             this.loading = false;
             this.$router.push(redirect);
+        },
+        async handleAuth() {
+                console.log("Authenticated");
+
+                let response = await this.$fetchApi('/api/auth/callback', 
+                    'POST',
+                    { code: keycloak.token }
+                );
+
+                if (response['msg'] == "register") {
+                    this.$router.push('/register');
+                    return;
+                }
+
+                let authStore = useAuthStore(this.$pinia);
+                
+                try {
+                    let user = await this.$fetchApi('/api/users/keycloak', 'GET', { sub: keycloak.tokenParsed.sub });
+                    authStore.login(user);
+                } catch (e) {
+                    this.error_msg = 'Failed to retrieve user information';
+                    return;
+                }
+
+                useBoardStore(this.$pinia).lastFetch = 0;
+                this.$router.push(redirect);
         },
         async loginWithKeycloak() {
             keycloak.login();
